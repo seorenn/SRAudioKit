@@ -11,6 +11,8 @@
 		8A3DABC91A84B96100470743 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A3DABC81A84B96100470743 /* Images.xcassets */; };
 		8A3DABCC1A84B96100470743 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3DABCA1A84B96100470743 /* MainMenu.xib */; };
 		8A3DABD81A84B96100470743 /* SRAudioKitDemoForOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */; };
+		8A4E8C271A8899770024F532 /* SRAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C261A8899770024F532 /* SRAudioQueue.m */; };
+		8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -32,6 +34,12 @@
 		8A3DABD11A84B96100470743 /* SRAudioKitDemoForOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SRAudioKitDemoForOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3DABD61A84B96100470743 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRAudioKitDemoForOSXTests.swift; sourceTree = "<group>"; };
+		8A4E8C231A8899270024F532 /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioKit.h; path = ../SRAudioKit/SRAudioKit.h; sourceTree = "<group>"; };
+		8A4E8C241A8899750024F532 /* SRAudioKitDemoForOSX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SRAudioKitDemoForOSX-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
+		8A4E8C251A8899770024F532 /* SRAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioQueue.h; path = ../SRAudioKit/SRAudioQueue.h; sourceTree = "<group>"; };
+		8A4E8C261A8899770024F532 /* SRAudioQueue.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioQueue.m; path = ../SRAudioKit/SRAudioQueue.m; sourceTree = "<group>"; };
+		8A4E8C281A889A5B0024F532 /* SRAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioDevice.h; path = ../SRAudioKit/SRAudioDevice.h; sourceTree = "<group>"; };
+		8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioDevice.m; path = ../SRAudioKit/SRAudioDevice.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -55,6 +63,7 @@
 		8A3DABB81A84B96100470743 = {
 			isa = PBXGroup;
 			children = (
+				8A4E8C221A8898F30024F532 /* SRAudioKit */,
 				8A3DABC31A84B96100470743 /* SRAudioKitDemoForOSX */,
 				8A3DABD41A84B96100470743 /* SRAudioKitDemoForOSXTests */,
 				8A3DABC21A84B96100470743 /* Products */,
@@ -73,6 +82,7 @@
 		8A3DABC31A84B96100470743 /* SRAudioKitDemoForOSX */ = {
 			isa = PBXGroup;
 			children = (
+				8A4E8C241A8899750024F532 /* SRAudioKitDemoForOSX-Bridging-Header.h */,
 				8A3DABC61A84B96100470743 /* AppDelegate.swift */,
 				8A3DABC81A84B96100470743 /* Images.xcassets */,
 				8A3DABCA1A84B96100470743 /* MainMenu.xib */,
@@ -104,6 +114,18 @@
 				8A3DABD61A84B96100470743 /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		8A4E8C221A8898F30024F532 /* SRAudioKit */ = {
+			isa = PBXGroup;
+			children = (
+				8A4E8C231A8899270024F532 /* SRAudioKit.h */,
+				8A4E8C251A8899770024F532 /* SRAudioQueue.h */,
+				8A4E8C261A8899770024F532 /* SRAudioQueue.m */,
+				8A4E8C281A889A5B0024F532 /* SRAudioDevice.h */,
+				8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */,
+			);
+			name = SRAudioKit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -206,6 +228,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				8A3DABC71A84B96100470743 /* AppDelegate.swift in Sources */,
+				8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */,
+				8A4E8C271A8899770024F532 /* SRAudioQueue.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -320,10 +344,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = SRAudioKitDemoForOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SRAudioKitDemoForOSX-Bridging-Header.h";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
@@ -331,10 +358,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				CLANG_ENABLE_MODULES = YES;
 				COMBINE_HIDPI_IMAGES = YES;
 				INFOPLIST_FILE = SRAudioKitDemoForOSX/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_OBJC_BRIDGING_HEADER = "SRAudioKitDemoForOSX-Bridging-Header.h";
 			};
 			name = Release;
 		};
@@ -393,6 +422,7 @@
 				8A3DABDD1A84B96100470743 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		8A3DABDE1A84B96100470743 /* Build configuration list for PBXNativeTarget "SRAudioKitDemoForOSXTests" */ = {
 			isa = XCConfigurationList;
@@ -401,6 +431,7 @@
 				8A3DABE01A84B96100470743 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

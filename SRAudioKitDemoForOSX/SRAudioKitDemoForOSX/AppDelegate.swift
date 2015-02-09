@@ -16,6 +16,10 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
+        let devices = SRAudioDevice.devices() as [SRAudioDevice]
+        for dev in devices {
+            println("Device [\(dev.name):\(dev.deviceID)]: I[\(dev.numberInputChannels)] O[\(dev.numberOutputChannels)]")
+        }
     }
 
     func applicationWillTerminate(aNotification: NSNotification) {
