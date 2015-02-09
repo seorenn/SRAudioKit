@@ -15,8 +15,7 @@
 @property (nonatomic, readonly) NSString *name;
 @property (nonatomic, readonly) UInt32 numberInputChannels;
 @property (nonatomic, readonly) UInt32 numberOutputChannels;
-
-//+ (NSArray *)devices;
+@property (nonatomic, readonly) NSString *deviceUID;
 
 - (id)initWithDeviceID:(AudioDeviceID)deviceID;
 

@@ -8,6 +8,9 @@
 
 #import "SRAudioDeviceManager.h"
 #import "SRAudioDevice.h"
+#import "SRAudioUtilities.h"
+
+#import <CoreAudio/CoreAudio.h>
 
 #pragma mark - C Implementations
 
@@ -15,11 +18,7 @@ static OSStatus getAudioDevices(Ptr *devices, UInt16 *devicesAvailable) {
     OSStatus err = noErr;
     UInt32 dataSize = 0;
     
-    AudioObjectPropertyAddress address = {
-        kAudioHardwarePropertyDevices,
-        kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
-    };
+    AudioObjectPropertyAddress address = AOPADefault(kAudioHardwarePropertyDevices);
     
     err = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &address, 0, NULL, &dataSize);
     if (err != noErr) return err;
@@ -42,11 +41,79 @@ static OSStatus getAudioDevices(Ptr *devices, UInt16 *devicesAvailable) {
     return err;
 }
 
+OSStatus propertyListenerProc(AudioObjectID inObjectID, UInt32 inNumberAddresses, const AudioObjectPropertyAddress inAddresses[], void *inClientData) {
+    SRAudioDeviceManager *managerInstance = (__bridge SRAudioDeviceManager *)inClientData;
+    
+    for (UInt32 i=0; i < inNumberAddresses; i++) {
+        switch (inAddresses[i].mSelector) {
+            case kAudioHardwarePropertyDefaultInputDevice:
+                NSLog(@"Default Input Device");
+                // TODO
+                break;
+                
+            case kAudioHardwarePropertyDefaultOutputDevice:
+                NSLog(@"Default Output Device");
+                // TODO
+                break;
+                
+            case kAudioHardwarePropertyDefaultSystemOutputDevice:
+                NSLog(@"Default System Output Device");
+                // TODO
+                break;
+                
+            case kAudioHardwarePropertyDevices:
+                NSLog(@"Devices");
+                [managerInstance refreshDevices];
+                break;
+                
+            default:
+                NSLog(@"Unknown Message");
+                // TODO
+                break;
+        }
+    }
+    
+    return noErr;
+}
+
 #pragma mark - Objective-C Class Implementations
 
 @implementation SRAudioDeviceManager
 
-+ (NSArray *)devices {
+@synthesize devices = _devices;
+
++ (SRAudioDeviceManager *)sharedManager {
+    static dispatch_once_t onceToken;
+    static SRAudioDeviceManager *instance = nil;
+    dispatch_once(&onceToken, ^{
+        instance = [[SRAudioDeviceManager alloc] init];
+    });
+    return instance;
+}
+
+- (id)init {
+    self = [super init];
+    if (self) {
+        [self refreshDevices];
+        
+        // Add Property Listener
+        
+        AudioObjectPropertyAddress address = AOPADefault(kAudioHardwarePropertyDevices);
+        AudioObjectAddPropertyListener(kAudioObjectSystemObject, &address, propertyListenerProc, (__bridge void *)self);
+    }
+    return self;
+}
+
+- (void)dealloc {
+    AudioObjectPropertyAddress address = AOPADefault(kAudioHardwarePropertyDevices);
+    AudioObjectRemovePropertyListener(kAudioObjectSystemObject, &address, propertyListenerProc, (__bridge void *)self);
+}
+
+- (void)refreshDevices {
+    _devices = [self generateDevices];
+}
+
+- (NSArray *)generateDevices {
     AudioObjectID *devices = NULL;
     UInt16 devicesAvailable = 0;
     
@@ -66,15 +133,6 @@ static OSStatus getAudioDevices(Ptr *devices, UInt16 *devicesAvailable) {
     free(devices);
     
     return [deviceArray copy];
-}
-
-+ (SRAudioDeviceManager *)sharedManager {
-    static dispatch_once_t onceToken;
-    static SRAudioDeviceManager *instance = nil;
-    dispatch_once(&onceToken, ^{
-        instance = [[SRAudioDeviceManager alloc] init];
-    });
-    return instance;
 }
 
 @end

@@ -7,39 +7,7 @@
 //
 
 #import "SRAudioDevice.h"
-
-//#pragma mark - C Implementations
-//
-//static OSStatus getAudioDevices(Ptr *devices, UInt16 *devicesAvailable) {
-//    OSStatus err = noErr;
-//    UInt32 dataSize = 0;
-//    
-//    AudioObjectPropertyAddress address = {
-//        kAudioHardwarePropertyDevices,
-//        kAudioObjectPropertyScopeGlobal,
-//        kAudioObjectPropertyElementMaster
-//    };
-//    
-//    err = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &address, 0, NULL, &dataSize);
-//    if (err != noErr) return err;
-//    
-//    *devicesAvailable = dataSize / (UInt32)sizeof(AudioObjectID);
-//    if (*devicesAvailable < 1) {
-//        // No Devices
-//        return err;
-//    }
-//    
-//    if (*devices != NULL) free(*devices);
-//    *devices = (Ptr)malloc(dataSize);
-//    memset(*devices, 0, dataSize);
-//    
-//    err = AudioObjectGetPropertyData(kAudioObjectSystemObject, &address, 0, NULL, &dataSize, (void *)*devices);
-//    if (err != noErr) {
-//        free(*devices);
-//    }
-//    
-//    return err;
-//}
+#import "SRAudioUtilities.h"
 
 @implementation SRAudioDevice
 
@@ -47,34 +15,12 @@
 @synthesize name = _name;
 @synthesize numberInputChannels = _numberInputChannels;
 @synthesize numberOutputChannels = _numberOutputChannels;
-
-//+ (NSArray *)devices {
-//    AudioObjectID *devices = NULL;
-//    UInt16 devicesAvailable = 0;
-//    
-//    NSMutableArray *deviceArray = [[NSMutableArray alloc] init];
-//    
-//    if (getAudioDevices((Ptr *)&devices, &devicesAvailable) != noErr) {
-//        return nil;
-//    }
-//    
-//    for (int i=0; i < devicesAvailable; i++) {
-//        UInt16 deviceID = devices[i];
-//        
-//        SRAudioDevice *device = [[SRAudioDevice alloc] initWithDeviceID:deviceID];
-//        [deviceArray addObject:device];
-//    }
-//    
-//    free(devices);
-//    
-//    return [deviceArray copy];
-//}
+@synthesize deviceUID = _deviceUID;
 
 - (id)initWithDeviceID:(AudioDeviceID)deviceID {
     self = [super init];
     if (self) {
         _deviceID = deviceID;
-        _name = [self nameOfDevice:deviceID];
         _numberInputChannels = [self inputChannelsOfDevice:deviceID];
         _numberOutputChannels = [self outputChannelsOfDevice:deviceID];
     }
@@ -82,25 +28,23 @@
     return self;
 }
 
-- (NSString *)nameOfDevice:(AudioDeviceID)deviceID {
-    AudioObjectPropertyAddress address = {
-        kAudioObjectPropertyName,
-        kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
-    };
-    
-    UInt32 ioSize = sizeof(CFStringRef);
-    CFStringRef stringRef = NULL;
-    OSStatus err = AudioObjectGetPropertyData(deviceID, &address, 0, NULL, &ioSize, &stringRef);
-    if (err != noErr || stringRef == NULL) {
-        // Failed to get name
-        return nil;
+- (NSString *)name {
+    if (_name == nil) {
+        AudioObjectPropertyAddress address = AOPADefault(kAudioObjectPropertyName);
+        
+        UInt32 ioSize = sizeof(CFStringRef);
+        CFStringRef stringRef = NULL;
+        OSStatus err = AudioObjectGetPropertyData(_deviceID, &address, 0, NULL, &ioSize, &stringRef);
+        if (err != noErr || stringRef == NULL) {
+            // Failed to get name
+            return nil;
+        }
+        
+        _name = (__bridge NSString *)stringRef;
+        CFRelease(stringRef);
     }
     
-    NSString *name = (__bridge NSString *)stringRef;
-    CFRelease(stringRef);
-    
-    return name;
+    return _name;
 }
 
 - (UInt32)inputChannelsOfDevice:(AudioDeviceID)deviceID {
@@ -177,6 +121,25 @@
     free(bufferList);
     
     return result;
+}
+
+- (NSString *)deviceUID {
+    if (_deviceUID == nil) {
+        AudioObjectPropertyAddress address = AOPADefault(kAudioDevicePropertyDeviceUID);
+        
+        CFStringRef stringRef = NULL;
+        UInt32 size = sizeof(CFStringRef);
+        
+        OSStatus err = AudioObjectGetPropertyData(_deviceID, &address, 0, NULL, &size, &stringRef);
+        if (err != noErr || stringRef == NULL) {
+            return nil;
+        }
+        
+        _deviceUID = (__bridge NSString *)stringRef;
+        CFRelease(stringRef);
+    }
+    
+    return _deviceUID;
 }
 
 @end

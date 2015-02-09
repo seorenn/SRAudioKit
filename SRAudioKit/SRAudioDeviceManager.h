@@ -10,7 +10,10 @@
 
 @interface SRAudioDeviceManager : NSObject
 
-+ (NSArray *)devices;
+@property (nonatomic, readonly) NSArray *devices;
+
 + (SRAudioDeviceManager *)sharedManager;
+
+- (void)refreshDevices;
 
 @end

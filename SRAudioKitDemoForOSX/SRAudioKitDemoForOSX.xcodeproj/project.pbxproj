@@ -14,6 +14,7 @@
 		8A4E8C271A8899770024F532 /* SRAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C261A8899770024F532 /* SRAudioQueue.m */; };
 		8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */; };
 		8A4E8C2D1A88AC590024F532 /* SRAudioDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */; };
+		8A4E8C301A88B7000024F532 /* SRAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C2F1A88B7000024F532 /* SRAudioUtilities.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -43,6 +44,8 @@
 		8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioDevice.m; path = ../SRAudioKit/SRAudioDevice.m; sourceTree = "<group>"; };
 		8A4E8C2B1A88AC590024F532 /* SRAudioDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioDeviceManager.h; path = ../SRAudioKit/SRAudioDeviceManager.h; sourceTree = "<group>"; };
 		8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioDeviceManager.m; path = ../SRAudioKit/SRAudioDeviceManager.m; sourceTree = "<group>"; };
+		8A4E8C2E1A88B7000024F532 /* SRAudioUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioUtilities.h; path = ../SRAudioKit/SRAudioUtilities.h; sourceTree = "<group>"; };
+		8A4E8C2F1A88B7000024F532 /* SRAudioUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioUtilities.m; path = ../SRAudioKit/SRAudioUtilities.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +132,8 @@
 				8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */,
 				8A4E8C2B1A88AC590024F532 /* SRAudioDeviceManager.h */,
 				8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */,
+				8A4E8C2E1A88B7000024F532 /* SRAudioUtilities.h */,
+				8A4E8C2F1A88B7000024F532 /* SRAudioUtilities.m */,
 			);
 			name = SRAudioKit;
 			sourceTree = "<group>";
@@ -235,6 +240,7 @@
 				8A3DABC71A84B96100470743 /* AppDelegate.swift in Sources */,
 				8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */,
 				8A4E8C271A8899770024F532 /* SRAudioQueue.m in Sources */,
+				8A4E8C301A88B7000024F532 /* SRAudioUtilities.m in Sources */,
 				8A4E8C2D1A88AC590024F532 /* SRAudioDeviceManager.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
