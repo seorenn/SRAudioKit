@@ -11,5 +11,6 @@
 
 #import "SRAudioQueue.h"
 #import "SRAudioDevice.h"
+#import "SRAudioDeviceManager.h"
 
 #endif
