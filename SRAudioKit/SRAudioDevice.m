@@ -21,11 +21,15 @@
     self = [super init];
     if (self) {
         _deviceID = deviceID;
-        _numberInputChannels = [self inputChannelsOfDevice:deviceID];
-        _numberOutputChannels = [self outputChannelsOfDevice:deviceID];
+        [self commonInitialization];
     }
     
     return self;
+}
+
+- (void)commonInitialization {
+    _numberInputChannels = [self inputChannelsOfDevice:_deviceID];
+    _numberOutputChannels = [self outputChannelsOfDevice:_deviceID];
 }
 
 - (NSString *)name {
