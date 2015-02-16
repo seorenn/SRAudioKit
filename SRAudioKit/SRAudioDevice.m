@@ -13,7 +13,6 @@
     NSNumber *_numInput;
     NSNumber *_numOutput;
 }
-
 @end
 
 @implementation SRAudioDevice
@@ -31,11 +30,6 @@
     
     return self;
 }
-
-//- (void)commonInitialization {
-//    _numberInputChannels = [self inputChannelsOfDevice:_deviceID];
-//    _numberOutputChannels = [self outputChannelsOfDevice:_deviceID];
-//}
 
 - (NSString *)name {
     if (_name == nil) {
@@ -55,82 +49,6 @@
     
     return _name;
 }
-
-//- (UInt32)inputChannelsOfDevice:(AudioDeviceID)deviceID {
-//    AudioObjectPropertyAddress address = {
-//        kAudioDevicePropertyStreamConfiguration,
-//        kAudioObjectPropertyScopeInput,
-//        0
-//    };
-//    
-//    UInt32 ioSize = 0;
-//    UInt32 result = 0;
-//    
-//    OSStatus err = AudioObjectGetPropertyDataSize(deviceID, &address, 0, NULL, &ioSize);
-//    if (err != noErr || ioSize == 0) {
-//        // Error or no result
-//        return 0;
-//    }
-//    
-//    AudioBufferList *bufferList = (AudioBufferList *)malloc(ioSize);
-//    if (bufferList == NULL) {
-//        // Insufficient Memory
-//        return 0;
-//    }
-//    
-//    err = AudioObjectGetPropertyData(deviceID, &address, 0, NULL, &ioSize, bufferList);
-//    if (err != noErr) {
-//        // Insufficient Memory
-//        free(bufferList);
-//        return 0;
-//    }
-//        
-//    for (int i = 0; i < bufferList->mNumberBuffers; ++i) {
-//        result += bufferList->mBuffers[i].mNumberChannels;
-//    }
-//        
-//    free(bufferList);
-//
-//    return result;
-//}
-
-//- (UInt32)outputChannelsOfDevice:(AudioDeviceID)deviceID {
-//    AudioObjectPropertyAddress address = {
-//        kAudioDevicePropertyStreamConfiguration,
-//        kAudioObjectPropertyScopeOutput,
-//        0
-//    };
-//    
-//    UInt32 ioSize = 0;
-//    UInt32 result = 0;
-//    
-//    OSStatus err = AudioObjectGetPropertyDataSize(deviceID, &address, 0, NULL, &ioSize);
-//    if (err != noErr || ioSize == 0) {
-//        // Error or no result
-//        return 0;
-//    }
-//    
-//    AudioBufferList *bufferList = (AudioBufferList *)malloc(ioSize);
-//    if (bufferList == NULL) {
-//        // Insufficient Memory
-//        return 0;
-//    }
-//    
-//    err = AudioObjectGetPropertyData(deviceID, &address, 0, NULL, &ioSize, bufferList);
-//    if (err != noErr) {
-//        // Insufficient Memory
-//        free(bufferList);
-//        return 0;
-//    }
-//    
-//    for (int i = 0; i < bufferList->mNumberBuffers; ++i) {
-//        result += bufferList->mBuffers[i].mNumberChannels;
-//    }
-//    
-//    free(bufferList);
-//    
-//    return result;
-//}
 
 - (UInt32)numberInputChannels {
     if (_numInput == nil) {
