@@ -10,16 +10,18 @@
 
 #define SRAudioQueueNumberOfBuffers 3
 
+/*
 static void SRAudioQueueInputBufferHandler(void *aqData,
                                            AudioQueueRef inAQ,
                                            AudioQueueBufferRef inBuffer,
                                            const AudioTimeStamp *inStartTime,
                                            UInt32 inNumPackets,
                                            const AudioStreamPacketDescription *inPacketDesc);
+*/
 
 @interface SRAudioQueue () {
     AudioStreamBasicDescription _dataFormat;
-    AudioQueueRef               _inputQueue;
+    AudioQueueRef               _queue;
     AudioQueueBufferRef         _buffers[SRAudioQueueNumberOfBuffers];
     AudioFileID                 _audioFile;
     UInt32                      _bufferByteSize;
@@ -28,16 +30,18 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     BOOL                        _isPrepared;
 }
 @property (assign) AudioStreamBasicDescription dataFormat;
+@property (assign) AudioQueueRef queue;
 @end
 
 @implementation SRAudioQueue
 
 @synthesize dataFormat = _dataFormat;
+@synthesize queue = _queue;
 
 - (id)init {
     self = [super init];
     if (self) {
-        _inputQueue = NULL;
+        _queue = NULL;
         
         self.sampleRate = 44100.0;
         self.channelsPerFrame = 2;
@@ -52,28 +56,33 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
 }
 
 - (void)dealloc {
-    if (_inputQueue) {
+    if (_queue) {
         [self stop];
-        [self disposeInputQueue];
+        [self dispose];
     }
 }
 
-- (BOOL)disposeInputQueue {
-    if (_inputQueue == NULL) return YES;
+- (BOOL)dispose {
+    if (_queue == NULL) return YES;
     
-    OSStatus error = AudioQueueDispose(_inputQueue, true);
+    OSStatus error = AudioQueueDispose(_queue, true);
     if (error != noErr) {
         NSLog(@"AudioQueueDispose Failed");
         return NO;
     }
     
-    _inputQueue = NULL;
+    _queue = NULL;
     return YES;
+}
+
+- (AudioQueueRef)queueWithFormat:(AudioStreamBasicDescription *)format {
+    NSAssert(NO, @"You must not use SRAudioQueue class directly. Use SRAudioQueueInput instead.");
+    return NULL;
 }
 
 - (BOOL)prepare {
     [self stop];
-    [self disposeInputQueue];
+    [self dispose];
     
     OSStatus error = noErr;
     
@@ -93,6 +102,13 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
         kLinearPCMFormatFlagIsSignedInteger |
         kLinearPCMFormatFlagIsPacked;
     
+    _queue = [self queueWithFormat:&_dataFormat];
+    if (_queue == NULL) {
+        NSLog(@"queueWithFormat Failed");
+        return NO;
+    }
+    
+    /*
     error = AudioQueueNewInput(&_dataFormat,
                                SRAudioQueueInputBufferHandler,
                                (__bridge void *)self,
@@ -104,11 +120,12 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
         NSLog(@"AudioQueueNewInput Failed");
         return NO;
     }
+     */
     
     // Determine Current Device
     if (self.device) {
         CFStringRef uid = (__bridge CFStringRef)self.device.deviceUID;
-        error = AudioQueueSetProperty(_inputQueue, kAudioQueueProperty_CurrentDevice, (void *)uid, sizeof(uid));
+        error = AudioQueueSetProperty(_queue, kAudioQueueProperty_CurrentDevice, (void *)uid, sizeof(uid));
         if (error != noErr) {
             NSLog(@"Failed to setup device [%@(%@)]", self.device.deviceUID, self.device.name);
             return NO;
@@ -116,7 +133,7 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     }
     
     UInt32 dataFormatSize = sizeof(_dataFormat);
-    error = AudioQueueGetProperty(_inputQueue,
+    error = AudioQueueGetProperty(_queue,
                                   kAudioConverterCurrentOutputStreamDescription,
                                   &_dataFormat,
                                   &dataFormatSize);
@@ -127,13 +144,13 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     
     _bufferByteSize = self.bufferSize * _dataFormat.mBytesPerPacket;
     for (int i=0; i < SRAudioQueueNumberOfBuffers; ++i) {
-        error = AudioQueueAllocateBuffer(_inputQueue, _bufferByteSize, &_buffers[i]);
+        error = AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_buffers[i]);
         if (error != noErr) {
             NSLog(@"AudioQueueAllocateBuffer Failed");
             return NO;
         }
         
-        error = AudioQueueEnqueueBuffer(_inputQueue, _buffers[i], 0, NULL);
+        error = AudioQueueEnqueueBuffer(_queue, _buffers[i], 0, NULL);
         if (error != noErr) {
             NSLog(@"AudioQueueEnqueueBuffer Failed");
             return NO;
@@ -148,7 +165,7 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     OSStatus error = noErr;
     
     _currentPacket = 0;
-    error = AudioQueueStart(_inputQueue, NULL);
+    error = AudioQueueStart(_queue, NULL);
     if (error != noErr) {
         NSLog(@"AudioQueueStart Failed");
         return NO;
@@ -159,11 +176,11 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
 }
 
 - (BOOL)stop {
-    if (_inputQueue == NULL || _isRunning == NO) return YES;
+    if (_queue == NULL || _isRunning == NO) return YES;
     
     OSStatus error = noErr;
     
-    error = AudioQueueStop(_inputQueue, true);
+    error = AudioQueueStop(_queue, true);
     if (error != noErr) {
         NSLog(@"AudioQueueStop Failed");
         return NO;
@@ -176,6 +193,7 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
 
 @end
 
+/*
 static void SRAudioQueueInputBufferHandler(void *aqData,
                                            AudioQueueRef inAQ,
                                            AudioQueueBufferRef inBuffer,
@@ -190,3 +208,4 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     
     // TODO
 }
+*/
