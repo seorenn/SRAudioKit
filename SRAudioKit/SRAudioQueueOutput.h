@@ -17,7 +17,7 @@
 - (BOOL)start;
 
 - (BOOL)feedBufferWithData:(NSData *)data;
-- (BOOL)feedBuffer:(AudioQueueBufferRef)buffer;
+- (BOOL)feedBufferWithAudioQueueBuffer:(AudioQueueBufferRef)buffer;
 
 - (BOOL)stop;
 

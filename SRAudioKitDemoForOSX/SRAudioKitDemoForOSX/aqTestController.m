@@ -58,6 +58,8 @@
 - (void)audioQueueInput:(SRAudioQueueInput *)queue encounterBuffer:(AudioQueueBufferRef)bufferRef startTime:(const AudioTimeStamp *)startTime numPackets:(UInt32)numPackets packetDesc:(const AudioStreamPacketDescription *)packetDesc
 {
     NSLog(@"AudioQueue Input Buffer: %d byte(s)", bufferRef->mAudioDataByteSize);
+    
+    [self.outputQueue feedBufferWithAudioQueueBuffer:bufferRef];
 }
 
 @end

@@ -8,18 +8,19 @@
 
 #import "SRAudioQueueOutput.h"
 
-#include <pthread.h>
+//#include <pthread.h>
 
-#define SRAudioQueueOutputNumberOfBuffers   3
+#define SRAudioQueueOutputNumberOfBuffers   5
 
 static void SRAudioQueueOutputBufferHandler(void *inUserData,
                                             AudioQueueRef inAQ,
                                             AudioQueueBufferRef inBuffer);
 
 typedef struct _buffer_box_t_ {
-    pthread_mutex_t mutex;
-    pthread_cond_t cond;
+//    pthread_mutex_t mutex;
+//    pthread_cond_t cond;
     AudioQueueBufferRef buffer;
+    BOOL ready;
     BOOL full;
 } SRAudioQueueOutputBuffer;
 
@@ -33,14 +34,17 @@ typedef struct _buffer_box_t_ {
     SInt64                      _currentPacket;
     BOOL                        _isRunning;
     BOOL                        _isPrepared;
+    int                         _currentBufferIndex;
 }
 @property (assign) AudioStreamBasicDescription dataFormat;
+@property (readonly) int currentBufferIndex;
 @end
 
 @implementation SRAudioQueueOutput
 
 @synthesize dataFormat = _dataFormat;
 @synthesize bufferByteSize = _bufferByteSize;
+@synthesize currentBufferIndex = _currentBufferIndex;
 
 - (id)init {
     self = [super init];
@@ -71,12 +75,12 @@ typedef struct _buffer_box_t_ {
     
     _queue = NULL;
     
-    if (_isPrepared) {
-        for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
-            pthread_mutex_destroy(&_buffers[i].mutex);
-            pthread_cond_destroy(&_buffers[i].cond);
-        }
-    }
+//    if (_isPrepared) {
+//        for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
+//            pthread_mutex_destroy(&_buffers[i].mutex);
+//            pthread_cond_destroy(&_buffers[i].cond);
+//        }
+//    }
     
     _isPrepared = NO;
     
@@ -142,6 +146,8 @@ typedef struct _buffer_box_t_ {
     _bufferByteSize = self.bufferSize * _dataFormat.mBytesPerPacket;
     for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
         memset(&_buffers[i], 0, sizeof(SRAudioQueueOutputBuffer));
+        _buffers[i].ready = YES;
+        _buffers[i].full = NO;
         
         error = AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_buffers[i].buffer);
         if (error != noErr) {
@@ -149,17 +155,17 @@ typedef struct _buffer_box_t_ {
             return NO;
         }
         
-        int res = pthread_mutex_init(&_buffers[i].mutex, NULL);
-        if (res) {
-            NSLog(@"pthread_mutex_init Failed");
-            return NO;
-        }
-        
-        res = pthread_cond_init(&_buffers[i].cond, NULL);
-        if (res) {
-            NSLog(@"pthread_cond_init Failed");
-            return NO;
-        }
+//        int res = pthread_mutex_init(&_buffers[i].mutex, NULL);
+//        if (res) {
+//            NSLog(@"pthread_mutex_init Failed");
+//            return NO;
+//        }
+//        
+//        res = pthread_cond_init(&_buffers[i].cond, NULL);
+//        if (res) {
+//            NSLog(@"pthread_cond_init Failed");
+//            return NO;
+//        }
     }
     
     _isPrepared = YES;
@@ -183,6 +189,8 @@ typedef struct _buffer_box_t_ {
 - (BOOL)stop {
     if (_queue == NULL || _isRunning == NO) return YES;
     
+    _isRunning = NO;
+    
     OSStatus error = noErr;
     
     error = AudioQueueStop(_queue, true);
@@ -191,13 +199,14 @@ typedef struct _buffer_box_t_ {
         return NO;
     }
     
-    _isRunning = NO;
-    
     return YES;
 }
 
 - (SRAudioQueueOutputBuffer *)bufferOnReady {
-    // TODO
+    for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
+        if (_buffers[i].ready) return &_buffers[i];
+    }
+
     return NULL;
 }
 
@@ -215,12 +224,15 @@ typedef struct _buffer_box_t_ {
         return;
     }
     
-    pthread_mutex_lock(&targetBuffer->mutex);
+//    pthread_mutex_lock(&targetBuffer->mutex);
+//    
+//    targetBuffer->full = NO;
+//    
+//    pthread_mutex_unlock(&targetBuffer->mutex);
+//    pthread_cond_signal(&targetBuffer->cond);
     
+    targetBuffer->ready = YES;
     targetBuffer->full = NO;
-    
-    pthread_mutex_unlock(&targetBuffer->mutex);
-    pthread_cond_signal(&targetBuffer->cond);
 }
 
 - (BOOL)feedBufferWithData:(NSData *)data {
@@ -228,9 +240,26 @@ typedef struct _buffer_box_t_ {
     return NO;
 }
 
-- (BOOL)feedBuffer:(AudioQueueBufferRef)buffer {
-    // TODO
-    return NO;
+- (BOOL)feedBufferWithAudioQueueBuffer:(AudioQueueBufferRef)buffer {
+    if (_isRunning == NO || _isPrepared == NO) return NO;
+    
+    SRAudioQueueOutputBuffer *targetBuffer = [self bufferOnReady];
+    if (targetBuffer == NULL) {
+        NSLog(@"No buffer ready...");
+        return NO;
+    }
+    
+    targetBuffer->ready = NO;
+    memcpy(targetBuffer->buffer->mAudioData, buffer->mAudioData, buffer->mAudioDataByteSize);
+    targetBuffer->buffer->mAudioDataByteSize = buffer->mAudioDataByteSize;
+    
+    OSStatus error = AudioQueueEnqueueBuffer(_queue, targetBuffer->buffer, 0, NULL);
+    if (error) {
+        NSLog(@"AudioQueueEnqueueBuffer Failed(%ld)", (long)error);
+        return NO;
+    }
+
+    return YES;
 }
 
 @end
