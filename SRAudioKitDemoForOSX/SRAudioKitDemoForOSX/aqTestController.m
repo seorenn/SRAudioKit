@@ -43,11 +43,13 @@
         NSLog(@"Stop!");
         [self.inputQueue stop];
         [self.outputQueue stop];
+        self.testingDirectRouting = NO;
     }
     else {
         NSLog(@"Start!");
         [self.inputQueue start];
         [self.outputQueue start];
+        self.testingDirectRouting = YES;
     }
 }
 
