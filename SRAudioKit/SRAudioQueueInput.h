@@ -22,4 +22,11 @@
 
 @property (nonatomic, weak) id<SRAudioQueueInputDelegate> delegate;
 
+- (BOOL)prepare;
+
+- (BOOL)start;
+- (BOOL)stop;
+
+- (BOOL)dispose;
+
 @end

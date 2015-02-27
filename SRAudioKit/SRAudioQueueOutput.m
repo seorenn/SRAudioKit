@@ -1,26 +1,33 @@
 //
-//  SRAudioQueueInput.m
+//  SRAudioQueueOutput.m
 //  SRAudioKitDemoForOSX
 //
-//  Created by Heeseung Seo on 2015. 2. 23..
-//  Copyright (c) 2015년 Seorenn. All rights reserved.
+//  Created by Seorenn on 2015. 2. 27..
+//  Copyright (c) 2015 Seorenn. All rights reserved.
 //
 
-#import "SRAudioQueueInput.h"
+#import "SRAudioQueueOutput.h"
 
-#define SRAudioQueueInputNumberOfBuffers    3
+#include <pthread.h>
 
-static void SRAudioQueueInputBufferHandler(void *aqData,
-                                           AudioQueueRef inAQ,
-                                           AudioQueueBufferRef inBuffer,
-                                           const AudioTimeStamp *inStartTime,
-                                           UInt32 inNumPackets,
-                                           const AudioStreamPacketDescription *inPacketDesc);
+#define SRAudioQueueOutputNumberOfBuffers   3
 
-@interface SRAudioQueueInput () {
+static void SRAudioQueueOutputBufferHandler(void *inUserData,
+                                            AudioQueueRef inAQ,
+                                            AudioQueueBufferRef inBuffer);
+
+typedef struct _buffer_box_t_ {
+    pthread_mutex_t mutex;
+    pthread_cond_t cond;
+    AudioQueueBufferRef buffer;
+    BOOL full;
+} SRAudioQueueOutputBuffer;
+
+@interface SRAudioQueueOutput () {
     AudioStreamBasicDescription _dataFormat;
     AudioQueueRef               _queue;
-    AudioQueueBufferRef         _buffers[SRAudioQueueInputNumberOfBuffers];
+    //AudioQueueBufferRef         _buffers[SRAudioQueueOutputNumberOfBuffers];
+    SRAudioQueueOutputBuffer    _buffers[SRAudioQueueOutputNumberOfBuffers];
     AudioFileID                 _audioFile;
     UInt32                      _bufferByteSize;
     SInt64                      _currentPacket;
@@ -30,12 +37,16 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
 @property (assign) AudioStreamBasicDescription dataFormat;
 @end
 
-@implementation SRAudioQueueInput
+@implementation SRAudioQueueOutput
+
+@synthesize dataFormat = _dataFormat;
+@synthesize bufferByteSize = _bufferByteSize;
 
 - (id)init {
     self = [super init];
     if (self) {
         _queue = NULL;
+        
         _isRunning = NO;
         _isPrepared = NO;
     }
@@ -59,6 +70,16 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     }
     
     _queue = NULL;
+    
+    if (_isPrepared) {
+        for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
+            pthread_mutex_destroy(&_buffers[i].mutex);
+            pthread_cond_destroy(&_buffers[i].cond);
+        }
+    }
+    
+    _isPrepared = NO;
+    
     return YES;
 }
 
@@ -84,15 +105,15 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     kLinearPCMFormatFlagIsSignedInteger |
     kLinearPCMFormatFlagIsPacked;
     
-    error = AudioQueueNewInput(&_dataFormat,
-                               SRAudioQueueInputBufferHandler,
-                               (__bridge void *)self,
-                               NULL,
-                               kCFRunLoopCommonModes,
-                               0,
-                               &_queue);
+    error = AudioQueueNewOutput(&_dataFormat,
+                                SRAudioQueueOutputBufferHandler,
+                                (__bridge void *)self,
+                                NULL,
+                                kCFRunLoopCommonModes,
+                                0,
+                                &_queue);
     if (error != noErr) {
-        NSLog(@"AudioQueueNewInput Failed");
+        NSLog(@"AudioQueueNewOutput Failed");
         return NO;
     }
     
@@ -106,6 +127,7 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
         }
     }
     
+    /*
     UInt32 dataFormatSize = sizeof(_dataFormat);
     error = AudioQueueGetProperty(_queue,
                                   kAudioConverterCurrentOutputStreamDescription,
@@ -115,18 +137,27 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
         NSLog(@"AudioQueueGetProperty Failed");
         return NO;
     }
+     */
     
     _bufferByteSize = self.bufferSize * _dataFormat.mBytesPerPacket;
-    for (int i=0; i < SRAudioQueueInputNumberOfBuffers; ++i) {
-        error = AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_buffers[i]);
+    for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
+        memset(&_buffers[i], 0, sizeof(SRAudioQueueOutputBuffer));
+        
+        error = AudioQueueAllocateBuffer(_queue, _bufferByteSize, &_buffers[i].buffer);
         if (error != noErr) {
             NSLog(@"AudioQueueAllocateBuffer Failed");
             return NO;
         }
         
-        error = AudioQueueEnqueueBuffer(_queue, _buffers[i], 0, NULL);
-        if (error != noErr) {
-            NSLog(@"AudioQueueEnqueueBuffer Failed");
+        int res = pthread_mutex_init(&_buffers[i].mutex, NULL);
+        if (res) {
+            NSLog(@"pthread_mutex_init Failed");
+            return NO;
+        }
+        
+        res = pthread_cond_init(&_buffers[i].cond, NULL);
+        if (res) {
+            NSLog(@"pthread_cond_init Failed");
             return NO;
         }
     }
@@ -165,23 +196,48 @@ static void SRAudioQueueInputBufferHandler(void *aqData,
     return YES;
 }
 
+- (SRAudioQueueOutputBuffer *)bufferOnReady {
+    // TODO
+    return NULL;
+}
+
+- (void)makeReadyBuffer:(AudioQueueBufferRef)buffer {
+    SRAudioQueueOutputBuffer *targetBuffer = NULL;
+    for (int i=0; i < SRAudioQueueOutputNumberOfBuffers; ++i) {
+        if (_buffers[i].buffer == buffer) {
+            targetBuffer = &_buffers[i];
+            break;
+        }
+    }
+    
+    if (targetBuffer == NULL) {
+        NSLog(@"Failed to get buffer from bufferRef");
+        return;
+    }
+    
+    pthread_mutex_lock(&targetBuffer->mutex);
+    
+    targetBuffer->full = NO;
+    
+    pthread_mutex_unlock(&targetBuffer->mutex);
+    pthread_cond_signal(&targetBuffer->cond);
+}
+
+- (BOOL)feedBufferWithData:(NSData *)data {
+    // TODO
+    return NO;
+}
+
+- (BOOL)feedBuffer:(AudioQueueBufferRef)buffer {
+    // TODO
+    return NO;
+}
+
 @end
 
-static void SRAudioQueueInputBufferHandler(void *aqData,
-                                           AudioQueueRef inAQ,
-                                           AudioQueueBufferRef inBuffer,
-                                           const AudioTimeStamp *inStartTime,
-                                           UInt32 inNumPackets,
-                                           const AudioStreamPacketDescription *inPacketDesc) {
-    SRAudioQueueInput *audioQueue = (__bridge SRAudioQueueInput *)aqData;
-    
-    if (inNumPackets == 0 && audioQueue.dataFormat.mBytesPerPacket != 0) {
-        inNumPackets = inBuffer->mAudioDataByteSize / audioQueue.dataFormat.mBytesPerPacket;
-    }
-    
-    if (audioQueue.delegate) {
-        [audioQueue.delegate audioQueueInput:audioQueue encounterBuffer:inBuffer startTime:inStartTime numPackets:inNumPackets packetDesc:inPacketDesc];
-    }
-    
-    // TODO
+static void SRAudioQueueOutputBufferHandler(void *inUserData,
+                                            AudioQueueRef inAQ,
+                                            AudioQueueBufferRef inBuffer) {
+    SRAudioQueueOutput *audioQueue = (__bridge SRAudioQueueOutput *)inUserData;
+    [audioQueue makeReadyBuffer:inBuffer];
 }

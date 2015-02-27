@@ -10,6 +10,8 @@
 #define SRAudioKitDemoForOSX_SRAudioKit_h
 
 #import "SRAudioQueue.h"
+#import "SRAudioQueueInput.h"
+#import "SRAudioQueueOutput.h"
 #import "SRAudioDevice.h"
 #import "SRAudioDeviceManager.h"
 
