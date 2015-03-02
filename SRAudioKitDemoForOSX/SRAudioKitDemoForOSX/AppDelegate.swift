@@ -15,6 +15,8 @@ class AppDelegate: NSObject, NSApplicationDelegate {
 
     func applicationDidFinishLaunching(aNotification: NSNotification) {
         // Insert code here to initialize your application
+        let dd = SRAudioDeviceManager.sharedManager().defaultDevice
+        println("Default Device: [\(dd.deviceID):\(dd.deviceUID)]")
         let devices = SRAudioDeviceManager.sharedManager().devices as [SRAudioDevice]
         for dev in devices {
             println("Device [\(dev.name):\(dev.deviceID):\(dev.deviceUID)]: I[\(dev.numberInputChannels)] O[\(dev.numberOutputChannels)]")

@@ -686,10 +686,21 @@
                             <action selector="pressedDirectRoutingTest:" target="hmj-Dv-aoV" id="0Aq-Eh-tIm"/>
                         </connections>
                     </button>
+                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eUa-Ka-Szl">
+                        <rect key="frame" x="14" y="279" width="114" height="32"/>
+                        <buttonCell key="cell" type="push" title="Record Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="891-Rc-Ix4">
+                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
+                            <font key="font" metaFont="system"/>
+                        </buttonCell>
+                        <connections>
+                            <action selector="pressedButton:" target="kuo-ju-UdH" id="3hr-VR-hhf"/>
+                        </connections>
+                    </button>
                 </subviews>
             </view>
         </window>
         <customObject id="Ngx-5e-kxu"/>
         <customObject id="uhP-UI-XDL"/>
+        <customObject id="kuo-ju-UdH" customClass="RecordTestController"/>
     </objects>
 </document>

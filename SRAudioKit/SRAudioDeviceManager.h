@@ -8,9 +8,12 @@
 
 #import <Foundation/Foundation.h>
 
+@class SRAudioDevice;
+
 @interface SRAudioDeviceManager : NSObject
 
 @property (nonatomic, readonly) NSArray *devices;
+@property (nonatomic, readonly) SRAudioDevice *defaultDevice;
 
 + (SRAudioDeviceManager *)sharedManager;
 

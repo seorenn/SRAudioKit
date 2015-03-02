@@ -135,4 +135,24 @@ OSStatus propertyListenerProc(AudioObjectID inObjectID, UInt32 inNumberAddresses
     return [deviceArray copy];
 }
 
+- (SRAudioDevice *)defaultDevice {
+    UInt32 size = sizeof(AudioDeviceID);
+    AudioDeviceID deviceID;
+    AudioObjectPropertyAddress address = {
+        kAudioHardwarePropertyDefaultInputDevice,
+        kAudioObjectPropertyScopeGlobal,
+        kAudioObjectPropertyElementMaster
+    };
+    
+    OSStatus error = AudioObjectGetPropertyData(kAudioObjectSystemObject,
+                                                &address,
+                                                0,
+                                                NULL,
+                                                &size,
+                                                &deviceID);
+    CheckOSStatusFailure(error, @"Failed to get default audio device");
+    
+    return [[SRAudioDevice alloc] initWithDeviceID:deviceID];
+}
+
 @end

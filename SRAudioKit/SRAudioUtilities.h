@@ -10,6 +10,13 @@
 
 #import <CoreAudio/CoreAudio.h>
 
+#define CheckOSStatusFailure(status, description) {    \
+    if ((status)) { \
+        NSLog(@"%@ (%d)", (description), (status)); \
+        exit(1);    \
+    }   \
+}
+
 AudioObjectPropertyAddress AOPADefault(AudioObjectPropertySelector inSelector);
 
 @interface SRAudioUtilities : NSObject
