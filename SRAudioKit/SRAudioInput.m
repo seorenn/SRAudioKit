@@ -55,6 +55,16 @@ static const AudioUnitScope SRAudioBusOutput = 0;
     return self;
 }
 
+- (void)startCapture {
+    
+}
+
+- (void)stopCapture {
+    
+}
+
+#pragma mark - Internal APIs
+
 - (AudioUnit)createAudioUnitWithDevice:(SRAudioDevice *)device {
     AudioComponentDescription description = [self audioComponentDescription];
     AudioComponent component = [self audioComponentWithDescription:description];

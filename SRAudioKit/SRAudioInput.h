@@ -12,6 +12,12 @@
 #import "SRAudioBufferSize.h"
 
 @class SRAudioDevice;
+@class SRAudioInput;
+
+@protocol SRAudioInputDelegate <NSObject>
+@optional
+- (void)audioInput:(SRAudioInput *)audioInput didTakeAudioBuffer:(NSData *)bufferData;
+@end
 
 @interface SRAudioInput : NSObject
 
@@ -19,6 +25,11 @@
 @property (readonly) Float64 sampleRate;
 @property (readonly) SRAudioBufferSize bufferSize;
 
+@property (nonatomic, weak) id<SRAudioInputDelegate> delegate;
+
 - (id)initWithDevice:(SRAudioDevice *)device sampleRate:(Float64)sampleRate bufferSize:(SRAudioBufferSize)bufferSize;
+
+- (void)startCapture;
+- (void)stopCapture;
 
 @end
