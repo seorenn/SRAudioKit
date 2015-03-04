@@ -9,7 +9,7 @@
 #import "RecordTestController.h"
 #import "SRAudioKit.h"
 
-@interface RecordTestController ()
+@interface RecordTestController () <SRAudioInputDelegate>
 @property (strong) SRAudioInput *input;
 @end
 
@@ -18,13 +18,25 @@
 - (id)init {
     self = [super init];
     if (self) {
-        SRAudioDevice *device = [[SRAudioDeviceManager sharedManager].devices objectAtIndex:1];
-        self.input = [[SRAudioInput alloc] initWithDevice:device sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferSize1024Samples];
+        self.input = [[SRAudioInput alloc] initWithStereoDevice:nil leftChannel:0 rightChannel:1 sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferSize1024Samples];
+        if (self.input == nil) {
+            NSLog(@"Failed to initialize SRAudioInput");
+        } else {
+            self.input.delegate = self;
+        }
     }
     return self;
 }
 
 - (IBAction)pressedButton:(id)sender {
+    if (self.input == nil) return;
+    
+    if (self.input.isCapturing) {
+        [self.input stopCapture];
+    }
+    else {
+        [self.input startCapture];
+    }
 }
 
 @end

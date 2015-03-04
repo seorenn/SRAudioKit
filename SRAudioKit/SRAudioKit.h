@@ -17,5 +17,6 @@
 #import "SRAudioInput.h"
 #import "SRAudioSampleRate.h"
 #import "SRAudioBufferSize.h"
+#import "SRAudioFrameType.h"
 
 #endif

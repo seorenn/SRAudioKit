@@ -47,6 +47,7 @@
 		8A41C08D1AA46BB20053DE56 /* SRAudioBufferSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioBufferSize.h; path = ../SRAudioKit/SRAudioBufferSize.h; sourceTree = "<group>"; };
 		8A41C08F1AA47A560053DE56 /* RecordTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordTestController.h; sourceTree = "<group>"; };
 		8A41C0901AA47A560053DE56 /* RecordTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordTestController.m; sourceTree = "<group>"; };
+		8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioFrameType.h; path = ../SRAudioKit/SRAudioFrameType.h; sourceTree = "<group>"; };
 		8A4E8C231A8899270024F532 /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioKit.h; path = ../SRAudioKit/SRAudioKit.h; sourceTree = "<group>"; };
 		8A4E8C241A8899750024F532 /* SRAudioKitDemoForOSX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SRAudioKitDemoForOSX-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		8A4E8C251A8899770024F532 /* SRAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioQueue.h; path = ../SRAudioKit/SRAudioQueue.h; sourceTree = "<group>"; };
@@ -171,6 +172,7 @@
 				8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */,
 				8A41C08B1AA46B6E0053DE56 /* SRAudioSampleRate.h */,
 				8A41C08D1AA46BB20053DE56 /* SRAudioBufferSize.h */,
+				8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */,
 			);
 			name = SRAudioKit;
 			sourceTree = "<group>";
