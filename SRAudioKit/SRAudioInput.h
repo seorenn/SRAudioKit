@@ -19,7 +19,7 @@
 
 @protocol SRAudioInputDelegate <NSObject>
 @optional
-- (void)audioInput:(SRAudioInput *)audioInput didTakeFloatAudioBuffer:(float **)buffer withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels;
+//- (void)audioInput:(SRAudioInput *)audioInput didTakeFloatAudioBuffer:(float **)buffer withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels;
 - (void)audioInput:(SRAudioInput *)audioInput didTakeBufferList:(AudioBufferList *)bufferList withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels;
 @end
 
@@ -30,6 +30,7 @@
 @property (readonly) SRAudioBufferSize bufferSize;
 @property (readonly) BOOL isCapturing;
 @property (readonly) BOOL stereo;
+@property (readonly) AudioStreamBasicDescription streamFormat;
 
 @property (nonatomic, weak) id<SRAudioInputDelegate> delegate;
 

@@ -13,6 +13,7 @@
 		8A3DABD81A84B96100470743 /* SRAudioKitDemoForOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */; };
 		8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */; };
 		8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0901AA47A560053DE56 /* RecordTestController.m */; };
+		8A41C0981AA802D50053DE56 /* SRAudioFileOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */; };
 		8A4E8C271A8899770024F532 /* SRAudioQueue.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C261A8899770024F532 /* SRAudioQueue.m */; };
 		8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */; };
 		8A4E8C2D1A88AC590024F532 /* SRAudioDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */; };
@@ -48,6 +49,8 @@
 		8A41C08F1AA47A560053DE56 /* RecordTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordTestController.h; sourceTree = "<group>"; };
 		8A41C0901AA47A560053DE56 /* RecordTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordTestController.m; sourceTree = "<group>"; };
 		8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioFrameType.h; path = ../SRAudioKit/SRAudioFrameType.h; sourceTree = "<group>"; };
+		8A41C0961AA802D50053DE56 /* SRAudioFileOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioFileOutput.h; path = ../SRAudioKit/SRAudioFileOutput.h; sourceTree = "<group>"; };
+		8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioFileOutput.m; path = ../SRAudioKit/SRAudioFileOutput.m; sourceTree = "<group>"; };
 		8A4E8C231A8899270024F532 /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioKit.h; path = ../SRAudioKit/SRAudioKit.h; sourceTree = "<group>"; };
 		8A4E8C241A8899750024F532 /* SRAudioKitDemoForOSX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SRAudioKitDemoForOSX-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		8A4E8C251A8899770024F532 /* SRAudioQueue.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioQueue.h; path = ../SRAudioKit/SRAudioQueue.h; sourceTree = "<group>"; };
@@ -173,6 +176,8 @@
 				8A41C08B1AA46B6E0053DE56 /* SRAudioSampleRate.h */,
 				8A41C08D1AA46BB20053DE56 /* SRAudioBufferSize.h */,
 				8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */,
+				8A41C0961AA802D50053DE56 /* SRAudioFileOutput.h */,
+				8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */,
 			);
 			name = SRAudioKit;
 			sourceTree = "<group>";
@@ -279,6 +284,7 @@
 				8A5371391A9B27CC00956700 /* SRAudioQueueInput.m in Sources */,
 				8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */,
 				8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */,
+				8A41C0981AA802D50053DE56 /* SRAudioFileOutput.m in Sources */,
 				8A3DABC71A84B96100470743 /* AppDelegate.swift in Sources */,
 				8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */,
 				8AE835981AA04C1B00C7C165 /* aqTestController.m in Sources */,

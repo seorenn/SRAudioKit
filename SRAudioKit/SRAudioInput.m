@@ -40,6 +40,8 @@ static OSStatus inputCallback(void                          *inRefCon,
 
 @implementation SRAudioInput
 
+@synthesize streamFormat = _streamFormat;
+
 @synthesize audioUnit = _audioUnit;
 @synthesize audioBufferList = _audioBufferList;
 
@@ -558,6 +560,12 @@ static OSStatus inputCallback(void                          *inRefCon,
     if (error) {
         NSLog(@"Failed to render (%ld)", (long)error);
         return error;
+    }
+    
+    if (audioInput.delegate == nil) return error;
+    
+    if ([audioInput.delegate respondsToSelector:@selector(audioInput:didTakeBufferList:withBufferSize:numberOfChannels:)]) {
+        [audioInput.delegate audioInput:audioInput didTakeBufferList:audioInput.audioBufferList withBufferSize:inNumberFrames numberOfChannels:audioInput.streamFormat.mChannelsPerFrame];
     }
     
     // TODO

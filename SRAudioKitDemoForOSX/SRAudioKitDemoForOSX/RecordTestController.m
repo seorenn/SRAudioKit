@@ -11,6 +11,7 @@
 
 @interface RecordTestController () <SRAudioInputDelegate>
 @property (strong) SRAudioInput *input;
+@property (strong) SRAudioFileOutput *fileOutput;
 @end
 
 @implementation RecordTestController
@@ -32,11 +33,35 @@
     if (self.input == nil) return;
     
     if (self.input.isCapturing) {
+        [self.fileOutput close];
         [self.input stopCapture];
     }
     else {
+        NSArray *desktopPaths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES);
+        NSLog(@"Desktop Paths: %@", desktopPaths);
+        
+        NSString *desktopPath = desktopPaths.firstObject;
+        NSLog(@"Desktop Path: %@", desktopPath);
+        
+        NSString *outputPathString = [desktopPath stringByAppendingPathComponent:@"record.wav"];
+        NSLog(@"Output File Path: %@", outputPathString);
+        
+        NSURL *fileURL = [NSURL fileURLWithPath:outputPathString];
+        NSLog(@"Output File URL: %@", fileURL);
+        
+        self.fileOutput = [[SRAudioFileOutput alloc] initWithFileURL:fileURL outputFileFormat:SRAudioFileOutputFormatWAVE inputStreamDescription:self.input.streamFormat];
+        if (self.fileOutput == nil) {
+            NSLog(@"Failed to initialize file output");
+            return;
+        }
+        
         [self.input startCapture];
     }
+}
+
+- (void)audioInput:(SRAudioInput *)audioInput didTakeBufferList:(AudioBufferList *)bufferList withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels {
+    NSLog(@"Writing Buffer List with Size: %ld", (long)bufferSize);
+    [self.fileOutput appendDataFromBufferList:bufferList withBufferSize:bufferSize];
 }
 
 @end
