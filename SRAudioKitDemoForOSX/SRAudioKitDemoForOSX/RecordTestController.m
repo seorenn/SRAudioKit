@@ -19,24 +19,28 @@
 - (id)init {
     self = [super init];
     if (self) {
+    }
+    return self;
+}
+
+- (IBAction)pressedButton:(id)sender {
+    if (self.input.isCapturing) {
+        [self.fileOutput close];
+        [self.input stopCapture];
+        
+        self.input = nil;
+        self.fileOutput = nil;
+    }
+    else {
         self.input = [[SRAudioInput alloc] initWithStereoDevice:nil leftChannel:0 rightChannel:1 sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferSize1024Samples];
         if (self.input == nil) {
             NSLog(@"Failed to initialize SRAudioInput");
         } else {
             self.input.delegate = self;
         }
-    }
-    return self;
-}
+        
+        NSLog(@"SRAudioInput Initialized with Buffer Size: %d", self.input.bufferSize);
 
-- (IBAction)pressedButton:(id)sender {
-    if (self.input == nil) return;
-    
-    if (self.input.isCapturing) {
-        [self.fileOutput close];
-        [self.input stopCapture];
-    }
-    else {
         NSArray *desktopPaths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES);
         NSLog(@"Desktop Paths: %@", desktopPaths);
         

@@ -9,9 +9,6 @@
 #ifndef SRAudioKitDemoForOSX_SRAudioKit_h
 #define SRAudioKitDemoForOSX_SRAudioKit_h
 
-#import "SRAudioQueue.h"        // TODO: Deprecated
-#import "SRAudioQueueInput.h"   // TODO: Deprecated
-#import "SRAudioQueueOutput.h"  // TODO: Deprecated
 #import "SRAudioDevice.h"
 #import "SRAudioDeviceManager.h"
 #import "SRAudioInput.h"

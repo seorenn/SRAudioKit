@@ -180,8 +180,6 @@ static OSStatus inputCallback(void                          *inRefCon,
         return NO;
     }
     
-    NSLog(@"SRAudioInput Configurated with Buffer Size: %d", _bufferSize);
-    
     _audioBufferList = [self allocateAudioBufferListWithStreamDescription:_streamFormat sampleBufferSize:_bufferSize];
     
     if ([self configureCallback] == NO) {
@@ -552,8 +550,6 @@ static OSStatus inputCallback(void                          *inRefCon,
                               AudioBufferList               *ioData ) {
     SRAudioInput *audioInput = (__bridge SRAudioInput *)inRefCon;
     OSStatus error = noErr;
-    
-    NSLog(@"[Callback]");
     
     error = AudioUnitRender(audioInput.audioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, audioInput.audioBufferList);
     

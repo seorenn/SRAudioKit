@@ -17,7 +17,6 @@
             </connections>
         </customObject>
         <customObject id="YLy-65-1bz" customClass="NSFontManager"/>
-        <customObject id="hmj-Dv-aoV" customClass="aqTestController"/>
         <menu title="Main Menu" systemMenu="main" id="AYu-sK-qS6">
             <items>
                 <menuItem title="SRAudioKitDemoForOSX" id="1Xt-HY-uBw">
@@ -676,16 +675,6 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="ilo-Sl-6J9">
-                        <rect key="frame" x="14" y="312" width="158" height="32"/>
-                        <buttonCell key="cell" type="push" title="Direct Routing Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="XzR-3s-cOX">
-                            <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
-                            <font key="font" metaFont="system"/>
-                        </buttonCell>
-                        <connections>
-                            <action selector="pressedDirectRoutingTest:" target="hmj-Dv-aoV" id="0Aq-Eh-tIm"/>
-                        </connections>
-                    </button>
                     <button verticalHuggingPriority="750" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="eUa-Ka-Szl">
                         <rect key="frame" x="14" y="279" width="114" height="32"/>
                         <buttonCell key="cell" type="push" title="Record Test" bezelStyle="rounded" alignment="center" borderStyle="border" imageScaling="proportionallyDown" inset="2" id="891-Rc-Ix4">
@@ -699,8 +688,6 @@
                 </subviews>
             </view>
         </window>
-        <customObject id="Ngx-5e-kxu"/>
-        <customObject id="uhP-UI-XDL"/>
         <customObject id="kuo-ju-UdH" customClass="RecordTestController"/>
     </objects>
 </document>
