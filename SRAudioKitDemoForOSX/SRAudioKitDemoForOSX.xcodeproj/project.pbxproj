@@ -13,7 +13,10 @@
 		8A3DABD81A84B96100470743 /* SRAudioKitDemoForOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */; };
 		8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */; };
 		8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0901AA47A560053DE56 /* RecordTestController.m */; };
-		8A41C0981AA802D50053DE56 /* SRAudioFileOutput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */; };
+		8A41C0981AA802D50053DE56 /* SRAudioFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0971AA802D50053DE56 /* SRAudioFileWriter.m */; };
+		8A41C0D01AA97B330053DE56 /* SRAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0CF1AA97B330053DE56 /* SRAudioUnit.m */; };
+		8A41C0D31AA9879F0053DE56 /* SRAudioGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0D21AA9879F0053DE56 /* SRAudioGraph.m */; };
+		8A41C0D71AA98C1B0053DE56 /* SRAudioUnitInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0D61AA98C1B0053DE56 /* SRAudioUnitInput.m */; };
 		8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */; };
 		8A4E8C2D1A88AC590024F532 /* SRAudioDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */; };
 		8A4E8C301A88B7000024F532 /* SRAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A4E8C2F1A88B7000024F532 /* SRAudioUtilities.m */; };
@@ -40,13 +43,17 @@
 		8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRAudioKitDemoForOSXTests.swift; sourceTree = "<group>"; };
 		8A41C0881AA45EDC0053DE56 /* SRAudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioInput.h; path = ../SRAudioKit/SRAudioInput.h; sourceTree = "<group>"; };
 		8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioInput.m; path = ../SRAudioKit/SRAudioInput.m; sourceTree = "<group>"; };
-		8A41C08B1AA46B6E0053DE56 /* SRAudioSampleRate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioSampleRate.h; path = ../SRAudioKit/SRAudioSampleRate.h; sourceTree = "<group>"; };
-		8A41C08D1AA46BB20053DE56 /* SRAudioBufferSize.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioBufferSize.h; path = ../SRAudioKit/SRAudioBufferSize.h; sourceTree = "<group>"; };
 		8A41C08F1AA47A560053DE56 /* RecordTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordTestController.h; sourceTree = "<group>"; };
 		8A41C0901AA47A560053DE56 /* RecordTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordTestController.m; sourceTree = "<group>"; };
-		8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioFrameType.h; path = ../SRAudioKit/SRAudioFrameType.h; sourceTree = "<group>"; };
-		8A41C0961AA802D50053DE56 /* SRAudioFileOutput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioFileOutput.h; path = ../SRAudioKit/SRAudioFileOutput.h; sourceTree = "<group>"; };
-		8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioFileOutput.m; path = ../SRAudioKit/SRAudioFileOutput.m; sourceTree = "<group>"; };
+		8A41C0961AA802D50053DE56 /* SRAudioFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioFileWriter.h; path = ../SRAudioKit/SRAudioFileWriter.h; sourceTree = "<group>"; };
+		8A41C0971AA802D50053DE56 /* SRAudioFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioFileWriter.m; path = ../SRAudioKit/SRAudioFileWriter.m; sourceTree = "<group>"; };
+		8A41C0CE1AA97B330053DE56 /* SRAudioUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUnit.h; sourceTree = "<group>"; };
+		8A41C0CF1AA97B330053DE56 /* SRAudioUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUnit.m; sourceTree = "<group>"; };
+		8A41C0D11AA9879F0053DE56 /* SRAudioGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioGraph.h; sourceTree = "<group>"; };
+		8A41C0D21AA9879F0053DE56 /* SRAudioGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioGraph.m; sourceTree = "<group>"; };
+		8A41C0D41AA9889A0053DE56 /* SRAudioContants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioContants.h; path = ../SRAudioKit/SRAudioContants.h; sourceTree = "<group>"; };
+		8A41C0D51AA98C1B0053DE56 /* SRAudioUnitInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUnitInput.h; sourceTree = "<group>"; };
+		8A41C0D61AA98C1B0053DE56 /* SRAudioUnitInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUnitInput.m; sourceTree = "<group>"; };
 		8A4E8C231A8899270024F532 /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = SRAudioKit.h; path = ../SRAudioKit/SRAudioKit.h; sourceTree = "<group>"; };
 		8A4E8C241A8899750024F532 /* SRAudioKitDemoForOSX-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "SRAudioKitDemoForOSX-Bridging-Header.h"; sourceTree = SOURCE_ROOT; };
 		8A4E8C281A889A5B0024F532 /* SRAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioDevice.h; path = ../SRAudioKit/SRAudioDevice.h; sourceTree = "<group>"; };
@@ -133,9 +140,34 @@
 			name = "Supporting Files";
 			sourceTree = "<group>";
 		};
+		8A41C0CC1AA97A7F0053DE56 /* SRAudioUnit */ = {
+			isa = PBXGroup;
+			children = (
+				8A41C0D11AA9879F0053DE56 /* SRAudioGraph.h */,
+				8A41C0D21AA9879F0053DE56 /* SRAudioGraph.m */,
+				8A41C0CE1AA97B330053DE56 /* SRAudioUnit.h */,
+				8A41C0CF1AA97B330053DE56 /* SRAudioUnit.m */,
+				8A41C0D51AA98C1B0053DE56 /* SRAudioUnitInput.h */,
+				8A41C0D61AA98C1B0053DE56 /* SRAudioUnitInput.m */,
+			);
+			name = SRAudioUnit;
+			path = ../SRAudioKit/SRAudioUnit;
+			sourceTree = "<group>";
+		};
+		8A41C0D81AA98D430053DE56 /* WILL_BE_DEPRECATED */ = {
+			isa = PBXGroup;
+			children = (
+				8A41C0881AA45EDC0053DE56 /* SRAudioInput.h */,
+				8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */,
+			);
+			name = WILL_BE_DEPRECATED;
+			sourceTree = "<group>";
+		};
 		8A4E8C221A8898F30024F532 /* SRAudioKit */ = {
 			isa = PBXGroup;
 			children = (
+				8A41C0D81AA98D430053DE56 /* WILL_BE_DEPRECATED */,
+				8A41C0CC1AA97A7F0053DE56 /* SRAudioUnit */,
 				8A4E8C231A8899270024F532 /* SRAudioKit.h */,
 				8A4E8C281A889A5B0024F532 /* SRAudioDevice.h */,
 				8A4E8C291A889A5B0024F532 /* SRAudioDevice.m */,
@@ -143,13 +175,9 @@
 				8A4E8C2C1A88AC590024F532 /* SRAudioDeviceManager.m */,
 				8A4E8C2E1A88B7000024F532 /* SRAudioUtilities.h */,
 				8A4E8C2F1A88B7000024F532 /* SRAudioUtilities.m */,
-				8A41C0881AA45EDC0053DE56 /* SRAudioInput.h */,
-				8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */,
-				8A41C08B1AA46B6E0053DE56 /* SRAudioSampleRate.h */,
-				8A41C08D1AA46BB20053DE56 /* SRAudioBufferSize.h */,
-				8A41C0951AA6E1B20053DE56 /* SRAudioFrameType.h */,
-				8A41C0961AA802D50053DE56 /* SRAudioFileOutput.h */,
-				8A41C0971AA802D50053DE56 /* SRAudioFileOutput.m */,
+				8A41C0961AA802D50053DE56 /* SRAudioFileWriter.h */,
+				8A41C0971AA802D50053DE56 /* SRAudioFileWriter.m */,
+				8A41C0D41AA9889A0053DE56 /* SRAudioContants.h */,
 			);
 			name = SRAudioKit;
 			sourceTree = "<group>";
@@ -255,11 +283,14 @@
 			files = (
 				8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */,
 				8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */,
-				8A41C0981AA802D50053DE56 /* SRAudioFileOutput.m in Sources */,
+				8A41C0D71AA98C1B0053DE56 /* SRAudioUnitInput.m in Sources */,
+				8A41C0981AA802D50053DE56 /* SRAudioFileWriter.m in Sources */,
+				8A41C0D31AA9879F0053DE56 /* SRAudioGraph.m in Sources */,
 				8A3DABC71A84B96100470743 /* AppDelegate.swift in Sources */,
 				8A4E8C2A1A889A5B0024F532 /* SRAudioDevice.m in Sources */,
 				8A4E8C301A88B7000024F532 /* SRAudioUtilities.m in Sources */,
 				8A4E8C2D1A88AC590024F532 /* SRAudioDeviceManager.m in Sources */,
+				8A41C0D01AA97B330053DE56 /* SRAudioUnit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

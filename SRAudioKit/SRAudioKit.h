@@ -9,12 +9,16 @@
 #ifndef SRAudioKitDemoForOSX_SRAudioKit_h
 #define SRAudioKitDemoForOSX_SRAudioKit_h
 
+#import "SRAudioContants.h"
+#import "SRAudioUtilities.h"
 #import "SRAudioDevice.h"
 #import "SRAudioDeviceManager.h"
-#import "SRAudioInput.h"
-#import "SRAudioSampleRate.h"
-#import "SRAudioBufferSize.h"
-#import "SRAudioFrameType.h"
-#import "SRAudioFileOutput.h"
+
+#import "SRAudioGraph.h"
+#import "SRAudioUnit.h"
+#import "SRAudioUnitInput.h"
+
+#import "SRAudioInput.h"        // DEPRECATED: Use SRAudioUnitOutput
+#import "SRAudioFileWriter.h"   // TODO: Rename to SRAudioFileWriter
 
 #endif

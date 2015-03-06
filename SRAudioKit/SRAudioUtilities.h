@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SRAudioFrameType.h"
+#import "SRAudioContants.h"
 
 #import <CoreAudio/CoreAudio.h>
 
@@ -18,6 +18,16 @@
         exit(1);    \
     }   \
 }
+
+#define SRAudioSetFlag(variable, flag) {    \
+    (variable) = (variable) | (flag);   \
+}
+
+#define SRAudioUnsetFlag(variable, flag) {  \
+    (variable) = (variable) & ~(flag);  \
+}
+
+#define SRAudioDurationFromBufferFrameSize(bufferFrameSize, sampleRate) (Float64)( (Float64)(bufferFrameSize) / (sampleRate) )
 
 AudioObjectPropertyAddress AOPADefault(AudioObjectPropertySelector inSelector);
 

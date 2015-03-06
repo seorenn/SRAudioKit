@@ -10,7 +10,6 @@
 #import "SRAudioDevice.h"
 #import "SRAudioDeviceManager.h"
 #import "SRAudioUtilities.h"
-#import "SRAudioFrameType.h"
 
 @import AudioToolbox;
 @import AudioUnit;
@@ -78,7 +77,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                leftChannel:(UInt32)leftChannel
               rightChannel:(UInt32)rightChannel
                 sampleRate:(Float64)sampleRate
-                bufferSize:(SRAudioBufferSize)bufferSize {
+                bufferSize:(SRAudioBufferFrameSize)bufferSize {
     self = [super init];
     if (self) {
         BOOL res = [self commonInitializationWithDevice:device
@@ -95,7 +94,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 - (id)initWithMonoDevice:(SRAudioDevice *)device
                  channel:(UInt32)channel
               sampleRate:(Float64)sampleRate
-              bufferSize:(SRAudioBufferSize)bufferSize {
+              bufferSize:(SRAudioBufferFrameSize)bufferSize {
     self = [super init];
     if (self) {
         BOOL res = [self commonInitializationWithDevice:device
@@ -143,7 +142,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 - (BOOL)commonInitializationWithDevice:(SRAudioDevice *)device
                                 stereo:(BOOL)stereo
                             sampleRate:(Float64)sampleRate
-                            bufferSize:(SRAudioBufferSize)bufferSize
+                            bufferSize:(SRAudioBufferFrameSize)bufferSize
                          inputChannel1:(UInt32)inputChannel1
                          inputChannel2:(UInt32)inputChannel2 {
     _stereo = stereo;
@@ -320,7 +319,7 @@ static OSStatus inputCallback(void                          *inRefCon,
     return YES;
 }
 
-- (AudioBufferList *)allocateAudioBufferListWithStreamDescription:(AudioStreamBasicDescription)description sampleBufferSize:(SRAudioBufferSize)sampleBufferSize {
+- (AudioBufferList *)allocateAudioBufferListWithStreamDescription:(AudioStreamBasicDescription)description sampleBufferSize:(SRAudioBufferFrameSize)sampleBufferSize {
     UInt32 size = description.mBytesPerFrame * sampleBufferSize;
     UInt32 memorySize = offsetof(AudioBufferList, mBuffers[0]) + (sizeof(AudioBuffer) * description.mChannelsPerFrame);
     

@@ -11,7 +11,7 @@
 
 @interface RecordTestController () <SRAudioInputDelegate>
 @property (strong) SRAudioInput *input;
-@property (strong) SRAudioFileOutput *fileOutput;
+@property (strong) SRAudioFileWriter *fileOutput;
 @end
 
 @implementation RecordTestController
@@ -32,7 +32,7 @@
         self.fileOutput = nil;
     }
     else {
-        self.input = [[SRAudioInput alloc] initWithStereoDevice:nil leftChannel:0 rightChannel:1 sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferSize1024Samples];
+        self.input = [[SRAudioInput alloc] initWithStereoDevice:nil leftChannel:0 rightChannel:1 sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferFrameSize1024Samples];
         if (self.input == nil) {
             NSLog(@"Failed to initialize SRAudioInput");
         } else {
@@ -53,7 +53,7 @@
         NSURL *fileURL = [NSURL fileURLWithPath:outputPathString];
         NSLog(@"Output File URL: %@", fileURL);
         
-        self.fileOutput = [[SRAudioFileOutput alloc] initWithFileURL:fileURL outputFileFormat:SRAudioFileOutputFormatWAVE inputStreamDescription:self.input.streamFormat];
+        self.fileOutput = [[SRAudioFileWriter alloc] initWithFileURL:fileURL outputFileFormat:SRAudioFileWriterFormatWAVE inputStreamDescription:self.input.streamFormat];
         if (self.fileOutput == nil) {
             NSLog(@"Failed to initialize file output");
             return;

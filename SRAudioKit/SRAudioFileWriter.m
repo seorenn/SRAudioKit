@@ -1,17 +1,17 @@
 //
-//  SRAudioFileOutput.m
-//  SRAudioKitDemoForOSX
+//  SRAudioFileWriter.m
+//  SRAudioKit
 //
-//  Created by Heeseung Seo on 2015. 3. 5..
-//  Copyright (c) 2015년 Seorenn. All rights reserved.
+//  Created by Seorenn on 2015. 3. 5..
+//  Copyright (c) 2015 Seorenn. All rights reserved.
 //
 
-#import "SRAudioFileOutput.h"
+#import "SRAudioFileWriter.h"
 #import "SRAudioUtilities.h"
 
 @import AudioToolbox;
 
-@interface SRAudioFileOutput () {
+@interface SRAudioFileWriter () {
     ExtAudioFileRef _fileRef;
     AudioFileTypeID _fileTypeID;
     CFURLRef _fileURLRef;
@@ -21,18 +21,18 @@
 
 @end
 
-@implementation SRAudioFileOutput
+@implementation SRAudioFileWriter
 
 - (id) initWithFileURL:(NSURL *)url
-      outputFileFormat:(SRAudioFileOutputFormat)outputFormat
+      outputFileFormat:(SRAudioFileWriterFormat)writerFormat
 inputStreamDescription:(AudioStreamBasicDescription)inputStreamDescription {
     self = [super init];
     if (self) {
         _fileRef = NULL;
         _fileURLRef = (__bridge CFURLRef)url;
-        _fileTypeID = [self typeIDWithFormat:outputFormat];
+        _fileTypeID = [self typeIDWithFormat:writerFormat];
         _inputStreamDescription = inputStreamDescription;
-        _outputStreamDescription = [self descriptionWithFormat:outputFormat];
+        _outputStreamDescription = [self descriptionWithFormat:writerFormat];
         
         if ([self commonInitialization] == NO) return nil;
     }
@@ -93,10 +93,10 @@ inputStreamDescription:(AudioStreamBasicDescription)inputStreamDescription {
     }
 }
 
-- (AudioStreamBasicDescription)descriptionWithFormat:(SRAudioFileOutputFormat)format {
+- (AudioStreamBasicDescription)descriptionWithFormat:(SRAudioFileWriterFormat)format {
     AudioStreamBasicDescription result;
     
-    if (format == SRAudioFileOutputFormatAIFF) {
+    if (format == SRAudioFileWriterFormatAIFF) {
         result.mFormatID = kAudioFormatLinearPCM;
         result.mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
         result.mSampleRate = _inputStreamDescription.mSampleRate;
@@ -121,8 +121,8 @@ inputStreamDescription:(AudioStreamBasicDescription)inputStreamDescription {
     return result;
 }
 
-- (AudioFileTypeID)typeIDWithFormat:(SRAudioFileOutputFormat)format {
-    if (format == SRAudioFileOutputFormatAIFF) {
+- (AudioFileTypeID)typeIDWithFormat:(SRAudioFileWriterFormat)format {
+    if (format == SRAudioFileWriterFormatAIFF) {
         return kAudioFileAIFFType;
     }
     else {

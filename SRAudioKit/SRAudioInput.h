@@ -8,8 +8,7 @@
 
 #import <Foundation/Foundation.h>
 
-#import "SRAudioSampleRate.h"
-#import "SRAudioBufferSize.h"
+#import "SRAudioContants.h"
 
 #import <AudioToolbox/AudioToolbox.h>
 #import <AudioUnit/AudioUnit.h>
@@ -27,7 +26,7 @@
 
 @property (readonly) SRAudioDevice *device;
 @property (readonly) Float64 sampleRate;
-@property (readonly) SRAudioBufferSize bufferSize;
+@property (readonly) SRAudioBufferFrameSize bufferSize;
 @property (readonly) BOOL isCapturing;
 @property (readonly) BOOL stereo;
 @property (readonly) AudioStreamBasicDescription streamFormat;
@@ -39,11 +38,11 @@
                leftChannel:(UInt32)leftChannel
               rightChannel:(UInt32)rightChannel
                 sampleRate:(Float64)sampleRate
-                bufferSize:(SRAudioBufferSize)bufferSize;
+                bufferSize:(SRAudioBufferFrameSize)bufferSize;
 - (id)initWithMonoDevice:(SRAudioDevice *)device
                  channel:(UInt32)channel
               sampleRate:(Float64)sampleRate
-              bufferSize:(SRAudioBufferSize)bufferSize;
+              bufferSize:(SRAudioBufferFrameSize)bufferSize;
 
 - (BOOL)startCapture;
 - (BOOL)stopCapture;
