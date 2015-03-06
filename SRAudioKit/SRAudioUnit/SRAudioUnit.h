@@ -28,7 +28,7 @@
 @property (assign) Float64                  sampleRate;
 @property (assign) UInt32                   channelsPerFrame;
 @property (assign) UInt32                   bytesPerFrame;
-@property (assign) BOOL                     interleaved;
+@property (nonatomic, assign) BOOL          interleaved;
 
 #pragma mark - Initializers
 
@@ -36,7 +36,7 @@
 
 #pragma mark - APIs
 
-- (void)instantiateAudioUnit;
+- (void)instantiate;
 
 #pragma mark - Helpful APIs
 

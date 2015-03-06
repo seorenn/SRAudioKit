@@ -9,6 +9,8 @@
 #ifndef __SRAudioContants_h__
 #define __SRAudioContants_h__
 
+#import <Foundation/Foundation.h>
+
 #define SRAudioSampleRate44100  44100.0
 #define SRAudioSampleRate48000  48000.0
 #define SRAudioSampleRate96000  96000.0

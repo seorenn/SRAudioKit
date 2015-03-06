@@ -22,7 +22,6 @@
 
 @synthesize audioComponentDescription = _audioComponentDescription;
 @synthesize streamFormat = _streamFormat;
-@synthesize audioDevice = _audioDevice;
 @synthesize audioUnit = _audioUnit;
 
 - (id)initWithType:(OSType)type subType:(OSType)subType {
@@ -44,17 +43,19 @@
         UInt32 sampleSize = sizeof(float);
 #endif
         _streamFormat.mChannelsPerFrame = 2;                // Stereo
-        _streamFormat.mSampleRate = SRAudioSampleRate44100
+        _streamFormat.mSampleRate = SRAudioSampleRate44100;
         _streamFormat.mFormatID = kAudioFormatLinearPCM;
         _streamFormat.mFramesPerPacket = 1;
         _streamFormat.mBitsPerChannel = 8 * sampleSize;
         
         // Non-inerleaved format requires buffer size of single channel.
-        desc.mBytesPerFrame = sampleSize;
-        desc.mBytesPerPacket = sampleSize;
+        _streamFormat.mBytesPerFrame = sampleSize;
+        _streamFormat.mBytesPerPacket = sampleSize;
         
-        desc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked | kAudioFormatFlagIsNonInterleaved;
+        _streamFormat.mFormatFlags = kAudioFormatFlagsNativeFloatPacked | kAudioFormatFlagIsNonInterleaved;
     }
+    
+    return self;
 }
 
 - (void)dealloc {
@@ -98,7 +99,7 @@
 
 #pragma mark - APIs
 
-- (void)instantiateAudioUnit {
+- (void)instantiate {
     AudioComponent component = AudioComponentFindNext(NULL, &_audioComponentDescription);
     NSAssert(component, @"Failed to find component");
     
@@ -110,14 +111,14 @@
 
 #pragma mark - Helpful APIs
 
-- (BOOL)setAudioUnitProperty:(AudioUnitPropertyID)propertyID
-                       scope:(AudioUnitScope)scope
-                     element:(AudioUnitElement)element
-                        data:(const void *)data
-                    dataSize:(UInt32)dataSize {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiateAudioUnit method.");
+- (BOOL)setProperty:(AudioUnitPropertyID)propertyID
+              scope:(AudioUnitScope)scope
+            element:(AudioUnitElement)element
+               data:(const void *)data
+           dataSize:(UInt32)dataSize {
+    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
     
-    OSStatus error = AudioUnitSetProperty(_audioUnit, propertyID, scope, element, data, size);
+    OSStatus error = AudioUnitSetProperty(_audioUnit, propertyID, scope, element, data, dataSize);
     if (error) {
         NSLog(@"Failed to set property: %ld", (long)error);
         return NO;
@@ -131,7 +132,7 @@
             element:(AudioUnitElement)element
             outData:(void *)outData
          ioDataSize:(UInt32 *)ioDataSize {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiateAudioUnit method.");
+    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
 
     OSStatus error = AudioUnitGetProperty(_audioUnit, propertyID, scope, element, outData, ioDataSize);
     if (error) {

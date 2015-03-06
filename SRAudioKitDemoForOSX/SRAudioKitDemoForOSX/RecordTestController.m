@@ -9,8 +9,8 @@
 #import "RecordTestController.h"
 #import "SRAudioKit.h"
 
-@interface RecordTestController () <SRAudioInputDelegate>
-@property (strong) SRAudioInput *input;
+@interface RecordTestController () <SRAudioUnitInputDelegate>
+@property (strong) SRAudioUnitInput *input;
 @property (strong) SRAudioFileWriter *fileOutput;
 @end
 
@@ -32,14 +32,25 @@
         self.fileOutput = nil;
     }
     else {
+        /*
         self.input = [[SRAudioInput alloc] initWithStereoDevice:nil leftChannel:0 rightChannel:1 sampleRate:SRAudioSampleRate44100 bufferSize:SRAudioBufferFrameSize1024Samples];
         if (self.input == nil) {
             NSLog(@"Failed to initialize SRAudioInput");
         } else {
             self.input.delegate = self;
         }
+         */
+        self.input = [[SRAudioUnitInput alloc] init];
+        self.input.audioDevice = [SRAudioDeviceManager sharedManager].defaultDevice;
+        self.input.sampleRate = SRAudioSampleRate44100;
+        self.input.bufferFrameSize = SRAudioBufferFrameSize1024;
+        self.input.stereo = YES;
         
-        NSLog(@"SRAudioInput Initialized with Buffer Size: %d", self.input.bufferSize);
+        [self.input instantiate];
+        
+        NSLog(@"SRAudioInput Initialized with Buffer Size: %d", self.input.bufferByteSize);
+        
+        
 
         NSArray *desktopPaths = NSSearchPathForDirectoriesInDomains(NSDesktopDirectory, NSUserDomainMask, YES);
         NSLog(@"Desktop Paths: %@", desktopPaths);
@@ -63,7 +74,7 @@
     }
 }
 
-- (void)audioInput:(SRAudioInput *)audioInput didTakeBufferList:(AudioBufferList *)bufferList withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels {
+- (void)audioUnitInput:(SRAudioUnitInput *)audioUnitInput didTakeBufferList:(AudioBufferList *)bufferList withBufferSize:(UInt32)bufferSize numberOfChannels:(UInt32)numberOfChannels {
     NSLog(@"Writing Buffer List with Size: %ld", (long)bufferSize);
     [self.fileOutput appendDataFromBufferList:bufferList withBufferSize:bufferSize];
 }
