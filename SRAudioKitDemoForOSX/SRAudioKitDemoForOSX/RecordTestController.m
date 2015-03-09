@@ -45,6 +45,7 @@
         self.input.sampleRate = SRAudioSampleRate44100;
         self.input.bufferFrameSize = SRAudioBufferFrameSize1024;
         self.input.stereo = YES;
+        self.input.delegate = self;
         
         [self.input instantiate];
         

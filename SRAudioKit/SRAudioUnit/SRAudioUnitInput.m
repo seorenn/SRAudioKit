@@ -24,13 +24,7 @@ static OSStatus inputCallback(void                          *inRefCon,
                               AudioBufferList               *ioData);
 
 @implementation SRAudioUnitInput {
-    BOOL _isBufferFrameSizeUpdated;
-    BOOL _isPerformedAudioDevice;
-    BOOL _isPerformedChannelMap;
 }
-
-@synthesize audioUnit = _audioUnit;
-@synthesize streamFormat = _streamFormat;
 
 @synthesize audioDevice = _audioDevice;
 @synthesize inputChannelMap = _inputChannelMap;
@@ -48,9 +42,9 @@ static OSStatus inputCallback(void                          *inRefCon,
 #endif
     if (self) {
         self.stereo = YES;
-        _isBufferFrameSizeUpdated = NO;
-        _isPerformedAudioDevice = NO;
-        _isPerformedChannelMap = NO;
+        self.bufferFrameSize = SRAudioBufferFrameSize1024;
+        _audioDevice = nil;
+        _inputChannelMap = nil;
     }
     return self;
 }
@@ -60,8 +54,8 @@ static OSStatus inputCallback(void                          *inRefCon,
         [self stopCapture];
     }
     
-    if (_audioUnit) {
-        AudioComponentInstanceDispose(_audioUnit);
+    if (self.audioUnit) {
+        AudioComponentInstanceDispose(self.audioUnit);
     }
     
     if (_audioBufferList) {
@@ -76,7 +70,7 @@ static OSStatus inputCallback(void                          *inRefCon,
     [self enableInputScope];
     [self disableOutputScope];
 
-    if (_audioDevice && _isPerformedAudioDevice == NO) {
+    if (_audioDevice) {
         self.audioDevice = _audioDevice;
     }
     
@@ -85,14 +79,11 @@ static OSStatus inputCallback(void                          *inRefCon,
     _outputScopeFormat = [self createOutputScopeFormat];
 #endif
     
-    if (_isPerformedChannelMap == NO) {
+    if (_inputChannelMap) {
         self.inputChannelMap = _inputChannelMap;
     }
-    
-    if (_isBufferFrameSizeUpdated == NO) {
-        // Default Sample Rate
-        self.bufferFrameSize = SRAudioBufferFrameSize1024;
-    }
+
+    self.bufferFrameSize = _bufferFrameSize;
     
     if (self.delegate) {
         [self allocateAudioBufferList];
@@ -100,17 +91,17 @@ static OSStatus inputCallback(void                          *inRefCon,
         if ([self disableCallbackBufferAllocation] == NO) return;
     }
     
-    OSStatus error = AudioUnitInitialize(_audioUnit);
+    OSStatus error = AudioUnitInitialize(self.audioUnit);
     if (error) {
         NSLog(@"Failed to initialize Audio Unit: %ld", (long)error);
     }
 }
 
 - (void)startCapture {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
+    NSAssert(self.audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
     if (_capturing) return;
     
-    OSStatus error = AudioOutputUnitStart(_audioUnit);
+    OSStatus error = AudioOutputUnitStart(self.audioUnit);
     if (error) {
         NSLog(@"Failed to start Audio Output Unit: %ld", (long)error);
         return;
@@ -122,7 +113,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 - (void)stopCapture {
     if (_capturing == NO) return;
     
-    OSStatus error = AudioOutputUnitStop(_audioUnit);
+    OSStatus error = AudioOutputUnitStop(self.audioUnit);
     if (error) {
         NSLog(@"Failed to stop Audio Output Unit: %ld", (long)error);
         return;
@@ -131,60 +122,58 @@ static OSStatus inputCallback(void                          *inRefCon,
     _capturing = NO;
 }
 
+#pragma mark - Properties
+
 - (void)setAudioDevice:(SRAudioDevice *)audioDevice {
-    if (_audioUnit) {
-        AudioDeviceID deviceID = 0;
-        if (audioDevice == nil) {
-            deviceID = [SRAudioDeviceManager sharedManager].defaultDevice.deviceID;
-        } else {
-            deviceID = audioDevice.deviceID;
-        }
-        
-        if ([self setProperty:kAudioOutputUnitProperty_CurrentDevice
-                        scope:kAudioUnitScope_Global
-                      element:SRAudioUnitInputBusOutput
-                         data:&deviceID
-                     dataSize:sizeof(deviceID)] == NO) {
-            NSLog(@"Failed to set audio device");
-            return;
-        }
-        
-        _isPerformedAudioDevice = YES;
+    _audioDevice = audioDevice;
+
+    if (self.audioUnit == NULL) return;
+    
+    AudioDeviceID deviceID = 0;
+    if (audioDevice == nil) {
+        deviceID = [SRAudioDeviceManager sharedManager].defaultDevice.deviceID;
+    } else {
+        deviceID = audioDevice.deviceID;
+    }
+    
+    if ([self setProperty:kAudioOutputUnitProperty_CurrentDevice
+                    scope:kAudioUnitScope_Global
+                  element:SRAudioUnitInputBusOutput
+                     data:&deviceID
+                 dataSize:sizeof(deviceID)] == NO) {
+        NSLog(@"Failed to set audio device");
+        return;
     }
     
     _audioDevice = audioDevice;
 }
 
 - (void)setInputChannelMap:(NSArray *)inputChannelMap {
-    if (_audioUnit && _audioDevice) {
-        if (inputChannelMap.count > _audioDevice.numberInputChannels) {
-            NSLog(@"WARNING: inputChannelMap count is bigger than audioDeivce.numberInputChannels");
-        }
-        
-        UInt32 mapSize = _audioDevice.numberInputChannels * sizeof(SInt32);
-        SInt32 *channelMap = malloc(mapSize);
-        NSAssert(channelMap != NULL, @"Insufficient Memory");
-        
-        int index = 0;
-        for (NSNumber *number in inputChannelMap) {
-            channelMap[index] = (SInt32)number.intValue;
-        }
-        
-        if ([self setProperty:kAudioOutputUnitProperty_ChannelMap
-                        scope:kAudioUnitScope_Output
-                      element:1
-                         data:channelMap
-                     dataSize:mapSize]) {
-            _inputChannelMap = inputChannelMap;
-            _isPerformedChannelMap = YES;
-        } else {
-            NSLog(@"Failed to set channel map");
-            _inputChannelMap = nil;
-        }
-        
+    _inputChannelMap = inputChannelMap;
+
+    if (self.audioUnit == NULL || _audioDevice == nil) return;
+    
+    if (inputChannelMap.count > _audioDevice.numberInputChannels) {
+        NSLog(@"WARNING: inputChannelMap count is bigger than audioDeivce.numberInputChannels");
     }
-    else {
-        _inputChannelMap = inputChannelMap;
+    
+    UInt32 mapSize = _audioDevice.numberInputChannels * sizeof(SInt32);
+    SInt32 *channelMap = malloc(mapSize);
+    NSAssert(channelMap != NULL, @"Insufficient Memory");
+    
+    int index = 0;
+    for (NSNumber *number in inputChannelMap) {
+        channelMap[index] = (SInt32)number.intValue;
+    }
+    
+    if ([self setProperty:kAudioOutputUnitProperty_ChannelMap
+                    scope:kAudioUnitScope_Output
+                  element:1
+                     data:channelMap
+                 dataSize:mapSize]) {
+    } else {
+        NSLog(@"Failed to set channel map");
+        _inputChannelMap = nil;
     }
 }
 
@@ -195,7 +184,9 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 - (void)setBufferFrameSize:(SRAudioBufferFrameSize)bufferFrameSize {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
+    _bufferFrameSize = bufferFrameSize;
+
+    if (self.audioUnit == NULL) return;
     
     UInt32 value = bufferFrameSize;
     UInt32 size = sizeof(UInt32);
@@ -227,17 +218,16 @@ static OSStatus inputCallback(void                          *inRefCon,
     }
     
     _bufferFrameSize = value;
-    _isBufferFrameSizeUpdated = YES;
 }
 
 - (UInt32)bufferByteSize {
-    return _streamFormat.mBytesPerFrame * _bufferFrameSize;
+    return self.streamFormat.mBytesPerFrame * _bufferFrameSize;
 }
 
 #pragma mark - Internal APIs
 
 - (AudioStreamBasicDescription)createInputScopeFormat {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
+    NSAssert(self.audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
     
     AudioStreamBasicDescription desc;
     UInt32 size = sizeof(desc);
@@ -254,7 +244,7 @@ static OSStatus inputCallback(void                          *inRefCon,
 }
 
 - (AudioStreamBasicDescription)createOutputScopeFormat {
-    NSAssert(_audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
+    NSAssert(self.audioUnit != NULL, @"You must create Audio Unit Instance using the instantiate method.");
     
     AudioStreamBasicDescription desc;
     UInt32 size = sizeof(desc);

@@ -30,7 +30,7 @@
         _audioUnit = NULL;
         
         _audioComponentDescription.componentType = type;
-        _audioComponentDescription.componentSubType = type;
+        _audioComponentDescription.componentSubType = subType;
         _audioComponentDescription.componentManufacturer = kAudioUnitManufacturer_Apple;
         _audioComponentDescription.componentFlags = 0;
         _audioComponentDescription.componentFlagsMask = 0;
