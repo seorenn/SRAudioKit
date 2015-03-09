@@ -18,15 +18,34 @@
 @end
 
 @implementation SRAudioGraph
+@synthesize graph = _graph;
 
 @synthesize isRunning = _running;
 
 - (id)init {
     self = [super init];
     if (self) {
+        _graph = NULL;
+        _running = NO;
         
+        [self initializeGraph];
     }
     return self;
+}
+
+- (void)initializeGraph {
+    OSStatus error = noErr;
+    
+    error = NewAUGraph(&_graph);
+    NSAssert(error == noErr && _graph != NULL, @"Failed to create AUGraph");
+
+    // TODO
+}
+
+- (void)dealloc {
+    if (_graph) {
+        DisposeAUGraph(_graph);
+    }
 }
 
 - (void)start {

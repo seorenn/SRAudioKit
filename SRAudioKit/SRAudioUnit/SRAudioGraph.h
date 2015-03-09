@@ -7,11 +7,14 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "SRAudioContants.h"
 
 #import <CoreAudio/CoreAudio.h>
 #import <AudioToolbox/AudioToolbox.h>
 
 @interface SRAudioGraph : NSObject
+
+@property (readonly) AUGraph graph;
 
 @property (readonly) BOOL isRunning;
 
