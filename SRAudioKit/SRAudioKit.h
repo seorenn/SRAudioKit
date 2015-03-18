@@ -18,7 +18,6 @@
 #import "SRAudioUnit.h"
 #import "SRAudioUnitInput.h"
 
-#import "SRAudioInput.h"        // DEPRECATED: Use SRAudioUnitOutput
-#import "SRAudioFileWriter.h"   // TODO: Rename to SRAudioFileWriter
+#import "SRAudioFileWriter.h"
 
 #endif

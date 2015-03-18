@@ -11,7 +11,6 @@
 		8A3DABC91A84B96100470743 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8A3DABC81A84B96100470743 /* Images.xcassets */; };
 		8A3DABCC1A84B96100470743 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 8A3DABCA1A84B96100470743 /* MainMenu.xib */; };
 		8A3DABD81A84B96100470743 /* SRAudioKitDemoForOSXTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */; };
-		8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */; };
 		8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0901AA47A560053DE56 /* RecordTestController.m */; };
 		8A41C0981AA802D50053DE56 /* SRAudioFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0971AA802D50053DE56 /* SRAudioFileWriter.m */; };
 		8A41C0D01AA97B330053DE56 /* SRAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A41C0CF1AA97B330053DE56 /* SRAudioUnit.m */; };
@@ -42,8 +41,6 @@
 		8A3DABD11A84B96100470743 /* SRAudioKitDemoForOSXTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = SRAudioKitDemoForOSXTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A3DABD61A84B96100470743 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A3DABD71A84B96100470743 /* SRAudioKitDemoForOSXTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SRAudioKitDemoForOSXTests.swift; sourceTree = "<group>"; };
-		8A41C0881AA45EDC0053DE56 /* SRAudioInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioInput.h; path = ../SRAudioKit/SRAudioInput.h; sourceTree = "<group>"; };
-		8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioInput.m; path = ../SRAudioKit/SRAudioInput.m; sourceTree = "<group>"; };
 		8A41C08F1AA47A560053DE56 /* RecordTestController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RecordTestController.h; sourceTree = "<group>"; };
 		8A41C0901AA47A560053DE56 /* RecordTestController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RecordTestController.m; sourceTree = "<group>"; };
 		8A41C0961AA802D50053DE56 /* SRAudioFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioFileWriter.h; path = ../SRAudioKit/SRAudioFileWriter.h; sourceTree = "<group>"; };
@@ -159,19 +156,9 @@
 			path = ../SRAudioKit/SRAudioUnit;
 			sourceTree = "<group>";
 		};
-		8A41C0D81AA98D430053DE56 /* WILL_BE_DEPRECATED */ = {
-			isa = PBXGroup;
-			children = (
-				8A41C0881AA45EDC0053DE56 /* SRAudioInput.h */,
-				8A41C0891AA45EDC0053DE56 /* SRAudioInput.m */,
-			);
-			name = WILL_BE_DEPRECATED;
-			sourceTree = "<group>";
-		};
 		8A4E8C221A8898F30024F532 /* SRAudioKit */ = {
 			isa = PBXGroup;
 			children = (
-				8A41C0D81AA98D430053DE56 /* WILL_BE_DEPRECATED */,
 				8A41C0CC1AA97A7F0053DE56 /* SRAudioUnit */,
 				8A4E8C231A8899270024F532 /* SRAudioKit.h */,
 				8A4E8C281A889A5B0024F532 /* SRAudioDevice.h */,
@@ -286,7 +273,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A41C08A1AA45EDC0053DE56 /* SRAudioInput.m in Sources */,
 				8A41C0911AA47A560053DE56 /* RecordTestController.m in Sources */,
 				8A41C0D71AA98C1B0053DE56 /* SRAudioUnitInput.m in Sources */,
 				8A41C0981AA802D50053DE56 /* SRAudioFileWriter.m in Sources */,
