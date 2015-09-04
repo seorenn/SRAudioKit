@@ -1,23 +1,29 @@
 //
 //  SRAudioKit.h
-//  SRAudioKitDemoForOSX
+//  SRAudioKit
 //
-//  Created by Seorenn on 2015. 2. 9..
-//  Copyright (c) 2015 Seorenn. All rights reserved.
+//  Created by Heeseung Seo on 2015. 9. 4..
+//  Copyright © 2015년 Seorenn. All rights reserved.
 //
 
-#ifndef SRAudioKitDemoForOSX_SRAudioKit_h
-#define SRAudioKitDemoForOSX_SRAudioKit_h
+#import <Cocoa/Cocoa.h>
 
-#import "SRAudioContants.h"
-#import "SRAudioUtilities.h"
-#import "SRAudioDevice.h"
-#import "SRAudioDeviceManager.h"
+//! Project version number for SRAudioKit.
+FOUNDATION_EXPORT double SRAudioKitVersionNumber;
 
-#import "SRAudioGraph.h"
-#import "SRAudioUnit.h"
-#import "SRAudioUnitInput.h"
+//! Project version string for SRAudioKit.
+FOUNDATION_EXPORT const unsigned char SRAudioKitVersionString[];
 
-#import "SRAudioFileWriter.h"
+// In this header, you should import all the public headers of your framework using statements like #import <SRAudioKit/PublicHeader.h>
 
-#endif
+
+#import <SRAudioKit/SRAudioContants.h>
+#import <SRAudioKit/SRAudioUtilities.h>
+#import <SRAudioKit/SRAudioDevice.h>
+#import <SRAudioKit/SRAudioDeviceManager.h>
+
+#import <SRAudioKit/SRAudioGraph.h>
+#import <SRAudioKit/SRAudioUnit.h>
+#import <SRAudioKit/SRAudioUnitInput.h>
+
+#import <SRAudioKit/SRAudioFileWriter.h>
