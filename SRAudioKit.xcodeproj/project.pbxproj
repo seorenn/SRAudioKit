@@ -90,6 +90,7 @@
 		8A1258D21B9998B000FA8BBB /* Sources */ = {
 			isa = PBXGroup;
 			children = (
+				8A1258DB1B9998B000FA8BBB /* SRAudioUnit */,
 				8A1258D31B9998B000FA8BBB /* SRAudioContants.h */,
 				8A1258D41B9998B000FA8BBB /* SRAudioDevice.h */,
 				8A1258D51B9998B000FA8BBB /* SRAudioDevice.m */,
@@ -97,7 +98,6 @@
 				8A1258D71B9998B000FA8BBB /* SRAudioDeviceManager.m */,
 				8A1258D81B9998B000FA8BBB /* SRAudioFileWriter.h */,
 				8A1258D91B9998B000FA8BBB /* SRAudioFileWriter.m */,
-				8A1258DB1B9998B000FA8BBB /* SRAudioUnit */,
 				8A1258E41B9998B000FA8BBB /* SRAudioUtilities.h */,
 				8A1258E51B9998B000FA8BBB /* SRAudioUtilities.m */,
 			);
