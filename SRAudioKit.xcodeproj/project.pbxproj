@@ -7,51 +7,67 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		8A1258CB1B9997EE00FA8BBB /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258CA1B9997EE00FA8BBB /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8A1258E61B9998B000FA8BBB /* SRAudioContants.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258D31B9998B000FA8BBB /* SRAudioContants.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258E71B9998B000FA8BBB /* SRAudioDevice.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258D41B9998B000FA8BBB /* SRAudioDevice.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258E81B9998B000FA8BBB /* SRAudioDevice.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258D51B9998B000FA8BBB /* SRAudioDevice.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258E91B9998B000FA8BBB /* SRAudioDeviceManager.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258D61B9998B000FA8BBB /* SRAudioDeviceManager.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258EA1B9998B000FA8BBB /* SRAudioDeviceManager.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258D71B9998B000FA8BBB /* SRAudioDeviceManager.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258EB1B9998B000FA8BBB /* SRAudioFileWriter.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258D81B9998B000FA8BBB /* SRAudioFileWriter.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258EC1B9998B000FA8BBB /* SRAudioFileWriter.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258D91B9998B000FA8BBB /* SRAudioFileWriter.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258EE1B9998B000FA8BBB /* SRAudioGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258DC1B9998B000FA8BBB /* SRAudioGraph.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258EF1B9998B000FA8BBB /* SRAudioGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258DD1B9998B000FA8BBB /* SRAudioGraph.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258F01B9998B000FA8BBB /* SRAudioUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258DE1B9998B000FA8BBB /* SRAudioUnit.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258F11B9998B000FA8BBB /* SRAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258DF1B9998B000FA8BBB /* SRAudioUnit.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258F21B9998B000FA8BBB /* SRAudioUnitInput.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258E01B9998B000FA8BBB /* SRAudioUnitInput.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258F31B9998B000FA8BBB /* SRAudioUnitInput.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258E11B9998B000FA8BBB /* SRAudioUnitInput.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258F41B9998B000FA8BBB /* SRAudioUnitMixer.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258E21B9998B000FA8BBB /* SRAudioUnitMixer.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258F51B9998B000FA8BBB /* SRAudioUnitMixer.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258E31B9998B000FA8BBB /* SRAudioUnitMixer.m */; settings = {ASSET_TAGS = (); }; };
-		8A1258F61B9998B000FA8BBB /* SRAudioUtilities.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A1258E41B9998B000FA8BBB /* SRAudioUtilities.h */; settings = {ASSET_TAGS = (); }; };
-		8A1258F71B9998B000FA8BBB /* SRAudioUtilities.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A1258E51B9998B000FA8BBB /* SRAudioUtilities.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B23C1BAF9F55009D6388 /* SRAudioKitUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A57B23A1BAF9F55009D6388 /* SRAudioKitUtils.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B23D1BAF9F55009D6388 /* SRAudioKitUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B23B1BAF9F55009D6388 /* SRAudioKitUtils.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B2521BAFC21D009D6388 /* SRAudioUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A57B2501BAFC21D009D6388 /* SRAudioUnit.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B2531BAFC21D009D6388 /* SRAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2511BAFC21D009D6388 /* SRAudioUnit.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B2BE1BB2761F009D6388 /* SRAudioDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2C01BB2764C009D6388 /* SRAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2C11BB279CC009D6388 /* SRAudioKitUtils.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B23B1BAF9F55009D6388 /* SRAudioKitUtils.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B2C21BB279E8009D6388 /* SRAudioKitUtils.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A57B23A1BAF9F55009D6388 /* SRAudioKitUtils.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B2C31BB27A08009D6388 /* SRAudioDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2C41BB27A0B009D6388 /* SRAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2D71BB28728009D6388 /* SRAudioInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2D61BB28728009D6388 /* SRAudioInput.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2D81BB28728009D6388 /* SRAudioInput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2D61BB28728009D6388 /* SRAudioInput.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2DA1BB28743009D6388 /* SRAudioOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2D91BB28743009D6388 /* SRAudioOutput.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2DB1BB28743009D6388 /* SRAudioOutput.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2D91BB28743009D6388 /* SRAudioOutput.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2DD1BB28791009D6388 /* SRAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2DC1BB28791009D6388 /* SRAudioManager.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2DE1BB28792009D6388 /* SRAudioManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2DC1BB28791009D6388 /* SRAudioManager.swift */; settings = {ASSET_TAGS = (); }; };
+		8A57B2DF1BB2A6AA009D6388 /* SRAUGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F81F1BAC0A7A00C81D09 /* SRAUGraph.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B2E01BB2A6AE009D6388 /* SRAUGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A84F8201BAC0A7A00C81D09 /* SRAUGraph.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B2E11BB2A844009D6388 /* SRAUNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8251BAC0B9F00C81D09 /* SRAUNode.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B2E21BB2A848009D6388 /* SRAUNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A84F8261BAC0B9F00C81D09 /* SRAUNode.m */; settings = {ASSET_TAGS = (); }; };
+		8A57B2E31BB2A84C009D6388 /* SRAudioUnit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A57B2501BAFC21D009D6388 /* SRAudioUnit.h */; settings = {ASSET_TAGS = (); }; };
+		8A57B2E41BB2A850009D6388 /* SRAudioUnit.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2511BAFC21D009D6388 /* SRAudioUnit.m */; settings = {ASSET_TAGS = (); }; };
+		8A84F80A1BAC08D700C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A84F8151BAC08E000C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8A84F8211BAC0A7A00C81D09 /* SRAUGraph.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F81F1BAC0A7A00C81D09 /* SRAUGraph.h */; settings = {ASSET_TAGS = (); }; };
+		8A84F8221BAC0A7A00C81D09 /* SRAUGraph.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A84F8201BAC0A7A00C81D09 /* SRAUGraph.m */; settings = {ASSET_TAGS = (); }; };
+		8A84F8271BAC0B9F00C81D09 /* SRAUNode.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8251BAC0B9F00C81D09 /* SRAUNode.h */; settings = {ASSET_TAGS = (); }; };
+		8A84F8281BAC0B9F00C81D09 /* SRAUNode.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A84F8261BAC0B9F00C81D09 /* SRAUNode.m */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		8A1258C71B9997EE00FA8BBB /* SRAudioKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		8A1258CA1B9997EE00FA8BBB /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRAudioKit.h; sourceTree = "<group>"; };
-		8A1258CC1B9997EE00FA8BBB /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		8A1258D31B9998B000FA8BBB /* SRAudioContants.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioContants.h; sourceTree = "<group>"; };
-		8A1258D41B9998B000FA8BBB /* SRAudioDevice.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioDevice.h; sourceTree = "<group>"; };
-		8A1258D51B9998B000FA8BBB /* SRAudioDevice.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioDevice.m; sourceTree = "<group>"; };
-		8A1258D61B9998B000FA8BBB /* SRAudioDeviceManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioDeviceManager.h; sourceTree = "<group>"; };
-		8A1258D71B9998B000FA8BBB /* SRAudioDeviceManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioDeviceManager.m; sourceTree = "<group>"; };
-		8A1258D81B9998B000FA8BBB /* SRAudioFileWriter.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioFileWriter.h; sourceTree = "<group>"; };
-		8A1258D91B9998B000FA8BBB /* SRAudioFileWriter.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioFileWriter.m; sourceTree = "<group>"; };
-		8A1258DC1B9998B000FA8BBB /* SRAudioGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioGraph.h; sourceTree = "<group>"; };
-		8A1258DD1B9998B000FA8BBB /* SRAudioGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioGraph.m; sourceTree = "<group>"; };
-		8A1258DE1B9998B000FA8BBB /* SRAudioUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUnit.h; sourceTree = "<group>"; };
-		8A1258DF1B9998B000FA8BBB /* SRAudioUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUnit.m; sourceTree = "<group>"; };
-		8A1258E01B9998B000FA8BBB /* SRAudioUnitInput.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUnitInput.h; sourceTree = "<group>"; };
-		8A1258E11B9998B000FA8BBB /* SRAudioUnitInput.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUnitInput.m; sourceTree = "<group>"; };
-		8A1258E21B9998B000FA8BBB /* SRAudioUnitMixer.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUnitMixer.h; sourceTree = "<group>"; };
-		8A1258E31B9998B000FA8BBB /* SRAudioUnitMixer.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUnitMixer.m; sourceTree = "<group>"; };
-		8A1258E41B9998B000FA8BBB /* SRAudioUtilities.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SRAudioUtilities.h; sourceTree = "<group>"; };
-		8A1258E51B9998B000FA8BBB /* SRAudioUtilities.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SRAudioUtilities.m; sourceTree = "<group>"; };
+		8A57B23A1BAF9F55009D6388 /* SRAudioKitUtils.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioKitUtils.h; path = Sources/SRAudioKitUtils.h; sourceTree = "<group>"; };
+		8A57B23B1BAF9F55009D6388 /* SRAudioKitUtils.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioKitUtils.m; path = Sources/SRAudioKitUtils.m; sourceTree = "<group>"; };
+		8A57B2501BAFC21D009D6388 /* SRAudioUnit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioUnit.h; path = Sources/SRAudioUnit.h; sourceTree = "<group>"; };
+		8A57B2511BAFC21D009D6388 /* SRAudioUnit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioUnit.m; path = Sources/SRAudioUnit.m; sourceTree = "<group>"; };
+		8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioDeviceManager.swift; path = Sources/SRAudioDeviceManager.swift; sourceTree = "<group>"; };
+		8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioDevice.swift; path = Sources/SRAudioDevice.swift; sourceTree = "<group>"; };
+		8A57B2D61BB28728009D6388 /* SRAudioInput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioInput.swift; path = Sources/SRAudioInput.swift; sourceTree = "<group>"; };
+		8A57B2D91BB28743009D6388 /* SRAudioOutput.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioOutput.swift; path = Sources/SRAudioOutput.swift; sourceTree = "<group>"; };
+		8A57B2DC1BB28791009D6388 /* SRAudioManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioManager.swift; path = Sources/SRAudioManager.swift; sourceTree = "<group>"; };
+		8A84F8061BAC08D700C81D09 /* SRAudioKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A84F8091BAC08D700C81D09 /* SRAudioKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRAudioKit.h; sourceTree = "<group>"; };
+		8A84F80B1BAC08D700C81D09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		8A84F81A1BAC08E000C81D09 /* SRAudioKitOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKitOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8A84F81C1BAC092500C81D09 /* SRAudioKitOSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRAudioKitOSX.h; sourceTree = "<group>"; };
+		8A84F81F1BAC0A7A00C81D09 /* SRAUGraph.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAUGraph.h; path = Sources/SRAUGraph.h; sourceTree = "<group>"; };
+		8A84F8201BAC0A7A00C81D09 /* SRAUGraph.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAUGraph.m; path = Sources/SRAUGraph.m; sourceTree = "<group>"; };
+		8A84F8241BAC0A9900C81D09 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		8A84F8251BAC0B9F00C81D09 /* SRAUNode.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAUNode.h; path = Sources/SRAUNode.h; sourceTree = "<group>"; };
+		8A84F8261BAC0B9F00C81D09 /* SRAUNode.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAUNode.m; path = Sources/SRAUNode.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		8A1258C31B9997EE00FA8BBB /* Frameworks */ = {
+		8A84F8021BAC08D700C81D09 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A84F8131BAC08E000C81D09 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -61,95 +77,134 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		8A1258BD1B9997EE00FA8BBB = {
+		8A57B23E1BAFA78F009D6388 /* Graph */ = {
 			isa = PBXGroup;
 			children = (
-				8A1258C91B9997EE00FA8BBB /* SRAudioKit */,
-				8A1258C81B9997EE00FA8BBB /* Products */,
+				8A84F81F1BAC0A7A00C81D09 /* SRAUGraph.h */,
+				8A84F8201BAC0A7A00C81D09 /* SRAUGraph.m */,
+			);
+			name = Graph;
+			sourceTree = "<group>";
+		};
+		8A57B2541BAFC2EA009D6388 /* AudioUnit */ = {
+			isa = PBXGroup;
+			children = (
+				8A57B2501BAFC21D009D6388 /* SRAudioUnit.h */,
+				8A57B2511BAFC21D009D6388 /* SRAudioUnit.m */,
+			);
+			name = AudioUnit;
+			sourceTree = "<group>";
+		};
+		8A84F7FC1BAC08D700C81D09 = {
+			isa = PBXGroup;
+			children = (
+				8A84F8081BAC08D700C81D09 /* SRAudioKit */,
+				8A84F8071BAC08D700C81D09 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		8A1258C81B9997EE00FA8BBB /* Products */ = {
+		8A84F8071BAC08D700C81D09 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				8A1258C71B9997EE00FA8BBB /* SRAudioKit.framework */,
+				8A84F8061BAC08D700C81D09 /* SRAudioKit.framework */,
+				8A84F81A1BAC08E000C81D09 /* SRAudioKitOSX.framework */,
 			);
 			name = Products;
 			sourceTree = "<group>";
 		};
-		8A1258C91B9997EE00FA8BBB /* SRAudioKit */ = {
+		8A84F8081BAC08D700C81D09 /* SRAudioKit */ = {
 			isa = PBXGroup;
 			children = (
-				8A1258D21B9998B000FA8BBB /* Sources */,
-				8A1258CA1B9997EE00FA8BBB /* SRAudioKit.h */,
-				8A1258CC1B9997EE00FA8BBB /* Info.plist */,
+				8A84F8231BAC0A9900C81D09 /* SRAudioKitPrivates */,
+				8A84F81D1BAC09F100C81D09 /* Low Level Implementations */,
+				8A84F81E1BAC09FB00C81D09 /* SRAudioKit */,
+				8A84F8091BAC08D700C81D09 /* SRAudioKit.h */,
+				8A84F81C1BAC092500C81D09 /* SRAudioKitOSX.h */,
+				8A84F80B1BAC08D700C81D09 /* Info.plist */,
 			);
 			path = SRAudioKit;
 			sourceTree = "<group>";
 		};
-		8A1258D21B9998B000FA8BBB /* Sources */ = {
+		8A84F81D1BAC09F100C81D09 /* Low Level Implementations */ = {
 			isa = PBXGroup;
 			children = (
-				8A1258DB1B9998B000FA8BBB /* SRAudioUnit */,
-				8A1258D31B9998B000FA8BBB /* SRAudioContants.h */,
-				8A1258D41B9998B000FA8BBB /* SRAudioDevice.h */,
-				8A1258D51B9998B000FA8BBB /* SRAudioDevice.m */,
-				8A1258D61B9998B000FA8BBB /* SRAudioDeviceManager.h */,
-				8A1258D71B9998B000FA8BBB /* SRAudioDeviceManager.m */,
-				8A1258D81B9998B000FA8BBB /* SRAudioFileWriter.h */,
-				8A1258D91B9998B000FA8BBB /* SRAudioFileWriter.m */,
-				8A1258E41B9998B000FA8BBB /* SRAudioUtilities.h */,
-				8A1258E51B9998B000FA8BBB /* SRAudioUtilities.m */,
+				8A57B23E1BAFA78F009D6388 /* Graph */,
+				8A84F8291BAC0C5400C81D09 /* Nodes */,
+				8A57B2541BAFC2EA009D6388 /* AudioUnit */,
+				8A57B23A1BAF9F55009D6388 /* SRAudioKitUtils.h */,
+				8A57B23B1BAF9F55009D6388 /* SRAudioKitUtils.m */,
 			);
-			path = Sources;
+			name = "Low Level Implementations";
 			sourceTree = "<group>";
 		};
-		8A1258DB1B9998B000FA8BBB /* SRAudioUnit */ = {
+		8A84F81E1BAC09FB00C81D09 /* SRAudioKit */ = {
 			isa = PBXGroup;
 			children = (
-				8A1258DC1B9998B000FA8BBB /* SRAudioGraph.h */,
-				8A1258DD1B9998B000FA8BBB /* SRAudioGraph.m */,
-				8A1258DE1B9998B000FA8BBB /* SRAudioUnit.h */,
-				8A1258DF1B9998B000FA8BBB /* SRAudioUnit.m */,
-				8A1258E01B9998B000FA8BBB /* SRAudioUnitInput.h */,
-				8A1258E11B9998B000FA8BBB /* SRAudioUnitInput.m */,
-				8A1258E21B9998B000FA8BBB /* SRAudioUnitMixer.h */,
-				8A1258E31B9998B000FA8BBB /* SRAudioUnitMixer.m */,
+				8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */,
+				8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */,
+				8A57B2D61BB28728009D6388 /* SRAudioInput.swift */,
+				8A57B2D91BB28743009D6388 /* SRAudioOutput.swift */,
+				8A57B2DC1BB28791009D6388 /* SRAudioManager.swift */,
 			);
-			path = SRAudioUnit;
+			name = SRAudioKit;
+			sourceTree = "<group>";
+		};
+		8A84F8231BAC0A9900C81D09 /* SRAudioKitPrivates */ = {
+			isa = PBXGroup;
+			children = (
+				8A84F8241BAC0A9900C81D09 /* module.modulemap */,
+			);
+			name = SRAudioKitPrivates;
+			path = Sources/SRAudioKitPrivates;
+			sourceTree = "<group>";
+		};
+		8A84F8291BAC0C5400C81D09 /* Nodes */ = {
+			isa = PBXGroup;
+			children = (
+				8A84F8251BAC0B9F00C81D09 /* SRAUNode.h */,
+				8A84F8261BAC0B9F00C81D09 /* SRAUNode.m */,
+			);
+			name = Nodes;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		8A1258C41B9997EE00FA8BBB /* Headers */ = {
+		8A84F8031BAC08D700C81D09 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A1258F21B9998B000FA8BBB /* SRAudioUnitInput.h in Headers */,
-				8A1258E61B9998B000FA8BBB /* SRAudioContants.h in Headers */,
-				8A1258F41B9998B000FA8BBB /* SRAudioUnitMixer.h in Headers */,
-				8A1258E71B9998B000FA8BBB /* SRAudioDevice.h in Headers */,
-				8A1258F61B9998B000FA8BBB /* SRAudioUtilities.h in Headers */,
-				8A1258F01B9998B000FA8BBB /* SRAudioUnit.h in Headers */,
-				8A1258EB1B9998B000FA8BBB /* SRAudioFileWriter.h in Headers */,
-				8A1258E91B9998B000FA8BBB /* SRAudioDeviceManager.h in Headers */,
-				8A1258EE1B9998B000FA8BBB /* SRAudioGraph.h in Headers */,
-				8A1258CB1B9997EE00FA8BBB /* SRAudioKit.h in Headers */,
+				8A84F8211BAC0A7A00C81D09 /* SRAUGraph.h in Headers */,
+				8A57B23C1BAF9F55009D6388 /* SRAudioKitUtils.h in Headers */,
+				8A84F8271BAC0B9F00C81D09 /* SRAUNode.h in Headers */,
+				8A57B2521BAFC21D009D6388 /* SRAudioUnit.h in Headers */,
+				8A84F80A1BAC08D700C81D09 /* SRAudioKit.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A84F8141BAC08E000C81D09 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A57B2DF1BB2A6AA009D6388 /* SRAUGraph.h in Headers */,
+				8A57B2E11BB2A844009D6388 /* SRAUNode.h in Headers */,
+				8A84F8151BAC08E000C81D09 /* SRAudioKit.h in Headers */,
+				8A57B2E31BB2A84C009D6388 /* SRAudioUnit.h in Headers */,
+				8A57B2C21BB279E8009D6388 /* SRAudioKitUtils.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		8A1258C61B9997EE00FA8BBB /* SRAudioKit */ = {
+		8A84F8051BAC08D700C81D09 /* SRAudioKit */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 8A1258CF1B9997EE00FA8BBB /* Build configuration list for PBXNativeTarget "SRAudioKit" */;
+			buildConfigurationList = 8A84F80E1BAC08D700C81D09 /* Build configuration list for PBXNativeTarget "SRAudioKit" */;
 			buildPhases = (
-				8A1258C21B9997EE00FA8BBB /* Sources */,
-				8A1258C31B9997EE00FA8BBB /* Frameworks */,
-				8A1258C41B9997EE00FA8BBB /* Headers */,
-				8A1258C51B9997EE00FA8BBB /* Resources */,
+				8A84F8011BAC08D700C81D09 /* Sources */,
+				8A84F8021BAC08D700C81D09 /* Frameworks */,
+				8A84F8031BAC08D700C81D09 /* Headers */,
+				8A84F8041BAC08D700C81D09 /* Resources */,
 			);
 			buildRules = (
 			);
@@ -157,42 +212,69 @@
 			);
 			name = SRAudioKit;
 			productName = SRAudioKit;
-			productReference = 8A1258C71B9997EE00FA8BBB /* SRAudioKit.framework */;
+			productReference = 8A84F8061BAC08D700C81D09 /* SRAudioKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		8A84F8111BAC08E000C81D09 /* SRAudioKitOSX */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8A84F8171BAC08E000C81D09 /* Build configuration list for PBXNativeTarget "SRAudioKitOSX" */;
+			buildPhases = (
+				8A84F8121BAC08E000C81D09 /* Sources */,
+				8A84F8131BAC08E000C81D09 /* Frameworks */,
+				8A84F8141BAC08E000C81D09 /* Headers */,
+				8A84F8161BAC08E000C81D09 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SRAudioKitOSX;
+			productName = SRAudioKit;
+			productReference = 8A84F81A1BAC08E000C81D09 /* SRAudioKitOSX.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
-		8A1258BE1B9997EE00FA8BBB /* Project object */ = {
+		8A84F7FD1BAC08D700C81D09 /* Project object */ = {
 			isa = PBXProject;
 			attributes = {
+				LastSwiftUpdateCheck = 0700;
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = Seorenn;
 				TargetAttributes = {
-					8A1258C61B9997EE00FA8BBB = {
+					8A84F8051BAC08D700C81D09 = {
 						CreatedOnToolsVersion = 7.0;
 					};
 				};
 			};
-			buildConfigurationList = 8A1258C11B9997EE00FA8BBB /* Build configuration list for PBXProject "SRAudioKit" */;
+			buildConfigurationList = 8A84F8001BAC08D700C81D09 /* Build configuration list for PBXProject "SRAudioKit" */;
 			compatibilityVersion = "Xcode 3.2";
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
 				en,
 			);
-			mainGroup = 8A1258BD1B9997EE00FA8BBB;
-			productRefGroup = 8A1258C81B9997EE00FA8BBB /* Products */;
+			mainGroup = 8A84F7FC1BAC08D700C81D09;
+			productRefGroup = 8A84F8071BAC08D700C81D09 /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				8A1258C61B9997EE00FA8BBB /* SRAudioKit */,
+				8A84F8051BAC08D700C81D09 /* SRAudioKit */,
+				8A84F8111BAC08E000C81D09 /* SRAudioKitOSX */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		8A1258C51B9997EE00FA8BBB /* Resources */ = {
+		8A84F8041BAC08D700C81D09 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A84F8161BAC08E000C81D09 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -202,25 +284,42 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		8A1258C21B9997EE00FA8BBB /* Sources */ = {
+		8A84F8011BAC08D700C81D09 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				8A1258F71B9998B000FA8BBB /* SRAudioUtilities.m in Sources */,
-				8A1258F51B9998B000FA8BBB /* SRAudioUnitMixer.m in Sources */,
-				8A1258EC1B9998B000FA8BBB /* SRAudioFileWriter.m in Sources */,
-				8A1258E81B9998B000FA8BBB /* SRAudioDevice.m in Sources */,
-				8A1258EF1B9998B000FA8BBB /* SRAudioGraph.m in Sources */,
-				8A1258F11B9998B000FA8BBB /* SRAudioUnit.m in Sources */,
-				8A1258F31B9998B000FA8BBB /* SRAudioUnitInput.m in Sources */,
-				8A1258EA1B9998B000FA8BBB /* SRAudioDeviceManager.m in Sources */,
+				8A57B23D1BAF9F55009D6388 /* SRAudioKitUtils.m in Sources */,
+				8A57B2DD1BB28791009D6388 /* SRAudioManager.swift in Sources */,
+				8A57B2DA1BB28743009D6388 /* SRAudioOutput.swift in Sources */,
+				8A84F8281BAC0B9F00C81D09 /* SRAUNode.m in Sources */,
+				8A57B2BE1BB2761F009D6388 /* SRAudioDeviceManager.swift in Sources */,
+				8A57B2D71BB28728009D6388 /* SRAudioInput.swift in Sources */,
+				8A57B2C01BB2764C009D6388 /* SRAudioDevice.swift in Sources */,
+				8A84F8221BAC0A7A00C81D09 /* SRAUGraph.m in Sources */,
+				8A57B2531BAFC21D009D6388 /* SRAudioUnit.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8A84F8121BAC08E000C81D09 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8A57B2C11BB279CC009D6388 /* SRAudioKitUtils.m in Sources */,
+				8A57B2E01BB2A6AE009D6388 /* SRAUGraph.m in Sources */,
+				8A57B2C31BB27A08009D6388 /* SRAudioDeviceManager.swift in Sources */,
+				8A57B2C41BB27A0B009D6388 /* SRAudioDevice.swift in Sources */,
+				8A57B2DB1BB28743009D6388 /* SRAudioOutput.swift in Sources */,
+				8A57B2DE1BB28792009D6388 /* SRAudioManager.swift in Sources */,
+				8A57B2E21BB2A848009D6388 /* SRAUNode.m in Sources */,
+				8A57B2D81BB28728009D6388 /* SRAudioInput.swift in Sources */,
+				8A57B2E41BB2A850009D6388 /* SRAudioUnit.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin XCBuildConfiguration section */
-		8A1258CD1B9997EE00FA8BBB /* Debug */ = {
+		8A84F80C1BAC08D700C81D09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -260,12 +359,13 @@
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = macosx;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Debug;
 		};
-		8A1258CE1B9997EE00FA8BBB /* Release */ = {
+		8A84F80D1BAC08D700C81D09 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
@@ -303,9 +403,11 @@
 			};
 			name = Release;
 		};
-		8A1258D01B9997EE00FA8BBB /* Debug */ = {
+		8A84F80F1BAC08D700C81D09 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -317,13 +419,17 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seorenn.SRAudioKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
 		};
-		8A1258D11B9997EE00FA8BBB /* Release */ = {
+		8A84F8101BAC08D700C81D09 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
+				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Distribution";
 				COMBINE_HIDPI_IMAGES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
@@ -335,32 +441,80 @@
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = com.seorenn.SRAudioKit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+			};
+			name = Release;
+		};
+		8A84F8181BAC08E000C81D09 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/SRAudioKit/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seorenn.SRAudioKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/SRAudioKit/Sources";
+			};
+			name = Debug;
+		};
+		8A84F8191BAC08E000C81D09 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				COMBINE_HIDPI_IMAGES = YES;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				INFOPLIST_FILE = "$(SRCROOT)/SRAudioKit/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				PRODUCT_BUNDLE_IDENTIFIER = com.seorenn.SRAudioKit;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_INCLUDE_PATHS = "$(SRCROOT)/SRAudioKit/Sources";
 			};
 			name = Release;
 		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		8A1258C11B9997EE00FA8BBB /* Build configuration list for PBXProject "SRAudioKit" */ = {
+		8A84F8001BAC08D700C81D09 /* Build configuration list for PBXProject "SRAudioKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8A1258CD1B9997EE00FA8BBB /* Debug */,
-				8A1258CE1B9997EE00FA8BBB /* Release */,
+				8A84F80C1BAC08D700C81D09 /* Debug */,
+				8A84F80D1BAC08D700C81D09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		8A1258CF1B9997EE00FA8BBB /* Build configuration list for PBXNativeTarget "SRAudioKit" */ = {
+		8A84F80E1BAC08D700C81D09 /* Build configuration list for PBXNativeTarget "SRAudioKit" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				8A1258D01B9997EE00FA8BBB /* Debug */,
-				8A1258D11B9997EE00FA8BBB /* Release */,
+				8A84F80F1BAC08D700C81D09 /* Debug */,
+				8A84F8101BAC08D700C81D09 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		8A84F8171BAC08E000C81D09 /* Build configuration list for PBXNativeTarget "SRAudioKitOSX" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				8A84F8181BAC08E000C81D09 /* Debug */,
+				8A84F8191BAC08E000C81D09 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
-	rootObject = 8A1258BE1B9997EE00FA8BBB /* Project object */;
+	rootObject = 8A84F7FD1BAC08D700C81D09 /* Project object */;
 }

@@ -5,6 +5,9 @@
       location = "group:../SRAudioKit.xcodeproj">
    </FileRef>
    <FileRef
-      location = "group:SRAudioKitDemoApp/SRAudioKitDemoApp.xcodeproj">
+      location = "group:SRAudioKitDemoOSXApp/SRAudioKitDemoOSXApp.xcodeproj">
+   </FileRef>
+   <FileRef
+      location = "group:SRAudioKitDemoiOSApp/SRAudioKitDemoiOSApp.xcodeproj">
    </FileRef>
 </Workspace>
