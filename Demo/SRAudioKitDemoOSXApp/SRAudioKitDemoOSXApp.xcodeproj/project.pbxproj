@@ -359,6 +359,7 @@
 				8A57B2751BAFF8D2009D6388 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

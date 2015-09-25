@@ -51,8 +51,7 @@
 - (nullable SRAUNode *)addNodeWithAudioComponentDescription:(AudioComponentDescription)audioComponentDescription;
 
 // Wrapper of AUGraphNodeInfo
-// - (nullable SRAudioUnit *)nodeInfo:(nonnull SRAUNode *)node;
-// NOT PROVIDE: SRAUNode supports audioUnit property typed SRAudioUnit.
+- (nullable SRAudioUnit *)nodeInfo:(nonnull SRAUNode *)node withAudioComponentDescription:(AudioComponentDescription)audioComponentDescription;
 
 // Wrapper of AUGraphSetNodeInputCallback
 - (BOOL)setNodeDelegate:(nonnull id<SRAUNodeDelegate>)delegate destInputNumber:(UInt32)destInputNumber forNode:(nonnull SRAUNode *)node;

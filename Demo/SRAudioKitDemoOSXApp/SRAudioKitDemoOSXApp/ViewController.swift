@@ -38,7 +38,12 @@ class ViewController: NSViewController {
         // Update the view, if already loaded.
         }
     }
-
-
+    
+    @IBAction func pressedReccordButton(sender: AnyObject) {
+        if let device = SRAudioDeviceManager.sharedManager.defaultInputDevice {
+            debugPrint("Use default input device \(device)")
+            self.startRecord(device, outputPath: "")
+        }
+    }
 }
 

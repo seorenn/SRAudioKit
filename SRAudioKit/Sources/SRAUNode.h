@@ -31,10 +31,11 @@
 
 @property (nonatomic, readonly) AudioComponentDescription audioComponentDescription;
 @property (nonatomic, readonly) AUNode node;
-@property (nonnull, nonatomic, readonly) SRAudioUnit *audioUnit;
+@property (nonnull, nonatomic, strong) SRAudioUnit *audioUnit;
 
 @property (nullable, nonatomic, weak) id<SRAUNodeDelegate> delegate;
 
-- (nonnull instancetype)initWithNode:(AUNode)node audioComponentDescription:(AudioComponentDescription)audioComponentDescription audioUnit:(nonnull SRAudioUnit *)audioUnit;
+//- (nonnull instancetype)initWithNode:(AUNode)node audioComponentDescription:(AudioComponentDescription)audioComponentDescription audioUnit:(nonnull SRAudioUnit *)audioUnit;
+- (nonnull instancetype)initWithNode:(AUNode)node audioComponentDescription:(AudioComponentDescription)audioComponentDescription;
 
 @end

@@ -67,22 +67,23 @@ static OSStatus SRAUGraphNodeInputCallback(void                          *inRefC
         return nil;
     };
     
+    /*
     SRAudioUnit *audioUnit = [self nodeInfo:node];
     if (audioUnit == nil) {
         return nil;
     }
+     */
 
-    SRAUNode *nodeObject = [[SRAUNode alloc] initWithNode:node audioComponentDescription:audioComponentDescription audioUnit:audioUnit];
+    SRAUNode *nodeObject = [[SRAUNode alloc] initWithNode:node audioComponentDescription:audioComponentDescription];
     
     return nodeObject;
 }
 
-// Private
-- (nullable SRAudioUnit *)nodeInfo:(AUNode)node {
+- (nullable SRAudioUnit *)nodeInfo:(nonnull SRAUNode *)node withAudioComponentDescription:(AudioComponentDescription)audioComponentDescription {
     AudioComponentDescription description;
     AudioUnit audioUnit;
     
-    if (CheckOSStatus(AUGraphNodeInfo(_graph, node, &description, &audioUnit), @"AUGraphNodeInfo") == NO) {
+    if (CheckOSStatus(AUGraphNodeInfo(_graph, node.node, &description, &audioUnit), @"AUGraphNodeInfo") == NO) {
         return nil;
     }
     

@@ -1,5 +1,7 @@
 module SRAudioKitPrivates {
     header "../SRAudioKitUtils.h"
     header "../SRAUGraph.h"
+    header "../SRAUNode.h"
+    header "../SRAudioUnit.h"
     export *
 }

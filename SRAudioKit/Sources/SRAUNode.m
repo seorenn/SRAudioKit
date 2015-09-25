@@ -23,12 +23,12 @@
 @synthesize node = _node;
 @synthesize audioComponentDescription = _audioComponentDescription;
 
-- (nonnull instancetype)initWithNode:(AUNode)node audioComponentDescription:(AudioComponentDescription)audioComponentDescription audioUnit:(nonnull SRAudioUnit *)audioUnit {
+- (nonnull instancetype)initWithNode:(AUNode)node audioComponentDescription:(AudioComponentDescription)audioComponentDescription {
     self = [super init];
     if (self) {
         _node = node;
         _audioComponentDescription = audioComponentDescription;
-        _audioUnit = audioUnit;
+//        _audioUnit = audioUnit;
     }
     return self;
 }

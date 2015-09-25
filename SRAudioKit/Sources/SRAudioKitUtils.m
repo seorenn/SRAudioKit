@@ -237,6 +237,14 @@ OSStatus SRAudioGetRawDevices(Ptr * _Nonnull devices, UInt16 * _Nonnull devicesA
     UInt32 dataSize = 0;
     
     AudioObjectPropertyAddress address = SRAudioGetAOPADefault(kAudioHardwarePropertyDevices);
+    /*
+     AudioObjectPropertyAddress address = {
+     inSelector,
+     kAudioObjectPropertyScopeGlobal,
+     kAudioObjectPropertyElementMaster
+     };
+
+     */
     
     err = AudioObjectGetPropertyDataSize(kAudioObjectSystemObject, &address, 0, NULL, &dataSize);
     if (err != noErr) return err;

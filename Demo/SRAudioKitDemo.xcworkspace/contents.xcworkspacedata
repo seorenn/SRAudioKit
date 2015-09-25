@@ -7,7 +7,4 @@
    <FileRef
       location = "group:SRAudioKitDemoOSXApp/SRAudioKitDemoOSXApp.xcodeproj">
    </FileRef>
-   <FileRef
-      location = "group:SRAudioKitDemoiOSApp/SRAudioKitDemoiOSApp.xcodeproj">
-   </FileRef>
 </Workspace>

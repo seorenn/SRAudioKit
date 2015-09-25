@@ -10,6 +10,7 @@
 #import <AudioToolbox/AudioToolbox.h>
 
 #if TARGET_OS_IPHONE
+#import <CoreAudio/CoreAudioTypes.h>
 #else
 #import <CoreAudio/CoreAudio.h>
 #endif
