@@ -10,6 +10,8 @@ import Cocoa
 import SRAudioKitOSX
 
 class ViewController: NSViewController {
+    
+    var recorder: SRAudioRecorder?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,16 +23,23 @@ class ViewController: NSViewController {
         }
     }
     
-    func startRecord(device: SRAudioDevice, outputPath: String) {
-        let input = SRAudioInputDevice(device: device)
-        let output = SRAudioOutputFile(path: outputPath)
-        
-        SRAudioManager.sharedManager.connect(input, output: output)
-        SRAudioManager.sharedManager.start()
+    func startRecord(outputPath: String) {
+        let device = SRAudioDeviceManager.sharedManager.devices[2]  // TODO: This is test case
+        debugPrint("Start Record with Output Path: \(outputPath)")
+        debugPrint("Using Input Device: \(device)")
+        if let recorder = SRAudioRecorder(device: device, sampleRate: 44100, frameType: .SignedInteger16Bit) {
+            self.recorder = recorder
+            recorder.startRecord(outputPath)
+        } else {
+            debugPrint("Failed to initialize SRAudioRecorder")
+        }
     }
     
     func stopRecord() {
-        SRAudioManager.sharedManager.stop()
+        debugPrint("Stop Record")
+        if let recorder = self.recorder {
+            recorder.stopRecord()
+        }
     }
 
     override var representedObject: AnyObject? {
@@ -40,9 +49,15 @@ class ViewController: NSViewController {
     }
     
     @IBAction func pressedReccordButton(sender: AnyObject) {
-        if let device = SRAudioDeviceManager.sharedManager.defaultInputDevice {
-            debugPrint("Use default input device \(device)")
-            self.startRecord(device, outputPath: "")
+        let outputPath = "/Users/hirenn/Desktop/output.aac"
+        if let recorder = self.recorder {
+            if recorder.recording {
+                self.stopRecord()
+            } else {
+                self.startRecord(outputPath)
+            }
+        } else {
+            self.startRecord(outputPath)
         }
     }
 }

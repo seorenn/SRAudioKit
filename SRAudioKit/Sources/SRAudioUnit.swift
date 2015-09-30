@@ -152,4 +152,13 @@ public class SRAudioUnit {
         
         return nil
     }
+    
+    // MARK: - Callbacks
+    
+    public func addRenderNotify(userData userData: AnyObject, callback: AURenderCallback) -> OSStatus {
+        var userDataVar = userData
+        let res = AudioUnitAddRenderNotify(self.audioUnit, callback, &userDataVar)
+        
+        return res
+    }
 }

@@ -44,6 +44,8 @@ NSArray<NSNumber *> * _Nullable SRAudioGetDevices();
 
 #endif  // #if TARGET_OS_IPHONE #else
 
+void SRAudioCAShow(AUGraph _Nonnull graph);
+
 @interface SRAudioKitUtils : NSObject
 
 @end

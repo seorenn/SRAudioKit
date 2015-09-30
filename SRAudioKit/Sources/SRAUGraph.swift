@@ -9,6 +9,7 @@
 import Foundation
 import CoreAudio
 import AudioToolbox
+import SRAudioKitPrivates
 
 public class SRAUGraph {
     let graph: AUGraph
@@ -17,6 +18,20 @@ public class SRAUGraph {
         var graph = AUGraph()
         NewAUGraph(&graph)
         self.graph = graph
+    }
+    
+    public var running: Bool {
+        var value = DarwinBoolean(false)
+        let res = AUGraphIsRunning(self.graph, &value)
+        if res == noErr { return value.boolValue }
+        return false
+    }
+    
+    public func clearConnections() throws {
+        let res = AUGraphClearConnections(self.graph)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res)
+        }
     }
     
     public func addNode(componentDescription: AudioComponentDescription) throws -> SRAUNode {
@@ -47,7 +62,7 @@ public class SRAUGraph {
         return SRAudioUnit(audioUnit: audioUnit)
     }
     
-    public func connect(sourceNode: SRAUNode, sourceOutputNumber: UInt32, destNode: SRAUNode, destInputNumber: UInt32) throws {
+    public func connect(sourceNode sourceNode: SRAUNode, sourceOutputNumber: UInt32, destNode: SRAUNode, destInputNumber: UInt32) throws {
         let res = AUGraphConnectNodeInput(self.graph, sourceNode.node, sourceOutputNumber, destNode.node, destInputNumber)
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res)
@@ -64,8 +79,31 @@ public class SRAUGraph {
         }
     }
     
+    public func addRenderNotify(userData procRefCon: AnyObject, callback: AURenderCallback) throws {
+        var ref = procRefCon
+        let res = AUGraphAddRenderNotify(self.graph, callback, &ref)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res)
+        }
+    }
+    
     public func initialize() throws {
         let res = AUGraphInitialize(self.graph)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res)
+        }
+    }
+    
+    public func update(sync: Bool = true) throws {
+        let res: OSStatus
+        
+        if sync {
+            res = AUGraphUpdate(self.graph, nil)
+        } else {
+            var updateValue = DarwinBoolean(false)
+            res = AUGraphUpdate(self.graph, &updateValue)
+        }
+
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res)
         }
@@ -90,5 +128,9 @@ public class SRAUGraph {
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res)
         }
+    }
+    
+    public func CAShow() {
+        SRAudioCAShow(self.graph)
     }
 }

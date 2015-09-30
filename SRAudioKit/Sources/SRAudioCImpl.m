@@ -6,7 +6,7 @@
 //  Copyright © 2015년 Seorenn. All rights reserved.
 //
 
-#import "SRAudioKitUtils.h"
+#import "SRAudioCImpl.h"
 
 #define SRAudioUInt32BitCount   (sizeof(UInt32) * 8)
 
@@ -290,6 +290,10 @@ NSArray<NSNumber *> * _Nullable SRAudioGetDevices() {
 }
 
 #endif
+
+void SRAudioCAShow(AUGraph _Nonnull graph) {
+    CAShow(graph);
+}
 
 @implementation SRAudioKitUtils
 
