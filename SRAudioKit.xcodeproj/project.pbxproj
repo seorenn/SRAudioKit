@@ -23,6 +23,8 @@
 		8A3FA7641BBBC1E300624D69 /* SRAudioCImpl.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A3FA7611BBBC1E300624D69 /* SRAudioCImpl.h */; settings = {ASSET_TAGS = (); }; };
 		8A3FA7651BBBC1E300624D69 /* SRAudioCImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FA7621BBBC1E300624D69 /* SRAudioCImpl.m */; settings = {ASSET_TAGS = (); }; };
 		8A3FA7661BBBC1E300624D69 /* SRAudioCImpl.m in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FA7621BBBC1E300624D69 /* SRAudioCImpl.m */; settings = {ASSET_TAGS = (); }; };
+		8A3FA7691BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FA7681BBBDA6E00624D69 /* SRAudioFileWriter.swift */; settings = {ASSET_TAGS = (); }; };
+		8A3FA76A1BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A3FA7681BBBDA6E00624D69 /* SRAudioFileWriter.swift */; settings = {ASSET_TAGS = (); }; };
 		8A57B2BE1BB2761F009D6388 /* SRAudioDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */; settings = {ASSET_TAGS = (); }; };
 		8A57B2C01BB2764C009D6388 /* SRAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */; settings = {ASSET_TAGS = (); }; };
 		8A57B2C31BB27A08009D6388 /* SRAudioDeviceManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */; settings = {ASSET_TAGS = (); }; };
@@ -40,6 +42,7 @@
 		8A14F8BD1BB3F4600037A28B /* SRAudioConstants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioConstants.swift; path = Sources/SRAudioConstants.swift; sourceTree = "<group>"; };
 		8A3FA7611BBBC1E300624D69 /* SRAudioCImpl.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = SRAudioCImpl.h; path = Sources/SRAudioCImpl.h; sourceTree = "<group>"; };
 		8A3FA7621BBBC1E300624D69 /* SRAudioCImpl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = SRAudioCImpl.m; path = Sources/SRAudioCImpl.m; sourceTree = "<group>"; };
+		8A3FA7681BBBDA6E00624D69 /* SRAudioFileWriter.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioFileWriter.swift; path = Sources/SRAudioFileWriter.swift; sourceTree = "<group>"; };
 		8A57B2BD1BB2761F009D6388 /* SRAudioDeviceManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioDeviceManager.swift; path = Sources/SRAudioDeviceManager.swift; sourceTree = "<group>"; };
 		8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioDevice.swift; path = Sources/SRAudioDevice.swift; sourceTree = "<group>"; };
 		8A84F8061BAC08D700C81D09 /* SRAudioKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -73,6 +76,7 @@
 			children = (
 				8A14F8A91BB3CDC70037A28B /* SRAudioUtils.swift */,
 				8A14F8BD1BB3F4600037A28B /* SRAudioConstants.swift */,
+				8A3FA7681BBBDA6E00624D69 /* SRAudioFileWriter.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -282,6 +286,7 @@
 				8A14F8B01BB3D8700037A28B /* SRAUNode.swift in Sources */,
 				8A14F8B21BB3D87B0037A28B /* SRAudioUnit.swift in Sources */,
 				8A57B2BE1BB2761F009D6388 /* SRAudioDeviceManager.swift in Sources */,
+				8A3FA7691BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */,
 				8A14F8BB1BB3F3F70037A28B /* SRAudioRecorder.swift in Sources */,
 				8A14F8BE1BB3F4600037A28B /* SRAudioConstants.swift in Sources */,
 				8A57B2C01BB2764C009D6388 /* SRAudioDevice.swift in Sources */,
@@ -298,6 +303,7 @@
 				8A14F8B71BB3DA9A0037A28B /* SRAUNode.swift in Sources */,
 				8A14F8B81BB3DA9E0037A28B /* SRAudioUnit.swift in Sources */,
 				8A57B2C31BB27A08009D6388 /* SRAudioDeviceManager.swift in Sources */,
+				8A3FA76A1BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */,
 				8A57B2C41BB27A0B009D6388 /* SRAudioDevice.swift in Sources */,
 				8A14F8AB1BB3CEBC0037A28B /* SRAudioUtils.swift in Sources */,
 				8A3FA7661BBBC1E300624D69 /* SRAudioCImpl.m in Sources */,

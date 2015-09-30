@@ -46,6 +46,10 @@ NSArray<NSNumber *> * _Nullable SRAudioGetDevices();
 
 void SRAudioCAShow(AUGraph _Nonnull graph);
 
+#pragma mark - Misc
+
+CFURLRef _Nullable CFURLFromString(NSString * _Nonnull urlString);
+
 @interface SRAudioKitUtils : NSObject
 
 @end

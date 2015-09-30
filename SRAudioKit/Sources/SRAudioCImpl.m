@@ -295,6 +295,13 @@ void SRAudioCAShow(AUGraph _Nonnull graph) {
     CAShow(graph);
 }
 
+#pragma mark - Misc
+
+CFURLRef _Nullable CFURLFromString(NSString * _Nonnull urlString) {
+    NSURL *url = [NSURL URLWithString:urlString];
+    return (__bridge CFURLRef)url;
+}
+
 @implementation SRAudioKitUtils
 
 @end
