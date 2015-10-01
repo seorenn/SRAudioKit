@@ -25,22 +25,30 @@ public class SRAudioUnit {
     // MARK: - Devices
     
     public func setDevice(device: SRAudioDevice, bus: SRAudioUnitBus) -> OSStatus {
-        var deviceID = device.deviceID
-        let size = UInt32(sizeof(AudioDeviceID))
-        let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus.rawValue, &deviceID, size)
-        return res
+        #if os(OSX)
+            var deviceID = device.deviceID
+            let size = UInt32(sizeof(AudioDeviceID))
+            let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus.rawValue, &deviceID, size)
+            return res
+        #else
+            return noErr
+        #endif
     }
     
     public func getDevice(bus: SRAudioUnitBus) -> SRAudioDevice? {
-        var deviceID = AudioDeviceID()
-        var size = UInt32(sizeof(AudioDeviceID))
-        let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus.rawValue, &deviceID, &size)
-        
-        if res == noErr {
-            return SRAudioDevice(deviceID: deviceID)
-        }
-        
-        return nil
+        #if os(OSX)
+            var deviceID = AudioDeviceID()
+            var size = UInt32(sizeof(AudioDeviceID))
+            let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus.rawValue, &deviceID, &size)
+            
+            if res == noErr {
+                return SRAudioDevice(deviceID: deviceID)
+            }
+            
+            return nil
+        #else
+            return nil
+        #endif
     }
     
     public func setChannelMap(channelMap: [Bool]) -> OSStatus {

@@ -22,16 +22,6 @@ UInt32 SRAudioUnsetBitUInt32(UInt32 field, UInt32 value) {
     return field & ~value;
 }
 
-AudioObjectPropertyAddress SRAudioGetAOPADefault(AudioObjectPropertySelector inSelector) {
-    AudioObjectPropertyAddress address = {
-        inSelector,
-        kAudioObjectPropertyScopeGlobal,
-        kAudioObjectPropertyElementMaster
-    };
-    
-    return address;
-}
-
 AudioStreamBasicDescription SRAudioGetAudioStreamBasicDescription(BOOL stereo, Float64 sampleRate, SRAudioFrameType frameType, BOOL interleaved, BOOL canonical) {
     AudioStreamBasicDescription desc;
     
@@ -119,7 +109,15 @@ AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL s
 
 #else   // if TARGET_OS_IPHONE
 
-#pragma mark - OS X APIs for Audio Device
+AudioObjectPropertyAddress SRAudioGetAOPADefault(AudioObjectPropertySelector inSelector) {
+    AudioObjectPropertyAddress address = {
+        inSelector,
+        kAudioObjectPropertyScopeGlobal,
+        kAudioObjectPropertyElementMaster
+    };
+    
+    return address;
+}
 
 NSString * _Nullable SRAudioGetDeviceName(AudioDeviceID deviceID) {
     AudioObjectPropertyAddress address = SRAudioGetAOPADefault(kAudioObjectPropertyName);

@@ -11,7 +11,7 @@ import CoreAudioKit
 import AudioToolbox
 
 struct SRAudioRecorderInternal {
-    let graph = SRAUGraph()
+    let graph: SRAUGraph
     
     let ioNode: SRAUNode
     let ioAudioUnit: SRAudioUnit
@@ -20,6 +20,7 @@ struct SRAudioRecorderInternal {
     let mixerAudioUnit: SRAudioUnit
     
     init?(device: SRAudioDevice?, sampleRate: Float64, frameType: SRAudioFrameType) {
+        self.graph = SRAUGraph()
         do {
             #if os(OSX)
                 let ioNodeDesc = AudioComponentDescription(componentType: kAudioUnitType_Output,

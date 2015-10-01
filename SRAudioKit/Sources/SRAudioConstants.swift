@@ -6,7 +6,7 @@
 //  Copyright © 2015년 Seorenn. All rights reserved.
 //
 
-import Cocoa
+import Foundation
 
 public enum SRAudioFrameType: Int {
     case Unknown = 0

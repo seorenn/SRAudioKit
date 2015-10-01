@@ -24,7 +24,6 @@ typedef NS_ENUM(UInt32, SRAudioFrameType) {
 BOOL CheckOSStatus(OSStatus status, NSString * _Nonnull description);
 UInt32 SRAudioUnsetBitUInt32(UInt32 field, UInt32 value);
 
-AudioObjectPropertyAddress SRAudioGetAOPADefault(AudioObjectPropertySelector inSelector);
 AudioStreamBasicDescription SRAudioGetAudioStreamBasicDescription(BOOL stereo, Float64 sampleRate, SRAudioFrameType frameType, BOOL interleaved, BOOL canonical);
 BOOL SRAudioIsNonInterleaved(AudioStreamBasicDescription stream);
 AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL stereo, Float64 sampleRate);
@@ -34,7 +33,7 @@ AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL s
 
 #else   // #if TARGET_OS_IPHONE
 
-#pragma mark - OS X APIs for Audio Device
+AudioObjectPropertyAddress SRAudioGetAOPADefault(AudioObjectPropertySelector inSelector);
 
 NSString * _Nullable SRAudioGetDeviceName(AudioDeviceID deviceID);
 NSString * _Nullable SRAudioGetDeviceUID(AudioDeviceID deviceID);

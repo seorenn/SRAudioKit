@@ -11,58 +11,64 @@ import SRAudioKitPrivates
 import AudioToolbox
 import CoreAudio
 
-#if os(OSX)
-
 public class SRAudioDeviceManager {
     public static let sharedManager: SRAudioDeviceManager = SRAudioDeviceManager()
 
     public var devices: [SRAudioDevice] {
-        var dataSize: UInt32 = 0;
-        var results = [SRAudioDevice]()
-        
-        var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDevices, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
-        
-        var err = AudioObjectGetPropertyDataSize(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize);
-        
-        guard err == noErr else { return results }
-        
-        let count = Int(dataSize / UInt32(sizeof(AudioObjectID)))
-        guard count > 0 else { return [SRAudioDevice]() }
+        #if os(OSX)
+            var dataSize: UInt32 = 0;
+            var results = [SRAudioDevice]()
+            
+            var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDevices, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
+            
+            var err = AudioObjectGetPropertyDataSize(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize);
+            
+            guard err == noErr else { return results }
+            
+            let count = Int(dataSize / UInt32(sizeof(AudioObjectID)))
+            guard count > 0 else { return [SRAudioDevice]() }
 
-        let devicesPtr = UnsafeMutablePointer<AudioObjectID>.alloc(Int(dataSize))
-        
-        err = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize, devicesPtr);
+            let devicesPtr = UnsafeMutablePointer<AudioObjectID>.alloc(Int(dataSize))
+            
+            err = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize, devicesPtr);
 
-        guard err == noErr else {
+            guard err == noErr else {
+                devicesPtr.dealloc(Int(dataSize))
+                return results
+            }
+            
+            var curPtr = devicesPtr
+            for _ in 0..<count {
+                let deviceID = curPtr.memory
+                let d = SRAudioDevice(deviceID: deviceID)
+                results.append(d)
+                
+                curPtr = curPtr.successor()
+            }
+            
             devicesPtr.dealloc(Int(dataSize))
             return results
-        }
-        
-        var curPtr = devicesPtr
-        for _ in 0..<count {
-            let deviceID = curPtr.memory
-            let d = SRAudioDevice(deviceID: deviceID)
-            results.append(d)
-            
-            curPtr = curPtr.successor()
-        }
-        
-        devicesPtr.dealloc(Int(dataSize))
-        return results
+        #else
+            return [SRAudioDevice]()
+        #endif
     }
     
     public var defaultInputDevice: SRAudioDevice? {
-        var size = UInt32(sizeof(AudioDeviceID))
-        var deviceID = AudioDeviceID()
-        var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultInputDevice, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
-        
-        let error = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID)
-        if error != noErr {
-            debugPrint("Failed to get default input device \(error)")
+        #if os(OSX)
+            var size = UInt32(sizeof(AudioDeviceID))
+            var deviceID = AudioDeviceID()
+            var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultInputDevice, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
+            
+            let error = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID)
+            if error != noErr {
+                debugPrint("Failed to get default input device \(error)")
+                return nil
+            }
+            
+            return SRAudioDevice(deviceID: deviceID)
+        #else
             return nil
-        }
-        
-        return SRAudioDevice(deviceID: deviceID)
+        #endif
     }
     
     public init() {
@@ -71,5 +77,3 @@ public class SRAudioDeviceManager {
 
     
 }
-
-#endif
