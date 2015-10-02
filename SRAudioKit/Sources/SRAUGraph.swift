@@ -13,6 +13,7 @@ import SRAudioKitPrivates
 
 public class SRAUGraph {
     let graph: AUGraph
+    var callbackHelpers = [SRAudioCallbackHelper]()
     
     public init() {
         var graph = AUGraph()
@@ -69,7 +70,20 @@ public class SRAUGraph {
         }
     }
     
-    public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, procRefCon: AnyObject, callback: AURenderCallback) throws {
+    //public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
+    public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, userData: AnyObject, callback: SRAudioUnitRenderCallback) throws {
+        let helper = SRAudioCallbackHelper()
+        helper.userData = userData
+        helper.callback = callback
+        
+        let res = helper.AUGraphSetNodeInputCallback(self.graph, node: destNode.node, inputNumber: destInputNumber)
+        
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res)
+        }
+        
+        self.callbackHelpers.append(helper)
+        /*
         var ref = procRefCon
         var callbackStruct = AURenderCallbackStruct(inputProc: callback, inputProcRefCon: &ref)
         let res = AUGraphSetNodeInputCallback(self.graph, destNode.node, destInputNumber, &callbackStruct)
@@ -77,9 +91,10 @@ public class SRAUGraph {
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res)
         }
+        */
     }
     
-    public func addRenderNotify(userData procRefCon: AnyObject, callback: AURenderCallback) throws {
+    public func addRenderNotify(userData procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
         var ref = procRefCon
         let res = AUGraphAddRenderNotify(self.graph, callback, &ref)
         if res != noErr {

@@ -22,14 +22,18 @@ typedef NS_ENUM(UInt32, SRAudioFrameType) {
 };
 
 BOOL CheckOSStatus(OSStatus status, NSString * _Nonnull description);
+NSString * _Nonnull OSStatusString(OSStatus status);
 UInt32 SRAudioUnsetBitUInt32(UInt32 field, UInt32 value);
 
 AudioStreamBasicDescription SRAudioGetAudioStreamBasicDescription(BOOL stereo, Float64 sampleRate, SRAudioFrameType frameType, BOOL interleaved, BOOL canonical);
 BOOL SRAudioIsNonInterleaved(AudioStreamBasicDescription stream);
 AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL stereo, Float64 sampleRate);
 
+OSStatus SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, const AudioChannelLayout * _Nullable inChannelLayout, BOOL eraseFile, ExtAudioFileRef _Nullable * _Nonnull outExtAudioFile);
+
 #if TARGET_OS_IPHONE
 #pragma mark - Utilities for iOS
+OSStatus SRAudioFileSetAppleCodecManufacturer(ExtAudioFileRef _Nonnull audioFileRef, BOOL useHardwareCodec);
 
 #else   // #if TARGET_OS_IPHONE
 
@@ -47,8 +51,18 @@ void SRAudioCAShow(AUGraph _Nonnull graph);
 
 #pragma mark - Misc
 
-CFURLRef _Nullable CFURLFromString(NSString * _Nonnull urlString);
+CFURLRef _Nullable CFURLFromPathString(NSString * _Nonnull pathString);
 
 @interface SRAudioKitUtils : NSObject
+
+@end
+
+typedef OSStatus (^SRAudioUnitRenderCallback)(id _Nullable userData, AudioUnitRenderActionFlags * _Nonnull ioActionFlags, const AudioTimeStamp * _Nonnull inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList * _Nonnull ioData);
+
+@interface SRAudioCallbackHelper: NSObject
+@property (nullable, nonatomic, weak) id userData;
+@property (nullable, nonatomic, strong) SRAudioUnitRenderCallback callback;
+
+- (OSStatus)AUGraphSetNodeInputCallback:(nonnull AUGraph)inGraph node:(AUNode)inDestNode inputNumber:(UInt32)inDestInputNumber;
 
 @end

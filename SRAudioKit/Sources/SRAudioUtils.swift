@@ -10,10 +10,18 @@ import Foundation
 import CoreAudioKit
 import AudioToolbox
 
-public enum SRAudioError: ErrorType {
-    case UnknownError
-    case GenericError(description: String)
-    case OSStatusError(status: OSStatus)
+public extension UInt32 {
+    public func flagged(flag: UInt32) -> UInt32 {
+        return self | flag
+    }
+    
+    public func unflagged(flag: UInt32) -> UInt32 {
+        return self & ~flag
+    }
+    
+    public func isFlagged(flag: UInt32) -> Bool {
+        return (self & flag) == flag
+    }
 }
 
 func SRAudioGenErrorDescription(status: OSStatus, description: String?) -> String {

@@ -8,6 +8,7 @@
 
 #import "SRAudioCImpl.h"
 
+
 #define SRAudioUInt32BitCount   (sizeof(UInt32) * 8)
 
 BOOL CheckOSStatus(OSStatus status, NSString *description) {
@@ -16,6 +17,21 @@ BOOL CheckOSStatus(OSStatus status, NSString *description) {
         return NO;
     }
     return YES;
+}
+
+NSString * _Nonnull OSStatusString(OSStatus status) {
+    char str[10] = { 0, };
+    
+    *(UInt32 *)(str + 1) = CFSwapInt32HostToBig(status);
+    if (isprint(str[1]) && isprint(str[2]) && isprint(str[3]) && isprint(str[4])) {
+        str[0] = str[5] = '\'';
+        str[6] = '\0';
+    } else {
+        // no, format it as an integer
+        sprintf(str, "%d", (int)status);
+    }
+    
+    return [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
 }
 
 UInt32 SRAudioUnsetBitUInt32(UInt32 field, UInt32 value) {
@@ -103,9 +119,33 @@ AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL s
     return desc;
 }
 
+OSStatus SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, const AudioChannelLayout * _Nullable inChannelLayout, BOOL eraseFile, ExtAudioFileRef _Nullable * _Nonnull outExtAudioFile) {
+    NSURL *nsurl = [NSURL fileURLWithPath:path];
+    UInt32 flags = eraseFile ? kAudioFileFlags_EraseFile : 0;
+    
+    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)nsurl, inFileType, inStreamDesc, inChannelLayout, flags, outExtAudioFile);
+    
+    return res;
+}
+
 #if TARGET_OS_IPHONE
 
 #pragma mark - Utilities for iOS
+
+OSStatus SRAudioFileSetCodecManufacturer(ExtAudioFileRef _Nonnull audioFileRef, UInt32 codec) {
+    UInt32 size = sizeof(codec);
+    OSStatus res = ExtAudioFileSetProperty(audioFileRef,
+                                           kExtAudioFileProperty_CodecManufacturer,
+                                           size,
+                                           &codec);
+    return res;
+}
+
+OSStatus SRAudioFileSetAppleCodecManufacturer(ExtAudioFileRef _Nonnull audioFileRef, BOOL useHardwareCodec) {
+    UInt32 codec = kAppleSoftwareAudioCodecManufacturer;
+    if (useHardwareCodec) codec = kAppleHardwareAudioCodecManufacturer;
+    return SRAudioFileSetCodecManufacturer(audioFileRef, codec);
+}
 
 #else   // if TARGET_OS_IPHONE
 
@@ -295,11 +335,35 @@ void SRAudioCAShow(AUGraph _Nonnull graph) {
 
 #pragma mark - Misc
 
-CFURLRef _Nullable CFURLFromString(NSString * _Nonnull urlString) {
-    NSURL *url = [NSURL URLWithString:urlString];
+CFURLRef _Nullable CFURLFromPathString(NSString * _Nonnull pathString) {
+    NSURL *url = [NSURL fileURLWithPath:pathString];
     return (__bridge CFURLRef)url;
 }
 
 @implementation SRAudioKitUtils
+
+@end
+
+
+OSStatus SRAudioCallbackHelperHandler(void * _Nonnull inRefCon, AudioUnitRenderActionFlags * _Nonnull ioActionFlags, const AudioTimeStamp * _Nonnull inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList * _Nonnull ioData) {
+    NSLog(@"IN SRAudioCallbackHelperHandler");
+    SRAudioCallbackHelper *obj = (__bridge SRAudioCallbackHelper *)inRefCon;
+    
+    if (obj && obj.callback) {
+        return obj.callback(obj.userData, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
+    } else {
+        return noErr;
+    }
+}
+
+@implementation SRAudioCallbackHelper
+
+- (OSStatus)AUGraphSetNodeInputCallback:(nonnull AUGraph)inGraph node:(AUNode)inDestNode inputNumber:(UInt32)inDestInputNumber {
+    AURenderCallbackStruct callbackStruct;
+    callbackStruct.inputProc = SRAudioCallbackHelperHandler;
+    callbackStruct.inputProcRefCon = (__bridge void *)self;
+    
+    return AUGraphSetNodeInputCallback(inGraph, inDestNode, inDestInputNumber, &callbackStruct);
+}
 
 @end

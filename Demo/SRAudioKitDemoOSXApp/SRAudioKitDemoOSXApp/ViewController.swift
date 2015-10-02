@@ -24,12 +24,17 @@ class ViewController: NSViewController {
     }
     
     func startRecord(outputPath: String) {
-        let device = SRAudioDeviceManager.sharedManager.devices[2]  // TODO: This is test case
+        let device = SRAudioDeviceManager.sharedManager.defaultInputDevice!
         debugPrint("Start Record with Output Path: \(outputPath)")
         debugPrint("Using Input Device: \(device)")
-        if let recorder = SRAudioRecorder(device: device, sampleRate: 44100, frameType: .SignedInteger16Bit) {
+        
+        let inputConfig = SRAudioStreamDescription(sampleRate: 44100, stereo: true, format: .PCM, frameType: .Float32Bit, interleaved: false)
+        debugPrint("Input Config: \(inputConfig)")
+        let outputConfig = SRAudioStreamDescription(sampleRate: 44100, stereo: true, format: .PCM, frameType: .Float32Bit, interleaved: false)
+        debugPrint("Output Config: \(outputConfig)")
+        if let recorder = SRAudioRecorder(inputDevice: device, inputAudioStreamDescription: inputConfig, outputPath: outputPath, outputAudioStreamDescription: outputConfig, outputFileFormat: .AIFF) {
             self.recorder = recorder
-            recorder.startRecord(outputPath)
+            recorder.startRecord()
         } else {
             debugPrint("Failed to initialize SRAudioRecorder")
         }
