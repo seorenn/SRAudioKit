@@ -50,6 +50,7 @@ func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStr
     var fileRef = ExtAudioFileRef()
 
     var outputDesc = audioStreamDescription.audioStreamBasicDescription
+
     var size = UInt32(sizeof(AudioStreamBasicDescription))
     var res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &outputDesc)
     if res != noErr {

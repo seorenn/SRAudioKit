@@ -167,9 +167,9 @@ public struct SRAudioStreamDescription: CustomDebugStringConvertible {
         let frameString: String
         switch (self.frameType) {
         case .SignedInteger16Bit:
-            frameString = "SInt 16Bit"
+            frameString = "SInt \(self.audioStreamBasicDescription.mBitsPerChannel)Bit"
         case .Float32Bit:
-            frameString = "Float 32Bit"
+            frameString = "Float \(self.audioStreamBasicDescription.mBitsPerChannel)Bit"
         default:
             frameString = "Unknown Frame Type"
         }

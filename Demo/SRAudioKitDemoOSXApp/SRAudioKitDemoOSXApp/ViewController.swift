@@ -32,7 +32,7 @@ class ViewController: NSViewController {
         debugPrint("Input Config: \(inputConfig)")
         let outputConfig = SRAudioStreamDescription(sampleRate: 44100, stereo: true, format: .PCM, frameType: .Float32Bit, interleaved: false)
         debugPrint("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, inputAudioStreamDescription: inputConfig, outputPath: outputPath, outputAudioStreamDescription: outputConfig, outputFileFormat: .AIFF) {
+        if let recorder = SRAudioRecorder(inputDevice: device, inputAudioStreamDescription: inputConfig, outputPath: outputPath, outputAudioStreamDescription: outputConfig, outputFileFormat: .WAVE) {
             self.recorder = recorder
             recorder.startRecord()
         } else {
