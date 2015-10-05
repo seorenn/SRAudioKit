@@ -31,8 +31,6 @@
 		8A57B2C41BB27A0B009D6388 /* SRAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */; settings = {ASSET_TAGS = (); }; };
 		8A84F80A1BAC08D700C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A84F8151BAC08E000C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		8A86C3901BBE5C8F0009988E /* SRAudioStreamDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86C38F1BBE5C8F0009988E /* SRAudioStreamDescription.swift */; settings = {ASSET_TAGS = (); }; };
-		8A86C3911BBE5C920009988E /* SRAudioStreamDescription.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A86C38F1BBE5C8F0009988E /* SRAudioStreamDescription.swift */; settings = {ASSET_TAGS = (); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -53,7 +51,6 @@
 		8A84F81A1BAC08E000C81D09 /* SRAudioKitOSX.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKitOSX.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A84F81C1BAC092500C81D09 /* SRAudioKitOSX.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SRAudioKitOSX.h; sourceTree = "<group>"; };
 		8A84F8241BAC0A9900C81D09 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
-		8A86C38F1BBE5C8F0009988E /* SRAudioStreamDescription.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioStreamDescription.swift; path = Sources/SRAudioStreamDescription.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -80,7 +77,6 @@
 				8A14F8A91BB3CDC70037A28B /* SRAudioUtils.swift */,
 				8A14F8BD1BB3F4600037A28B /* SRAudioConstants.swift */,
 				8A3FA7681BBBDA6E00624D69 /* SRAudioFileWriter.swift */,
-				8A86C38F1BBE5C8F0009988E /* SRAudioStreamDescription.swift */,
 			);
 			name = Utils;
 			sourceTree = "<group>";
@@ -296,7 +292,6 @@
 				8A57B2C01BB2764C009D6388 /* SRAudioDevice.swift in Sources */,
 				8A3FA7651BBBC1E300624D69 /* SRAudioCImpl.m in Sources */,
 				8A14F8AA1BB3CDC70037A28B /* SRAudioUtils.swift in Sources */,
-				8A86C3901BBE5C8F0009988E /* SRAudioStreamDescription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -314,7 +309,6 @@
 				8A3FA7661BBBC1E300624D69 /* SRAudioCImpl.m in Sources */,
 				8A14F8BC1BB3F3F70037A28B /* SRAudioRecorder.swift in Sources */,
 				8A14F8BF1BB3F4600037A28B /* SRAudioConstants.swift in Sources */,
-				8A86C3911BBE5C920009988E /* SRAudioStreamDescription.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

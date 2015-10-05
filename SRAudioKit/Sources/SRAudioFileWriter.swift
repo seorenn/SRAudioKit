@@ -30,48 +30,53 @@ func SRAudioFileWriterGetFormat() throws -> AudioStreamBasicDescription {
     var result = AudioStreamBasicDescription()
     let res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &result)
     if res != noErr {
-        throw SRAudioError.OSStatusError(status: res)
+        throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterGetFormat")
     }
     return result
 }
 
-func SRAudioFileWriterSetFileFormat(fileRef: ExtAudioFileRef, audioStreamDescription: SRAudioStreamDescription) throws {
+func SRAudioFileWriterSetFileFormat(fileRef: ExtAudioFileRef, audioStreamDescription: AudioStreamBasicDescription) throws {
     let size = UInt32(sizeof(AudioStreamBasicDescription))
-    var inFormat = audioStreamDescription.audioStreamBasicDescription
+    var inFormat = audioStreamDescription
     let res = ExtAudioFileSetProperty(fileRef, kExtAudioFileProperty_ClientDataFormat, size, &inFormat)
     if res != noErr {
-        throw SRAudioError.OSStatusError(status: res)
+        throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterSetFileFormat")
     }
 }
 
-func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStreamDescription: SRAudioStreamDescription) throws -> ExtAudioFileRef {
+func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStreamDescription: AudioStreamBasicDescription) throws -> ExtAudioFileRef {
     let url = NSURL(fileURLWithPath: path) as CFURL
     let fileTypeID = SRAudioFileTypeFromFormat(fileFormat)
-    var fileRef = ExtAudioFileRef()
+    var fileRef: ExtAudioFileRef = nil
 
-    var outputDesc = audioStreamDescription.audioStreamBasicDescription
+    var outputDesc = audioStreamDescription
+
+    print("Current Format Description: \(outputDesc)")
 
     var size = UInt32(sizeof(AudioStreamBasicDescription))
     var res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &outputDesc)
     if res != noErr {
-        throw SRAudioError.OSStatusError(status: res)
+        throw SRAudioError.OSStatusError(status: res, description: "AudioFormatGetProperty")
     }
     
-    let debugFormat = SRAudioStreamDescription(description: outputDesc)
-    debugPrint("SRAudioFileWriterOpen: Updated Stream Format: \(debugFormat)")
+    print("Updated Format Description: \(outputDesc)")
     
     res = ExtAudioFileCreateWithURL(url, fileTypeID, &outputDesc, nil, AudioFileFlags.EraseFile.rawValue, &fileRef)
     if res != noErr {
-        throw SRAudioError.OSStatusError(status: res)
+        throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileCreateWithURL")
     }
+//    fileRef = SRAudioFileCreate(path, fileTypeID, &outputDesc, true)
+//    if fileRef == nil {
+//        throw SRAudioError.OSStatusError(status: 0, description: "OOPS!")
+//    }
     
-    var sf = audioStreamDescription.audioStreamBasicDescription
+    var sf = audioStreamDescription
     size = UInt32(sizeof(AudioStreamBasicDescription))
     
-    debugPrint("SRAudioFileWriterOpen: Try to update stream format: \(audioStreamDescription)")
+    print("SRAudioFileWriterOpen: Try to update stream format: \(audioStreamDescription)")
     res = ExtAudioFileSetProperty(fileRef, kExtAudioFileProperty_ClientDataFormat, size, &sf)
     if res != noErr {
-        throw SRAudioError.OSStatusError(status: res)
+        throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileSetProperty")
     }
     
     return fileRef
@@ -80,39 +85,39 @@ func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStr
 public class SRAudioFileWriter {
     var fileRef: ExtAudioFileRef?
     
-    public init?(audioStreamDescription: SRAudioStreamDescription, fileFormat: SRAudioFileFormat, filePath: String) {
+    public init?(audioStreamDescription: AudioStreamBasicDescription, fileFormat: SRAudioFileFormat, filePath: String) {
         do {
-            debugPrint("SRAudioFileWriter INIT [\(filePath)] [\(fileFormat)] [\(audioStreamDescription)]")
+            print("SRAudioFileWriter INIT [\(filePath)] [\(fileFormat)] [\(audioStreamDescription)]")
             self.fileRef = try SRAudioFileWriterOpen(filePath, fileFormat: fileFormat, audioStreamDescription: audioStreamDescription)
             try SRAudioFileWriterSetFileFormat(self.fileRef!, audioStreamDescription: audioStreamDescription)
         }
-        catch SRAudioError.OSStatusError(let status) {
-            print("Failed to open file: \(OSStatusString(status))")
+        catch SRAudioError.OSStatusError(let status, let description) {
+            print("[\(description)] Failed to open file: \(OSStatusString(status))")
             switch (status) {
             case kExtAudioFileError_InvalidProperty:
-                debugPrint("E: Invalid Property")
+                print("E: Invalid Property")
             case kExtAudioFileError_InvalidPropertySize:
-                debugPrint("E: Invalid Property Size")
+                print("E: Invalid Property Size")
             case kExtAudioFileError_NonPCMClientFormat:
-                debugPrint("E: Non PCM Client Format")
+                print("E: Non PCM Client Format")
             case kExtAudioFileError_InvalidChannelMap:
-                debugPrint("E: Invalid Channel Map")
+                print("E: Invalid Channel Map")
             case kExtAudioFileError_InvalidOperationOrder:
-                debugPrint("E: Invalid Operation Order")
+                print("E: Invalid Operation Order")
             case kExtAudioFileError_InvalidDataFormat:
-                debugPrint("E: Invalid Data Format")
+                print("E: Invalid Data Format")
             case kExtAudioFileError_MaxPacketSizeUnknown:
-                debugPrint("E: Max Packet Size Unknown")
+                print("E: Max Packet Size Unknown")
             case kExtAudioFileError_InvalidSeek:
-                debugPrint("E: Invalid Seek")
+                print("E: Invalid Seek")
             case kExtAudioFileError_AsyncWriteTooLarge:
-                debugPrint("E: Async Write Too Large")
+                print("E: Async Write Too Large")
             case kExtAudioFileError_AsyncWriteBufferOverflow:
-                debugPrint("E: Async Write Buffer Overflow")
+                print("E: Async Write Buffer Overflow")
             case kAudioFormatUnsupportedDataFormatError:
-                debugPrint("E: AudioFormat: Unsupported Data Format Error")
+                print("E: AudioFormat: Unsupported Data Format Error")
             default:
-                debugPrint("E: kExtAudioFileError Status \(status)")
+                print("E: kExtAudioFileError Status \(status)")
             }
             return nil
         }
@@ -124,7 +129,7 @@ public class SRAudioFileWriter {
     public func close() throws {
         let res = ExtAudioFileDispose(self.fileRef!)
         if res != noErr {
-            SRAudioError.OSStatusError(status: res)
+            SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.close()")
         }
     }
  
@@ -133,7 +138,7 @@ public class SRAudioFileWriter {
         
         let res = ExtAudioFileWriteAsync(fileRef, bufferSize, bufferList)
         if res != noErr {
-            SRAudioError.OSStatusError(status: res)
+            SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.append()")
         }
     }
 }

@@ -29,7 +29,8 @@ AudioStreamBasicDescription SRAudioGetAudioStreamBasicDescription(BOOL stereo, F
 BOOL SRAudioIsNonInterleaved(AudioStreamBasicDescription stream);
 AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL stereo, Float64 sampleRate);
 
-OSStatus SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, const AudioChannelLayout * _Nullable inChannelLayout, BOOL eraseFile, ExtAudioFileRef _Nullable * _Nonnull outExtAudioFile);
+ExtAudioFileRef _Nullable SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, BOOL eraseFile);
+void SRAudioFileOpenTest();
 
 #if TARGET_OS_IPHONE
 #pragma mark - Utilities for iOS

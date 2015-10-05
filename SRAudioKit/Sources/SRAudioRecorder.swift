@@ -24,8 +24,10 @@ public class SRAudioRecorder {
     
     public private(set) var recording: Bool = false
     
-    //public init?(outputPath: String, device: SRAudioDevice?, audioStreamDescription: SRAudioStreamDescription) {
-    public init?(inputDevice: SRAudioDevice?, inputAudioStreamDescription: SRAudioStreamDescription, outputPath: String, outputAudioStreamDescription: SRAudioStreamDescription, outputFileFormat: SRAudioFileFormat) {
+    public static func CTest() {
+        SRAudioFileOpenTest()
+    }
+    public init?(inputDevice: SRAudioDevice?, inputStreamDescription: AudioStreamBasicDescription, outputPath: String, outputStreamDescription: AudioStreamBasicDescription, outputFileFormat: SRAudioFileFormat) {
         self.graph = SRAUGraph()
         do {
             #if os(OSX)
@@ -54,15 +56,13 @@ public class SRAudioRecorder {
             self.ioAudioUnit = try self.graph?.nodeInfo(self.ioNode!)
             
             self.ioAudioUnit?.enableIO(true, scope: kAudioUnitScope_Input, bus: .Input)
-            self.ioAudioUnit?.setStreamFormat(inputAudioStreamDescription.audioStreamBasicDescription, scope: kAudioUnitScope_Input, bus: .Input)
+            self.ioAudioUnit?.setStreamFormat(inputStreamDescription, scope: kAudioUnitScope_Input, bus: .Input)
             
             #if os(OSX)
                 let inputScopeFormat = self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Output, bus: .Input)
-                debugPrint("IO-AU Input Scope Format:")
-                debugPrint(SRAudioStreamDescription(description: inputScopeFormat!))
+                print("IO-AU Input Scope Format: \(inputScopeFormat)")
                 let outputScopeFormat = self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Input, bus: .Output)
-                debugPrint("IO-AU Output Scope Format:")
-                debugPrint(SRAudioStreamDescription(description: outputScopeFormat!))
+                print("IO-AU Output Scope Format: \(outputScopeFormat)")
             #endif
             
             // When open below comment, input callback will not calling.
@@ -84,12 +84,11 @@ public class SRAudioRecorder {
 
             // Prepare File Writer
             
-            //let streamFormat = self.ioAudioUnit?.getStreamFormat(kAudioUnitScope_Output, bus: .Output)
-            //let streamFormat = self.ioAudioUnit?.getStreamFormat(kAudioUnitScope_Output, bus: .Output)
-//            let streamFormat = SRAudioGenerateFileFormatDescription(44100, frameType: .SignedInteger16Bit, stereo: true, format: .AIFF)
-            self.writer = SRAudioFileWriter(audioStreamDescription: outputAudioStreamDescription, fileFormat: outputFileFormat, filePath: outputPath)
-//            self.writer = SRAudioFileWriter(audioStreamDescription: outputAudioStreamDescription, outputPath: outputPath)
-            if self.writer == nil { return nil }
+            self.writer = SRAudioFileWriter(audioStreamDescription: outputStreamDescription, fileFormat: outputFileFormat, filePath: outputPath)
+            if self.writer == nil {
+                print("Failed to initialize SRAudioFileWriter. Cancel operations")
+                return nil
+            }
 
             // Configure Callbacks
 
@@ -124,11 +123,11 @@ public class SRAudioRecorder {
             try self.graph?.initialize()
         }
         catch SRAudioError.OSStatusError(let status) {
-            debugPrint("Failed to initialize with OSStats \(status)")
+            print("Failed to initialize with OSStats \(status)")
             return nil
         }
         catch {
-            debugPrint("Unknown Exception")
+            print("Unknown Exception")
             return nil
         }
     }
@@ -139,32 +138,36 @@ public class SRAudioRecorder {
     }
     
     public func startRecord() {
+        if self.graph == nil { return }
+        
         self.recording = true
         do {
             if self.graph!.running {
-                debugPrint("Graph already running...")
+                print("Graph already running...")
                 return
             }
             try self.graph?.start()
             self.graph?.CAShow()
         }
         catch {
-            debugPrint("Failed to start graph")
+            print("Failed to start graph")
         }
     }
     
     public func stopRecord() {
+        if self.graph == nil { return }
+
         self.recording = false
         do {
             if self.graph!.running == false {
-                debugPrint("Graph not running")
+                print("Graph not running")
                 return
             }
             try self.graph?.stop()
             self.graph?.CAShow()
         }
         catch {
-            debugPrint("Failed to stop graph")
+            print("Failed to stop graph")
         }
     }
 }

@@ -7,6 +7,8 @@
 //
 
 import Cocoa
+import CoreAudio
+import AudioToolbox
 import SRAudioKitOSX
 
 class ViewController: NSViewController {
@@ -24,24 +26,28 @@ class ViewController: NSViewController {
     }
     
     func startRecord(outputPath: String) {
-        let device = SRAudioDeviceManager.sharedManager.defaultInputDevice!
-        debugPrint("Start Record with Output Path: \(outputPath)")
-        debugPrint("Using Input Device: \(device)")
         
-        let inputConfig = SRAudioStreamDescription(sampleRate: 44100, stereo: true, format: .PCM, frameType: .Float32Bit, interleaved: false)
+        SRAudioRecorder.CTest()
+        return
+        
+        let device = SRAudioDeviceManager.sharedManager.defaultInputDevice!
+        print("Start Record with Output Path: \(outputPath)")
+        print("Using Input Device: \(device)")
+        
+        let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
         debugPrint("Input Config: \(inputConfig)")
-        let outputConfig = SRAudioStreamDescription(sampleRate: 44100, stereo: true, format: .PCM, frameType: .Float32Bit, interleaved: false)
+        let outputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
         debugPrint("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, inputAudioStreamDescription: inputConfig, outputPath: outputPath, outputAudioStreamDescription: outputConfig, outputFileFormat: .WAVE) {
+        if let recorder = SRAudioRecorder(inputDevice: device, inputStreamDescription: inputConfig, outputPath: outputPath, outputStreamDescription: outputConfig, outputFileFormat: .WAVE) {
             self.recorder = recorder
             recorder.startRecord()
         } else {
-            debugPrint("Failed to initialize SRAudioRecorder")
+            print("Failed to initialize SRAudioRecorder")
         }
     }
     
     func stopRecord() {
-        debugPrint("Stop Record")
+        print("Stop Record")
         if let recorder = self.recorder {
             recorder.stopRecord()
         }

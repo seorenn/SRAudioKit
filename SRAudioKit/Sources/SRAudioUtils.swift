@@ -10,6 +10,164 @@ import Foundation
 import CoreAudioKit
 import AudioToolbox
 
+// BASIC THEORY
+
+/* 
+# Interleaved: 
+Audio data that contains all channel informations in single stream.
+Stereo channels comes with left then right then left right L R L R ...
+
+eg., A audio buffer contains all channel datas. If interleaved stereo, data will be L R L R L R ...
+
+# Noninterleaved:
+Each individual buffer consists of one channel of data
+*/
+
+public extension AudioStreamBasicDescription {
+    public init(sampleRate: Float64, numberOfChannels:UInt32, format: SRAudioFormat, frameType: SRAudioFrameType, interleaved: Bool = false) {
+        self.init()
+        
+        self.mChannelsPerFrame = numberOfChannels
+        self.mSampleRate = sampleRate
+        
+        self.mFormatID = SRAudioGetFormatID(format)
+        
+        let sampleSize: UInt32
+        if frameType == .SignedInteger16Bit {
+            sampleSize = UInt32(sizeof(Int16))
+            self.mFormatFlags |= SRAudioSIntFormatFlags
+        }
+        else {
+            // Float32Bit
+            sampleSize = UInt32(sizeof(Float32))
+            self.mFormatFlags |= SRAudioFloatFormatFlags
+        }
+        
+        if interleaved == false {
+            self.mFormatFlags |= kAudioFormatFlagIsNonInterleaved
+        }
+        
+        self.mFramesPerPacket = 1
+        self.mBitsPerChannel = 8 * sampleSize
+        self.mBytesPerPacket = sampleSize * numberOfChannels
+        self.mBytesPerFrame = sampleSize * numberOfChannels
+    }
+    
+    public static func genericUncompressedDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType, interleaved: Bool) -> AudioStreamBasicDescription {
+        //let commonFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked
+        let commonFlags = kAudioFormatFlagIsPacked
+        let formatFlags: UInt32
+        let sampleSize: UInt32
+        
+        if frameType == .SignedInteger16Bit {
+            // SInt16
+            formatFlags = commonFlags | kAudioFormatFlagIsSignedInteger
+            sampleSize = UInt32(sizeof(Int16))
+        } else {
+            // Float32
+            formatFlags = commonFlags | kAudioFormatFlagIsFloat
+            sampleSize = UInt32(sizeof(Float32))
+        }
+
+        let bytesPerFrame: UInt32
+
+        if interleaved {
+            bytesPerFrame = numberOfChannels * sampleSize
+        } else {
+            bytesPerFrame = sampleSize
+        }
+        
+        return AudioStreamBasicDescription(
+            mSampleRate: sampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: formatFlags,
+            mBytesPerPacket: bytesPerFrame, // needs confirm
+            mFramesPerPacket: 1, // Feature of Uncompressed
+            mBytesPerFrame: bytesPerFrame,
+            mChannelsPerFrame: numberOfChannels,
+            mBitsPerChannel: 8 * sampleSize,    // Canonical (But canonical was deprecated)
+            mReserved: 0)
+    }
+    
+    public static func genericInterleavedDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType) -> AudioStreamBasicDescription {
+        let formatFlags: UInt32
+        let sampleSize: UInt32
+        
+        if frameType == .SignedInteger16Bit {
+            // SInt16
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Int16))
+        } else {
+            // Float32
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Float32))
+        }
+
+        return AudioStreamBasicDescription(
+            mSampleRate: sampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: formatFlags,
+            mBytesPerPacket: sampleSize * numberOfChannels,
+            mFramesPerPacket: 1,
+            mBytesPerFrame: sampleSize,
+            mChannelsPerFrame: numberOfChannels,
+            mBitsPerChannel: sampleSize * 8,
+            mReserved: 0)
+    }
+    
+    public static func genericNoninterleavedDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType) -> AudioStreamBasicDescription {
+        let formatFlags: UInt32
+        let sampleSize: UInt32
+        
+        if frameType == .SignedInteger16Bit {
+            // SInt16
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Int16))
+        } else {
+            // Float32
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Float32))
+        }
+        
+        return AudioStreamBasicDescription(
+            mSampleRate: sampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: formatFlags,
+            mBytesPerPacket: sampleSize * numberOfChannels,
+            mFramesPerPacket: 1,
+            mBytesPerFrame: sampleSize * numberOfChannels,
+            mChannelsPerFrame: numberOfChannels,
+            mBitsPerChannel: sampleSize * 8,
+            mReserved: 0)
+    }
+
+    public static func genericAiffFileDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType) -> AudioStreamBasicDescription {
+        let formatFlags: UInt32
+        let sampleSize: UInt32
+        
+        if frameType == .SignedInteger16Bit {
+            // SInt16
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsSignedInteger | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Int16))
+        } else {
+            // Float32
+            formatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsFloat | kAudioFormatFlagIsPacked
+            sampleSize = UInt32(sizeof(Float32))
+        }
+        
+        return AudioStreamBasicDescription(
+            mSampleRate: sampleRate,
+            mFormatID: kAudioFormatLinearPCM,
+            mFormatFlags: formatFlags,
+            mBytesPerPacket: sampleSize * numberOfChannels,
+            mFramesPerPacket: 1,
+            mBytesPerFrame: sampleSize * numberOfChannels,
+            mChannelsPerFrame: numberOfChannels,
+            mBitsPerChannel: sampleSize * 8,
+            mReserved: 0)
+    }
+}
+
 public extension UInt32 {
     public func flagged(flag: UInt32) -> UInt32 {
         return self | flag
@@ -64,6 +222,13 @@ public func SRAUGraphAssert(status: OSStatus) throws {
     default:
         throw SRAUGraphError.Unknown
     }
+}
+
+// MARK: - MISC
+
+public func SRAudioGetDuration(sampleRate: Float64, framesPerPacket: UInt32) -> Float64 {
+    let unit = Float64( 1.0 / Float64(sampleRate) )
+    return unit * Float64(framesPerPacket)
 }
 
 class SRAudioUtils: NSObject {

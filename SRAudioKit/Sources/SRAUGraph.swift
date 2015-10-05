@@ -31,7 +31,7 @@ public class SRAUGraph {
     public func clearConnections() throws {
         let res = AUGraphClearConnections(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.clearConnections()")
         }
     }
     
@@ -40,7 +40,7 @@ public class SRAUGraph {
         var desc = componentDescription
         let res = AUGraphAddNode(self.graph, &desc, &node)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.addNode()")
         }
         
         return SRAUNode(node: node)
@@ -49,7 +49,7 @@ public class SRAUGraph {
     public func open() throws {
         let res = AUGraphOpen(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.open()")
         }
     }
     
@@ -57,7 +57,7 @@ public class SRAUGraph {
         var audioUnit = AudioUnit()
         let res = AUGraphNodeInfo(self.graph, node.node, nil, &audioUnit)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.nodeInfo()")
         }
         
         return SRAudioUnit(audioUnit: audioUnit)
@@ -66,11 +66,10 @@ public class SRAUGraph {
     public func connect(sourceNode sourceNode: SRAUNode, sourceOutputNumber: UInt32, destNode: SRAUNode, destInputNumber: UInt32) throws {
         let res = AUGraphConnectNodeInput(self.graph, sourceNode.node, sourceOutputNumber, destNode.node, destInputNumber)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.connect()")
         }
     }
     
-    //public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
     public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, userData: AnyObject, callback: SRAudioUnitRenderCallback) throws {
         let helper = SRAudioCallbackHelper()
         helper.userData = userData
@@ -79,33 +78,24 @@ public class SRAUGraph {
         let res = helper.AUGraphSetNodeInputCallback(self.graph, node: destNode.node, inputNumber: destInputNumber)
         
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.setNodeInputCallback()")
         }
         
         self.callbackHelpers.append(helper)
-        /*
-        var ref = procRefCon
-        var callbackStruct = AURenderCallbackStruct(inputProc: callback, inputProcRefCon: &ref)
-        let res = AUGraphSetNodeInputCallback(self.graph, destNode.node, destInputNumber, &callbackStruct)
-        
-        if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
-        }
-        */
     }
     
     public func addRenderNotify(userData procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
         var ref = procRefCon
         let res = AUGraphAddRenderNotify(self.graph, callback, &ref)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.addRenderNotify()")
         }
     }
     
     public func initialize() throws {
         let res = AUGraphInitialize(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.initialize()")
         }
     }
     
@@ -120,28 +110,28 @@ public class SRAUGraph {
         }
 
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.update()")
         }
     }
     
     public func start() throws {
         let res = AUGraphStart(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.start()")
         }
     }
     
     public func stop() throws {
         let res = AUGraphStop(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.stop()")
         }
     }
     
     public func dispose() throws {
         let res = DisposeAUGraph(self.graph)
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res)
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.dispose()")
         }
     }
     

@@ -119,13 +119,48 @@ AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL s
     return desc;
 }
 
-OSStatus SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, const AudioChannelLayout * _Nullable inChannelLayout, BOOL eraseFile, ExtAudioFileRef _Nullable * _Nonnull outExtAudioFile) {
+ExtAudioFileRef _Nullable SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, BOOL eraseFile) {
     NSURL *nsurl = [NSURL fileURLWithPath:path];
     UInt32 flags = eraseFile ? kAudioFileFlags_EraseFile : 0;
+    ExtAudioFileRef audioFile = NULL;
     
-    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)nsurl, inFileType, inStreamDesc, inChannelLayout, flags, outExtAudioFile);
+    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)nsurl, inFileType, inStreamDesc, NULL, flags, &audioFile);
+    if (res != noErr || audioFile == NULL) {
+        NSLog(@"SRAudioFileCreate: ExtAudioFileCreateWithURL Failed with OSStatus(%@)", OSStatusString(res));
+        return NULL;
+    }
     
-    return res;
+    return audioFile;
+}
+
+void SRAudioFileOpenTest() {
+    AudioStreamBasicDescription asbd = { 0 };
+    asbd.mSampleRate = 44100;
+    asbd.mChannelsPerFrame = 2;
+    asbd.mFormatID = kAudioFormatLinearPCM;
+    asbd.mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
+    asbd.mBitsPerChannel = 32;
+    asbd.mFramesPerPacket = 1;
+    asbd.mBytesPerFrame = 8;
+    asbd.mBytesPerPacket = 8;
+    
+    NSLog(@"TEST IN  ID[%ud] FLAG[%ud]", asbd.mFormatID, asbd.mFormatFlags);
+    
+    UInt32 size = sizeof(asbd);
+    AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, &size, &asbd);
+    
+    NSLog(@"TEST OUT ID[%ud] FLAG[%ud]", asbd.mFormatID, asbd.mFormatFlags);
+    
+    NSURL *url = [NSURL fileURLWithPath:@"/Users/hirenn/test.aiff"];
+    ExtAudioFileRef audioFile = NULL;
+    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)url, kAudioFileAIFFType, &asbd, NULL, kAudioFileFlags_EraseFile, &audioFile);
+    
+    if (res != noErr) {
+        NSLog(@"TEST ExtAudioFileCreateWithURL Failed: %@", OSStatusString(res));
+        return;
+    }
+    
+    ExtAudioFileDispose(audioFile);
 }
 
 #if TARGET_OS_IPHONE
