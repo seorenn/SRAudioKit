@@ -22,6 +22,8 @@ public class SRAudioRecorder {
     
     var writer: SRAudioFileWriter?
     
+    var buffer: SRAudioBuffer?
+    
     public private(set) var recording: Bool = false
     
     public init?(inputDevice: SRAudioDevice?, inputStreamDescription: AudioStreamBasicDescription, outputPath: String, outputStreamDescription: AudioStreamBasicDescription, outputFileFormat: SRAudioFileFormat) {
@@ -64,6 +66,14 @@ public class SRAudioRecorder {
 
             try self.graph!.open()
             
+            // Prepare Buffer
+            
+            self.buffer = SRAudioBuffer(
+                channelsPerFrame: 2,
+                bytesPerFrame: outputStreamDescription.mBitsPerChannel/8,
+                interleaved: outputStreamDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved != kAudioFormatFlagIsNonInterleaved,
+                capacity: 512)
+            
             // Prepare File Writer
             
             self.writer = SRAudioFileWriter(audioStreamDescription: outputStreamDescription, fileFormat: outputFileFormat, filePath: outputPath)
@@ -75,15 +85,62 @@ public class SRAudioRecorder {
             // Configure Callbacks
             
             let selfPointer = UnsafeMutablePointer<Void>(Unmanaged.passUnretained(self).toOpaque())
+            let callback: AURenderCallback = {
+                (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) in
+                
+                let recorderObject: SRAudioRecorder = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
+                let abl = UnsafeMutableAudioBufferListPointer(ioData)
+                print("AURenderCallback: ioData = \(abl.count) buffers")
+                for b: AudioBuffer in abl {
+                    print("AURenderCallback: ioData Buffer = \(b.mNumberChannels) channels \(b.mDataByteSize) bytes")
+                }
+                
+                do {
+                    try recorderObject.buffer!.render(audioUnit: recorderObject.mixerAudioUnit!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+                }
+                catch let error as SRAudioError {
+                    print("From SRAudioRecorder.callback -> \(error)")
+                }
+                catch {
+                    print("Unknown Error")
+                }
+                
+                return noErr
+            }
+            
+            /*
             let callback = AURenderCallbackStruct(
                 inputProc: { (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) -> OSStatus in
-                    let recorderObject = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
+                    let recorderObject: SRAudioRecorder = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
+                    let abl = UnsafeMutableAudioBufferListPointer(ioData)
+                    print("AURenderCallback: ioData = \(abl.count) buffers")
+                    for b: AudioBuffer in abl {
+                        print("AURenderCallback: ioData Buffer = \(b.mNumberChannels) channels \(b.mDataByteSize) bytes")
+                    }
+                    
+                    do {
+                        try recorderObject.buffer!.render(audioUnit: recorderObject.mixerAudioUnit!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+                    }
+                    catch let error as SRAudioError {
+                        print("From SRAudioRecorder.callback -> \(error)")
+                    }
+                    catch {
+                        print("Unknown Error")
+                    }
+                    
+                    
+//                    let res = AudioUnitRender(recorderObject.mixerAudioUnit!.audioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData)
+//                    if res != noErr {
+//                        print(SRAudioError.OSStatusError(status: res, description: "AudioUnitRender"))
+//                    }
+                    
                     // TODO
                     return noErr
                 },
                 inputProcRefCon: selfPointer)
-            try! self.graph!.setNodeInputCallback(self.mixerNode!, destInputNumber: 0, callback: callback)
-            
+            */
+            //try! self.graph!.setNodeInputCallback(self.mixerNode!, destInputNumber: 0, callback: callback)
+            try! self.graph!.addRenderNotify(userData: selfPointer, callback: callback)
             /*
             try! self.graph?.setNodeInputCallback(
                 self.mixerNode!,
