@@ -65,10 +65,6 @@ func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStr
     if res != noErr {
         throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileCreateWithURL")
     }
-//    fileRef = SRAudioFileCreate(path, fileTypeID, &outputDesc, true)
-//    if fileRef == nil {
-//        throw SRAudioError.OSStatusError(status: 0, description: "OOPS!")
-//    }
     
     var sf = audioStreamDescription
     size = UInt32(sizeof(AudioStreamBasicDescription))
@@ -91,34 +87,8 @@ public class SRAudioFileWriter {
             self.fileRef = try SRAudioFileWriterOpen(filePath, fileFormat: fileFormat, audioStreamDescription: audioStreamDescription)
             try SRAudioFileWriterSetFileFormat(self.fileRef!, audioStreamDescription: audioStreamDescription)
         }
-        catch SRAudioError.OSStatusError(let status, let description) {
-            print("[\(description)] Failed to open file: \(OSStatusString(status))")
-            switch (status) {
-            case kExtAudioFileError_InvalidProperty:
-                print("E: Invalid Property")
-            case kExtAudioFileError_InvalidPropertySize:
-                print("E: Invalid Property Size")
-            case kExtAudioFileError_NonPCMClientFormat:
-                print("E: Non PCM Client Format")
-            case kExtAudioFileError_InvalidChannelMap:
-                print("E: Invalid Channel Map")
-            case kExtAudioFileError_InvalidOperationOrder:
-                print("E: Invalid Operation Order")
-            case kExtAudioFileError_InvalidDataFormat:
-                print("E: Invalid Data Format")
-            case kExtAudioFileError_MaxPacketSizeUnknown:
-                print("E: Max Packet Size Unknown")
-            case kExtAudioFileError_InvalidSeek:
-                print("E: Invalid Seek")
-            case kExtAudioFileError_AsyncWriteTooLarge:
-                print("E: Async Write Too Large")
-            case kExtAudioFileError_AsyncWriteBufferOverflow:
-                print("E: Async Write Buffer Overflow")
-            case kAudioFormatUnsupportedDataFormatError:
-                print("E: AudioFormat: Unsupported Data Format Error")
-            default:
-                print("E: kExtAudioFileError Status \(status)")
-            }
+        catch let error as SRAudioError {
+            print("[SRAudioFileWriter.init] \(error)")
             return nil
         }
         catch {

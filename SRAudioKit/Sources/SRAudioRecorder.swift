@@ -78,7 +78,7 @@ public class SRAudioRecorder {
             let callback = AURenderCallbackStruct(
                 inputProc: { (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) -> OSStatus in
                     let recorderObject = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
-                    recorderObject.test()
+                    // TODO
                     return noErr
                 },
                 inputProcRefCon: selfPointer)
@@ -101,39 +101,15 @@ public class SRAudioRecorder {
             })
             */
             
-//            try! self.graph?.setNodeInputCallback(self.mixerNode!, destInputNumber: 0, procRefCon: unsafeAddressOf(self), callback: {
-//                (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) -> OSStatus in
-//                //let audioUnit = inRefCon.memory as AudioUnit
-//                let userDataPointer = unsafeBitCast(inRefCon, UnsafeMutablePointer<SRAudioRecorder>.self)
-//                let userData = userDataPointer.memory
-//                /*
-//                let au = userData.mixerAudioUnit!.audioUnit
-//                let res = AudioUnitRender(au, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData)
-//                
-//                if res == noErr {
-//                    try! userData.writer.append(ioData, bufferSize: inNumberFrames)
-//                }
-//                return res
-//                */
-//                
-//                userData.append(ioData, bufferSize: inNumberFrames)
-//                return noErr
-//            })
-            
             try self.graph!.initialize()
         }
-        catch SRAudioError.OSStatusError(let status) {
-            print("Failed to initialize with OSStats \(status)")
-            return nil
+        catch let error as SRAudioError {
+            print("[SRAudioRecorder.init] \(error)")
         }
         catch {
             print("Unknown Exception")
             return nil
         }
-    }
-    
-    func test() {
-        print("OK! THIS IS RECORDER OBJECT METHOD")
     }
     
     func append(bufferList: UnsafeMutablePointer<AudioBufferList>, bufferSize: UInt32) {

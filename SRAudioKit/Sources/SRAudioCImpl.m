@@ -8,16 +8,7 @@
 
 #import "SRAudioCImpl.h"
 
-
 #define SRAudioUInt32BitCount   (sizeof(UInt32) * 8)
-
-BOOL CheckOSStatus(OSStatus status, NSString *description) {
-    if (status) {
-        NSLog(@"Failed: %@", description);
-        return NO;
-    }
-    return YES;
-}
 
 NSString * _Nonnull OSStatusString(OSStatus status) {
     char str[10] = { 0, };
@@ -32,135 +23,6 @@ NSString * _Nonnull OSStatusString(OSStatus status) {
     }
     
     return [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
-}
-
-UInt32 SRAudioUnsetBitUInt32(UInt32 field, UInt32 value) {
-    return field & ~value;
-}
-
-AudioStreamBasicDescription SRAudioGetAudioStreamBasicDescription(BOOL stereo, Float64 sampleRate, SRAudioFrameType frameType, BOOL interleaved, BOOL canonical) {
-    AudioStreamBasicDescription desc;
-    
-    UInt32 sampleSize = 0;
-    
-    desc.mChannelsPerFrame = (stereo) ? 2 : 1;
-    desc.mSampleRate = sampleRate;
-    desc.mFormatID = kAudioFormatLinearPCM;
-    desc.mFramesPerPacket = 1;
-    
-    desc.mBitsPerChannel = 8 * sampleSize;
-    
-    if (stereo) {
-        if (interleaved) {
-            
-        } else {
-            
-        }
-    } else {
-        if (interleaved) {
-            
-        } else {
-            
-        }
-    }
-    
-    if (frameType == SRAudioFrameTypeFloat32Bit) {
-#if TARGET_OS_IPHONE
-        sampleSize = sizeof(float);
-#else
-        sampleSize = sizeof(Float32);
-#endif
-        desc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked;
-    } else if (frameType == SRAudioFrameTypeSignedInteger16Bit) {
-        sampleSize = sizeof(SInt16);
-        desc.mFormatFlags = kAudioFormatFlagIsSignedInteger | kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked;
-    } else {
-        NSLog(@"Not Implemented Frame Type");
-        exit(1);
-    }
-    
-    if (interleaved) {
-        desc.mBytesPerPacket = desc.mBytesPerFrame = desc.mChannelsPerFrame * sampleSize;
-    } else {
-        desc.mBytesPerPacket = desc.mBytesPerFrame = sampleSize;
-        desc.mFormatFlags = desc.mFormatFlags | kAudioFormatFlagIsNonInterleaved;
-    }
-    
-    return desc;
-}
-
-BOOL SRAudioIsNonInterleaved(AudioStreamBasicDescription stream) {
-    return (stream.mFormatFlags & kAudioFormatFlagIsNonInterleaved) == kAudioFormatFlagIsNonInterleaved;
-}
-
-
-AudioStreamBasicDescription SRAudioGetCanonicalNoninterleavedStreamFormat(BOOL stereo, Float64 sampleRate) {
-    AudioStreamBasicDescription desc;
-    
-#if TARGET_OS_IPHONE
-    UInt32 sampleSize = sizeof(float);
-#else
-    UInt32 sampleSize = sizeof(Float32);
-#endif
-    
-    desc.mChannelsPerFrame = (stereo) ? 2 : 1;
-    desc.mSampleRate = sampleRate;
-    desc.mFormatID = kAudioFormatLinearPCM;
-    desc.mFramesPerPacket = 1;
-    
-    desc.mBitsPerChannel = 8 * sampleSize;
-    
-    // Non-inerleaved format requires buffer size of single channel.
-    desc.mBytesPerFrame = sampleSize;
-    desc.mBytesPerPacket = sampleSize;
-    
-    desc.mFormatFlags = kAudioFormatFlagsNativeFloatPacked | kAudioFormatFlagIsNonInterleaved;
-    
-    return desc;
-}
-
-ExtAudioFileRef _Nullable SRAudioFileCreate(NSString * _Nonnull path, AudioFileTypeID inFileType, const AudioStreamBasicDescription * _Nonnull inStreamDesc, BOOL eraseFile) {
-    NSURL *nsurl = [NSURL fileURLWithPath:path];
-    UInt32 flags = eraseFile ? kAudioFileFlags_EraseFile : 0;
-    ExtAudioFileRef audioFile = NULL;
-    
-    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)nsurl, inFileType, inStreamDesc, NULL, flags, &audioFile);
-    if (res != noErr || audioFile == NULL) {
-        NSLog(@"SRAudioFileCreate: ExtAudioFileCreateWithURL Failed with OSStatus(%@)", OSStatusString(res));
-        return NULL;
-    }
-    
-    return audioFile;
-}
-
-void SRAudioFileOpenTest() {
-    AudioStreamBasicDescription asbd = { 0 };
-    asbd.mSampleRate = 44100;
-    asbd.mChannelsPerFrame = 2;
-    asbd.mFormatID = kAudioFormatLinearPCM;
-    asbd.mFormatFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger;
-    asbd.mBitsPerChannel = 32;
-    asbd.mFramesPerPacket = 1;
-    asbd.mBytesPerFrame = 8;
-    asbd.mBytesPerPacket = 8;
-    
-    NSLog(@"TEST IN  ID[%ud] FLAG[%ud]", asbd.mFormatID, asbd.mFormatFlags);
-    
-    UInt32 size = sizeof(asbd);
-    AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, NULL, &size, &asbd);
-    
-    NSLog(@"TEST OUT ID[%ud] FLAG[%ud]", asbd.mFormatID, asbd.mFormatFlags);
-    
-    NSURL *url = [NSURL fileURLWithPath:@"/Users/hirenn/test.aiff"];
-    ExtAudioFileRef audioFile = NULL;
-    OSStatus res = ExtAudioFileCreateWithURL((__bridge CFURLRef)url, kAudioFileAIFFType, &asbd, NULL, kAudioFileFlags_EraseFile, &audioFile);
-    
-    if (res != noErr) {
-        NSLog(@"TEST ExtAudioFileCreateWithURL Failed: %@", OSStatusString(res));
-        return;
-    }
-    
-    ExtAudioFileDispose(audioFile);
 }
 
 #if TARGET_OS_IPHONE
@@ -364,41 +226,8 @@ NSArray<NSNumber *> * _Nullable SRAudioGetDevices() {
 
 #endif
 
+#pragma mark - Misc
+
 void SRAudioCAShow(AUGraph _Nonnull graph) {
     CAShow(graph);
 }
-
-#pragma mark - Misc
-
-CFURLRef _Nullable CFURLFromPathString(NSString * _Nonnull pathString) {
-    NSURL *url = [NSURL fileURLWithPath:pathString];
-    return (__bridge CFURLRef)url;
-}
-
-@implementation SRAudioKitUtils
-
-@end
-
-
-OSStatus SRAudioCallbackHelperHandler(void * _Nonnull inRefCon, AudioUnitRenderActionFlags * _Nonnull ioActionFlags, const AudioTimeStamp * _Nonnull inTimeStamp, UInt32 inBusNumber, UInt32 inNumberFrames, AudioBufferList * _Nonnull ioData) {
-    NSLog(@"IN SRAudioCallbackHelperHandler");
-    SRAudioCallbackHelper *obj = (__bridge SRAudioCallbackHelper *)inRefCon;
-    
-    if (obj && obj.callback) {
-        return obj.callback(obj.userData, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData);
-    } else {
-        return noErr;
-    }
-}
-
-@implementation SRAudioCallbackHelper
-
-- (OSStatus)AUGraphSetNodeInputCallback:(nonnull AUGraph)inGraph node:(AUNode)inDestNode inputNumber:(UInt32)inDestInputNumber {
-    AURenderCallbackStruct callbackStruct;
-    callbackStruct.inputProc = SRAudioCallbackHelperHandler;
-    callbackStruct.inputProcRefCon = (__bridge void *)self;
-    
-    return AUGraphSetNodeInputCallback(inGraph, inDestNode, inDestInputNumber, &callbackStruct);
-}
-
-@end

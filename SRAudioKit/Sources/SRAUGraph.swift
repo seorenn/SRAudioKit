@@ -13,7 +13,6 @@ import SRAudioKitPrivates
 
 public class SRAUGraph {
     let graph: AUGraph
-    var callbackHelpers = [SRAudioCallbackHelper]()
     
     public init() {
         var graph = AUGraph()
@@ -70,7 +69,6 @@ public class SRAUGraph {
         }
     }
 
-    // Set Node Input Callback: Direct Setup
     public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, callback: AURenderCallbackStruct) throws {
         var callbackRef = callback
         let res = AUGraphSetNodeInputCallback(self.graph, destNode.node, destInputNumber, &callbackRef)
@@ -78,21 +76,6 @@ public class SRAUGraph {
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.setNodeInputCallback()")
         }
-    }
-    
-    // Set Node Input Callback: Setup via Helper Class
-    public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, userData: AnyObject, callback: SRAudioUnitRenderCallback) throws {
-        let helper = SRAudioCallbackHelper()
-        helper.userData = userData
-        helper.callback = callback
-        
-        let res = helper.AUGraphSetNodeInputCallback(self.graph, node: destNode.node, inputNumber: destInputNumber)
-        
-        if res != noErr {
-            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.setNodeInputCallback()")
-        }
-        
-        self.callbackHelpers.append(helper)
     }
     
     public func addRenderNotify(userData procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
