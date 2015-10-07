@@ -52,6 +52,54 @@ public func OSStatusErrorDescription(status: OSStatus) -> String {
     case kAUGraphErr_InvalidAudioUnit:
         return "Invalid Audio Unit"
         
+    // Audio Unit
+    case kAudioUnitErr_InvalidProperty:
+        return "Invalid Property"
+    case kAudioUnitErr_InvalidParameter:
+        return "Invalid Parameter"
+    case kAudioUnitErr_InvalidElement:
+        return "Invalid Element"
+    case kAudioUnitErr_NoConnection:
+        return "No Connection"
+    case kAudioUnitErr_FailedInitialization:
+        return "Failed Initialization"
+    case kAudioUnitErr_TooManyFramesToProcess:
+        return "Too Many Frames To Process"
+    case kAudioUnitErr_IllegalInstrument:
+        return "Illegal Instrument"
+    case kAudioUnitErr_InstrumentTypeNotFound:
+        return "Instrument Type Not Found"
+    case kAudioUnitErr_InvalidFile:
+        return "Invalid File"
+    case kAudioUnitErr_UnknownFileType:
+        return "Unknown File Type"
+    case kAudioUnitErr_FileNotSpecified:
+        return "File Not Specified"
+    case kAudioUnitErr_FormatNotSupported:
+        return "Format Not Supported"
+    case kAudioUnitErr_Uninitialized:
+        return "Uninitialized"
+    case kAudioUnitErr_InvalidScope:
+        return "Invalid Scope"
+    case kAudioUnitErr_PropertyNotWritable:
+        return "Property Not Writable"
+    case kAudioUnitErr_CannotDoInCurrentContext:
+        return "Cannot Do In Current Context"
+    case kAudioUnitErr_InvalidPropertyValue:
+        return "Invalid Property Value"
+    case kAudioUnitErr_PropertyNotInUse:
+        return "PropertyNotInUse"
+    case kAudioUnitErr_Initialized:
+        return "Initialized"
+    case kAudioUnitErr_InvalidOfflineRender:
+        return "Invalid Offline Render"
+    case kAudioUnitErr_Unauthorized:
+        return "Unauthorized"
+        
+    // Audio
+    case kAudio_ParamError:
+        return "kAudio_ParamError"
+        
     default:
         return "(Unknown Error Description)"
     }
@@ -80,6 +128,7 @@ public enum SRAudioFrameType: Int {
     case Unknown = 0
     case Float32Bit = 1
     case SignedInteger16Bit = 2
+    case SignedInteger32Bit = 3
 }
 
 
