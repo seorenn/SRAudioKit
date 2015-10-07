@@ -78,9 +78,8 @@ public class SRAUGraph {
         }
     }
     
-    public func addRenderNotify(userData procRefCon: UnsafePointer<Void>, callback: AURenderCallback) throws {
-        var ref = procRefCon
-        let res = AUGraphAddRenderNotify(self.graph, callback, &ref)
+    public func addRenderNotify(userData procRefCon: UnsafeMutablePointer<Void>, callback: AURenderCallback) throws {
+        let res = AUGraphAddRenderNotify(self.graph, callback, procRefCon)
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.addRenderNotify()")
         }
