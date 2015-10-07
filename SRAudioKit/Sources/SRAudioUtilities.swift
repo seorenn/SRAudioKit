@@ -1,5 +1,5 @@
 //
-//  SRAudioUtils.swift
+//  SRAudioUtilities.swift
 //  SRAudioKit
 //
 //  Created by Heeseung Seo on 2015. 9. 24..
@@ -36,6 +36,10 @@ public extension AudioStreamBasicDescription {
             // SInt16
             formatFlags = commonFlags | kAudioFormatFlagIsSignedInteger
             sampleSize = UInt32(sizeof(Int16))
+        } else if frameType == .SignedInteger32Bit {
+            // SInt32
+            formatFlags = commonFlags | kAudioFormatFlagIsSignedInteger
+            sampleSize = UInt32(sizeof(Int32))
         } else {
             // Float32
             formatFlags = commonFlags | kAudioFormatFlagIsFloat
