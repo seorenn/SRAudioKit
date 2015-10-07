@@ -26,19 +26,15 @@ class ViewController: NSViewController {
     }
     
     func startRecord(outputPath: String) {
-        
-        SRAudioRecorder.CTest()
-        return
-        
         let device = SRAudioDeviceManager.sharedManager.defaultInputDevice!
         print("Start Record with Output Path: \(outputPath)")
         print("Using Input Device: \(device)")
         
         let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
-        debugPrint("Input Config: \(inputConfig)")
-        let outputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
-        debugPrint("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, inputStreamDescription: inputConfig, outputPath: outputPath, outputStreamDescription: outputConfig, outputFileFormat: .WAVE) {
+        print("Input Config: \(inputConfig)")
+        let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.AIFF)
+        print("Output Config: \(outputConfig)")
+        if let recorder = SRAudioRecorder(inputDevice: device, inputStreamDescription: inputConfig, outputPath: outputPath, outputStreamDescription: outputConfig, outputFileFormat: .AIFF) {
             self.recorder = recorder
             recorder.startRecord()
         } else {
@@ -60,7 +56,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func pressedReccordButton(sender: AnyObject) {
-        let outputPath = "/Users/hirenn/Desktop/output.aac"
+        let outputPath = "/Users/hirenn/Desktop/output.aiff"
         if let recorder = self.recorder {
             if recorder.recording {
                 self.stopRecord()

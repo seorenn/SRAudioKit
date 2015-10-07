@@ -140,6 +140,45 @@ public extension AudioStreamBasicDescription {
             mBitsPerChannel: sampleSize * 8,
             mReserved: 0)
     }
+    
+    public static func fileFormatDescription(format: SRAudioFileFormat) -> AudioStreamBasicDescription {
+        switch (format) {
+        case .AIFF:
+            return AudioStreamBasicDescription(
+                mSampleRate: 44100,
+                mFormatID: kAudioFormatLinearPCM,
+                mFormatFlags: kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger,
+                mBytesPerPacket: 8,
+                mFramesPerPacket: 1,
+                mBytesPerFrame: 8,
+                mChannelsPerFrame: 2,
+                mBitsPerChannel: 32,
+                mReserved: 0)
+        case .WAVE:
+            return AudioStreamBasicDescription(
+                mSampleRate: 44100,
+                mFormatID: kAudioFormatLinearPCM,
+                mFormatFlags: kAudioFormatFlagIsPacked | kAudioFormatFlagIsFloat,
+                mBytesPerPacket: 8,
+                mFramesPerPacket: 1,
+                mBytesPerFrame: 8,
+                mChannelsPerFrame: 2,
+                mBitsPerChannel: 32,
+                mReserved: 0)
+        case .MP3:
+            // TODO: Not Confirmed
+            return AudioStreamBasicDescription(
+                mSampleRate: 44100,
+                mFormatID: kAudioFormatLinearPCM,
+                mFormatFlags: kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger,
+                mBytesPerPacket: 8,
+                mFramesPerPacket: 1,
+                mBytesPerFrame: 8,
+                mChannelsPerFrame: 2,
+                mBitsPerChannel: 32,
+                mReserved: 0)
+        }
+    }
 
     public static func genericAiffFileDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType) -> AudioStreamBasicDescription {
         let formatFlags: UInt32
@@ -168,6 +207,34 @@ public extension AudioStreamBasicDescription {
     }
 }
 
+public extension AudioComponentDescription {
+    public static func mainIO() -> AudioComponentDescription {
+        #if os(OSX)
+            return AudioComponentDescription(
+                componentType: kAudioUnitType_Output,
+                componentSubType: kAudioUnitSubType_HALOutput,
+                componentManufacturer: kAudioUnitManufacturer_Apple,
+                componentFlags: 0,
+                componentFlagsMask: 0)
+        #else
+            return AudioComponentDescription(
+                componentType: kAudioUnitType_Output,
+                componentSubType: kAudioUnitSubType_RemoteIO,
+                componentManufacturer: kAudioUnitManufacturer_Apple,
+                componentFlags: 0,
+                componentFlagsMask: 0)
+        #endif
+    }
+    
+    public static func multichannelMixer() -> AudioComponentDescription {
+        return AudioComponentDescription(
+            componentType: kAudioUnitType_Mixer,
+            componentSubType: kAudioUnitSubType_MultiChannelMixer,
+            componentManufacturer: kAudioUnitManufacturer_Apple,
+            componentFlags: 0,
+            componentFlagsMask: 0)
+    }
+}
 public extension UInt32 {
     public func flagged(flag: UInt32) -> UInt32 {
         return self | flag
@@ -229,8 +296,4 @@ public func SRAUGraphAssert(status: OSStatus) throws {
 public func SRAudioGetDuration(sampleRate: Float64, framesPerPacket: UInt32) -> Float64 {
     let unit = Float64( 1.0 / Float64(sampleRate) )
     return unit * Float64(framesPerPacket)
-}
-
-class SRAudioUtils: NSObject {
-
 }

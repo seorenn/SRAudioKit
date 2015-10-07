@@ -69,7 +69,18 @@ public class SRAUGraph {
             throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.connect()")
         }
     }
+
+    // Set Node Input Callback: Direct Setup
+    public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, callback: AURenderCallbackStruct) throws {
+        var callbackRef = callback
+        let res = AUGraphSetNodeInputCallback(self.graph, destNode.node, destInputNumber, &callbackRef)
+        
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.setNodeInputCallback()")
+        }
+    }
     
+    // Set Node Input Callback: Setup via Helper Class
     public func setNodeInputCallback(destNode: SRAUNode, destInputNumber: UInt32, userData: AnyObject, callback: SRAudioUnitRenderCallback) throws {
         let helper = SRAudioCallbackHelper()
         helper.userData = userData
