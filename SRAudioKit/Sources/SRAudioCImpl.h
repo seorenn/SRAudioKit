@@ -23,6 +23,13 @@ typedef NS_ENUM(UInt32, SRAudioFrameType) {
 
 NSString * _Nonnull OSStatusString(OSStatus status);
 
+AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
+                                                     UInt32 bytesPerFrame,
+                                                     BOOL interleaved,
+                                                     UInt32 capacityFrames);
+
+void SRAudioFreeBufferList(AudioBufferList * _Nonnull bufferList);
+
 #if TARGET_OS_IPHONE
 #pragma mark - Utilities for iOS
 OSStatus SRAudioFileSetAppleCodecManufacturer(ExtAudioFileRef _Nonnull audioFileRef, BOOL useHardwareCodec);

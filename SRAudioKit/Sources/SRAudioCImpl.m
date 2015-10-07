@@ -25,6 +25,38 @@ NSString * _Nonnull OSStatusString(OSStatus status) {
     return [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
 }
 
+AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
+                                                     UInt32 bytesPerFrame,
+                                                     BOOL interleaved,
+                                                     UInt32 capacityFrames) {
+    AudioBufferList *bufferList = NULL;
+    
+    UInt32 numBuffers = interleaved ? 1 : channelsPerFrame;
+    UInt32 channelsPerBuffer = interleaved ? channelsPerFrame : 1;
+    
+    bufferList = (AudioBufferList *)(calloc(1, offsetof(AudioBufferList, mBuffers) + (sizeof(AudioBuffer) * numBuffers)));
+    
+    bufferList->mNumberBuffers = numBuffers;
+    
+    for(UInt32 bufferIndex = 0; bufferIndex < bufferList->mNumberBuffers; ++bufferIndex) {
+        bufferList->mBuffers[bufferIndex].mData = (void *)(calloc(capacityFrames, bytesPerFrame));
+        bufferList->mBuffers[bufferIndex].mDataByteSize = capacityFrames * bytesPerFrame;
+        bufferList->mBuffers[bufferIndex].mNumberChannels = channelsPerBuffer;
+    }
+    
+    return bufferList;
+}
+
+void SRAudioFreeBufferList(AudioBufferList * _Nonnull bufferList) {
+    if (bufferList == NULL) return;
+    
+    for (UInt32 i=0; i < bufferList->mNumberBuffers; ++i) {
+        free(bufferList->mBuffers[i].mData);
+    }
+    
+    free(bufferList);
+}
+
 #if TARGET_OS_IPHONE
 
 #pragma mark - Utilities for iOS
