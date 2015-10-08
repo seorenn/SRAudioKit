@@ -27,6 +27,7 @@ AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
                                                      UInt32 bytesPerFrame,
                                                      BOOL interleaved,
                                                      UInt32 capacityFrames);
+void SRAudioCopyBufferList(AudioBufferList * _Nonnull src, AudioBufferList * _Nonnull dest);
 
 void SRAudioFreeBufferList(AudioBufferList * _Nonnull bufferList);
 

@@ -15,6 +15,38 @@ public enum SRAudioUnitBus: AudioUnitElement {
     case Output = 0
 }
 
+func SRAudioUnitErrorDesc(name: String, scope: AudioUnitScope?, bus: SRAudioUnitBus?) -> String {
+    let scopeString: String
+    if let s = scope {
+        if s == kAudioUnitScope_Global {
+            scopeString = " SCOPE[GLOBAL]"
+        } else if s == kAudioUnitScope_Input {
+            scopeString = " SCOPE[INPUT]"
+        } else if s == kAudioUnitScope_Output {
+            scopeString = " SCOPE[OUTPUT]"
+        } else {
+            scopeString = " SCOPE[OTHER]"
+        }
+    } else {
+        scopeString = ""
+    }
+    
+    let busString: String
+    if let b = bus {
+        if b == .Input {
+            busString = " BUS[INPUT]"
+        } else if b == .Output {
+            busString = " BUS[OUTPUT]"
+        } else {
+            busString = " BUS[UNKNOWN]"
+        }
+    } else {
+        busString = ""
+    }
+    
+    return "[\(name)\(scopeString)\(busString)]"
+}
+
 public class SRAudioUnit {
     let audioUnit: AudioUnit
     
@@ -24,14 +56,17 @@ public class SRAudioUnit {
     
     // MARK: - Devices
     
-    public func setDevice(device: SRAudioDevice, bus: SRAudioUnitBus) -> OSStatus {
+    public func setDevice(device: SRAudioDevice, bus: SRAudioUnitBus) throws {
         #if os(OSX)
             var deviceID = device.deviceID
             let size = UInt32(sizeof(AudioDeviceID))
             let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus.rawValue, &deviceID, size)
-            return res
+            
+            if res != noErr {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setDevice]")
+            }
         #else
-            return noErr
+            // TODO: for iOS
         #endif
     }
     
@@ -122,32 +157,35 @@ public class SRAudioUnit {
     
     // MARK: - Format
     
-    public func setStreamFormat(format: AudioStreamBasicDescription, scope: AudioUnitScope, bus: SRAudioUnitBus) -> OSStatus {
+    public func setStreamFormat(format: AudioStreamBasicDescription, scope: AudioUnitScope, bus: SRAudioUnitBus) throws {
         var desc = format
         let size = UInt32(sizeof(AudioStreamBasicDescription))
         let res = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, scope, bus.rawValue, &desc, size)
-        return res
-        
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setStreamFormat]")
+        }
     }
     
-    public func getStreamFormat(scope: AudioUnitScope, bus: SRAudioUnitBus) -> AudioStreamBasicDescription? {
+    public func getStreamFormat(scope: AudioUnitScope, bus: SRAudioUnitBus) throws -> AudioStreamBasicDescription {
         var desc = AudioStreamBasicDescription()
         var size = UInt32(sizeof(AudioStreamBasicDescription))
         let res = AudioUnitGetProperty(self.audioUnit, kAudioUnitProperty_StreamFormat, scope, bus.rawValue, &desc, &size)
-        if res == noErr {
-            return desc
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.getStreamFormat]")
         }
         
-        return nil
+        return desc
     }
     
     // MARK: - IO Enabling
     
-    public func enableIO(enable: Bool, scope: AudioUnitScope, bus: SRAudioUnitBus) -> OSStatus {
+    public func enableIO(enable: Bool, scope: AudioUnitScope, bus: SRAudioUnitBus) throws {
         var flag = enable ? UInt32(1) : UInt32(0)
         let size = UInt32(sizeof(UInt32))
         let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_EnableIO, scope, bus.rawValue, &flag, size)
-        return res
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: SRAudioUnitErrorDesc("SRAudioUnit.enableIO \(enable)", scope: scope, bus: bus))
+        }
     }
     
     public func getEnableIO(scope: AudioUnitScope, bus: SRAudioUnitBus) -> Bool? {
@@ -168,5 +206,15 @@ public class SRAudioUnit {
         let res = AudioUnitAddRenderNotify(self.audioUnit, callback, &userDataVar)
         
         return res
+    }
+    
+    public func setRenderCallback(scope: AudioUnitScope, bus: SRAudioUnitBus, callbackStruct: AURenderCallbackStruct) throws {
+        var mutableCallbackStruct = callbackStruct
+        let size = UInt32(sizeof(AURenderCallbackStruct))
+        let res = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_SetRenderCallback, scope, bus.rawValue, &mutableCallbackStruct, size)
+        
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "SRAudioUnit.setRenderCallback")
+        }
     }
 }

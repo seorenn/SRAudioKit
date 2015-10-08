@@ -42,11 +42,12 @@ public class SRAudioBuffer {
     }
     
     // Sideway Wrapper of AudioUnitRender ;-)
-    public func render( audioUnit audioUnit: SRAudioUnit,
-                        ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
-                        inTimeStamp: UnsafePointer<AudioTimeStamp>,
-                        inOutputBusNumber: UInt32,
-                        inNumberFrames: UInt32) throws {
+    public func render(
+        audioUnit audioUnit: SRAudioUnit,
+        ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
+        inTimeStamp: UnsafePointer<AudioTimeStamp>,
+        inOutputBusNumber: UInt32,
+        inNumberFrames: UInt32) throws {
                             
         print("--------")
         print("[render] ioActionFlags: \(ioActionFlags.memory)")
@@ -59,5 +60,10 @@ public class SRAudioBuffer {
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "[SRAudioBuffer.render]")
         }
+    }
+    
+    public func copy(source: UnsafeMutableAudioBufferListPointer) {
+        assert(self.audioBufferList.count == source.count)
+        SRAudioCopyBufferList(source.unsafeMutablePointer, self.audioBufferList.unsafeMutablePointer)
     }
 }

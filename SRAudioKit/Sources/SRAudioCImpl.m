@@ -47,6 +47,13 @@ AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
     return bufferList;
 }
 
+void SRAudioCopyBufferList(AudioBufferList * _Nonnull src, AudioBufferList * _Nonnull dest) {
+    for (int i=0; i < src->mNumberBuffers; ++i) {
+        memcpy(src->mBuffers[i].mData, dest->mBuffers[i].mData, src->mBuffers[i].mDataByteSize);
+    }
+}
+
+
 void SRAudioFreeBufferList(AudioBufferList * _Nonnull bufferList) {
     if (bufferList == NULL) return;
     

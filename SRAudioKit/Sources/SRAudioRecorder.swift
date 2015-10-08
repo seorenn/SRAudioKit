@@ -37,13 +37,19 @@ public class SRAudioRecorder {
             
             self.ioAudioUnit = try self.graph!.nodeInfo(self.ioNode!)
             
-            self.ioAudioUnit!.enableIO(true, scope: kAudioUnitScope_Input, bus: .Input)
-            self.ioAudioUnit!.setStreamFormat(inputStreamDescription, scope: kAudioUnitScope_Input, bus: .Input)
+            try self.ioAudioUnit!.enableIO(true, scope: kAudioUnitScope_Input, bus: .Input)
+            try self.ioAudioUnit!.enableIO(false, scope: kAudioUnitScope_Output, bus: .Output)
+            
+            try self.ioAudioUnit!.setStreamFormat(inputStreamDescription, scope: kAudioUnitScope_Input, bus: .Input)
+            
+            let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
+            print("Setup Main IO Device: \(dev)")
+            try self.ioAudioUnit!.setDevice(dev, bus: .Output)
             
             #if os(OSX)
-                let inputScopeFormat = self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Output, bus: .Input)
+                let inputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Output, bus: .Input)
                 print("IO-AU Input Scope Format: \(inputScopeFormat)")
-                let outputScopeFormat = self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Input, bus: .Output)
+                let outputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Input, bus: .Output)
                 print("IO-AU Output Scope Format: \(outputScopeFormat)")
             #endif
             
@@ -51,11 +57,6 @@ public class SRAudioRecorder {
             //self.ioAudioUnit.enableIO(false, scope: kAudioUnitScope_Output, bus: .Output)
             
             self.mixerAudioUnit = try! self.graph!.nodeInfo(self.mixerNode!)
-            
-            // Configure Audio Units
-            
-            let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
-            self.ioAudioUnit!.setDevice(dev, bus: .Output)
             
             // Connect
             
@@ -88,6 +89,7 @@ public class SRAudioRecorder {
             let callback: AURenderCallback = {
                 (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) in
                 
+                print("AURenderCallback: Called with Bus \(inBusNumber), \(inNumberFrames)frames")
                 let recorderObject: SRAudioRecorder = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
                 let abl = UnsafeMutableAudioBufferListPointer(ioData)
                 print("AURenderCallback: ioData = \(abl.count) buffers")
@@ -95,19 +97,22 @@ public class SRAudioRecorder {
                     print("AURenderCallback: ioData Buffer = \(b.mNumberChannels) channels \(b.mDataByteSize) bytes")
                 }
                 
-                do {
-                    try recorderObject.buffer!.render(audioUnit: recorderObject.mixerAudioUnit!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
-                }
-                catch let error as SRAudioError {
-                    print("From SRAudioRecorder.callback -> \(error)")
-                }
-                catch {
-                    print("Unknown Error")
-                }
+//                do {
+//                    try recorderObject.buffer!.render(audioUnit: recorderObject.mixerAudioUnit!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+//                }
+//                catch let error as SRAudioError {
+//                    print("From SRAudioRecorder.callback -> \(error)")
+//                }
+//                catch {
+//                    print("Unknown Error")
+//                }
+                recorderObject.buffer!.copy(UnsafeMutableAudioBufferListPointer(ioData))
                 
                 return noErr
             }
+            let callbackStruct = AURenderCallbackStruct(inputProc: callback, inputProcRefCon: selfPointer)
             
+            try! self.graph!.setNodeInputCallback(self.mixerNode!, destInputNumber: 0, callback: callbackStruct)
             /*
             let callback = AURenderCallbackStruct(
                 inputProc: { (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) -> OSStatus in
@@ -140,7 +145,7 @@ public class SRAudioRecorder {
                 inputProcRefCon: selfPointer)
             */
             //try! self.graph!.setNodeInputCallback(self.mixerNode!, destInputNumber: 0, callback: callback)
-            try! self.graph!.addRenderNotify(userData: selfPointer, callback: callback)
+            //try! self.graph!.addRenderNotify(userData: selfPointer, callback: callback)
             /*
             try! self.graph?.setNodeInputCallback(
                 self.mixerNode!,
