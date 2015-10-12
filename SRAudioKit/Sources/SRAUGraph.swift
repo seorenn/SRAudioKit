@@ -20,6 +20,10 @@ public class SRAUGraph {
         self.graph = graph
     }
     
+    deinit {
+        DisposeAUGraph(self.graph)
+    }
+    
     public var running: Bool {
         var value = DarwinBoolean(false)
         let res = AUGraphIsRunning(self.graph, &value)
@@ -52,8 +56,15 @@ public class SRAUGraph {
         }
     }
     
+    public func close() throws {
+        let res = AUGraphClose(self.graph)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.close()")
+        }
+    }
+    
     public func nodeInfo(node: SRAUNode) throws -> SRAudioUnit {
-        var audioUnit = AudioUnit()
+        var audioUnit: AudioUnit = nil
         let res = AUGraphNodeInfo(self.graph, node.node, nil, &audioUnit)
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.nodeInfo()")
@@ -92,6 +103,13 @@ public class SRAUGraph {
         }
     }
     
+    public func uninitialize() throws {
+        let res = AUGraphUninitialize(self.graph)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.uninitialize()")
+        }
+    }
+    
     public func update(sync: Bool = true) throws {
         let res: OSStatus
         
@@ -121,12 +139,12 @@ public class SRAUGraph {
         }
     }
     
-    public func dispose() throws {
-        let res = DisposeAUGraph(self.graph)
-        if res != noErr {
-            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.dispose()")
-        }
-    }
+//    public func dispose() throws {
+//        let res = DisposeAUGraph(self.graph)
+//        if res != noErr {
+//            throw SRAudioError.OSStatusError(status: res, description: "SRAUGraph.dispose()")
+//        }
+//    }
     
     public func CAShow() {
         SRAudioCAShow(self.graph)

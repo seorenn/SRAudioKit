@@ -109,7 +109,7 @@ public extension AudioStreamBasicDescription {
 // MARK: - AudioComponentDescription Generators
 
 public extension AudioComponentDescription {
-    public static func mainIO() -> AudioComponentDescription {
+    public static func HAL() -> AudioComponentDescription {
         #if os(OSX)
             return AudioComponentDescription(
                 componentType: kAudioUnitType_Output,

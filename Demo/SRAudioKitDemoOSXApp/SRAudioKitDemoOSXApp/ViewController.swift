@@ -34,7 +34,7 @@ class ViewController: NSViewController {
         print("Input Config: \(inputConfig)")
         let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.AIFF)
         print("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, inputStreamDescription: inputConfig, outputPath: outputPath, outputStreamDescription: outputConfig, outputFileFormat: .AIFF) {
+        if let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .AIFF) {
             self.recorder = recorder
             recorder.startRecord()
         } else {
