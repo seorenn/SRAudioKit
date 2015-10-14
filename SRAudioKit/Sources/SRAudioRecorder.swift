@@ -136,6 +136,9 @@ public class SRAudioRecorder {
     }
 }
 
+/* OLD CODES HERE */
+/* This is backup code. Because, this code not works but I don't know any ideas */
+
 public class SRAudioRecorderWithGraph {
     var graph: SRAUGraph?
     
