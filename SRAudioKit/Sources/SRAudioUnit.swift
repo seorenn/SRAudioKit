@@ -36,7 +36,7 @@ func SRAudioUnitErrorDesc(name: String, scope: AudioUnitScope?, bus: AudioUnitEl
     return "[\(name)\(scopeString)\(busString)]"
 }
 
-public class SRAudioUnit {
+public class SRAudioUnit: CustomDebugStringConvertible {
     let audioUnit: AudioUnit
     let underGraph: Bool
 
@@ -102,7 +102,16 @@ public class SRAudioUnit {
         return SRAudioDevice(deviceID: deviceID)
     }
     
-    public func setChannelMap(channelMap: [Bool], scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) -> OSStatus {
+    public func setChannelMap(channels: SRAudioDeviceIOChannels, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
+        var channelMap = [Bool]()
+        for i in 0..<channels.count {
+            channelMap.append(channels[i])
+        }
+        
+        try self.setChannelMap(channelMap, scope: scope, bus: bus)
+    }
+    
+    public func setChannelMap(channelMap: [Bool], scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
         let dataPtr = UnsafeMutablePointer<Int32>.alloc(channelMap.count)
         var curPtr = dataPtr
         for value in channelMap {
@@ -113,9 +122,13 @@ public class SRAudioUnit {
         let size = UInt32(channelMap.count * sizeof(Int32))
         
         let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, size)
-        dataPtr.dealloc(channelMap.count)
+        defer {
+            dataPtr.dealloc(channelMap.count)
+        }
         
-        return res
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setChannelMap [\(channelMap)] Scope \(scope) BUS \(bus)]")
+        }
     }
     
     public func getChannelMap(numberInputChannels: Int, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) -> [Bool]? {
@@ -140,7 +153,7 @@ public class SRAudioUnit {
     
     // MARK: - Buffer Frame Size
     
-    public func setBufferFrameSize(frameSize: UInt32, bus: AudioUnitElement) -> OSStatus {
+    public func setBufferFrameSize(frameSize: UInt32, bus: AudioUnitElement) throws {
         var value = frameSize
         let size = UInt32(sizeof(UInt32))
         
@@ -151,10 +164,12 @@ public class SRAudioUnit {
         #endif
         
         let res = AudioUnitSetProperty(self.audioUnit, pid, kAudioUnitScope_Global, bus, &value, size)
-        return res
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setBufferFrameSize \(frameSize) BUS \(bus)]")
+        }
     }
     
-    public func getBufferFrameSize(bus: AudioUnitElement) -> UInt32 {
+    public func getBufferFrameSize(bus: AudioUnitElement) throws -> UInt32 {
         var value = UInt32()
         var size = UInt32(sizeof(UInt32))
         
@@ -165,11 +180,11 @@ public class SRAudioUnit {
         #endif
 
         let res = AudioUnitGetProperty(self.audioUnit, pid, kAudioUnitScope_Global, bus, &value, &size)
-        if res == noErr {
-            return value
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.getBufferFrameSize BUS \(bus)]")
         }
         
-        return 0
+        return value
     }
     
     // MARK: - Format
@@ -246,13 +261,22 @@ public class SRAudioUnit {
         }
     }
 
-    public func setInputCallback(scope: AudioUnitScope, bus: AudioUnitElement, callbackStruct: AURenderCallbackStruct) throws {
+    public func setInputCallback(callbackStruct: AURenderCallbackStruct, scope: AudioUnitScope, bus: AudioUnitElement) throws {
         var mutableCallbackStruct = callbackStruct
         let size = UInt32(sizeof(AURenderCallbackStruct))
         let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_SetInputCallback, scope, bus, &mutableCallbackStruct, size)
         
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "SRAudioUnit.setInputCallback")
+        }
+    }
+    
+    public func setEnableCallbackBufferAllocation(enable: Bool, scope: AudioUnitScope, bus: AudioUnitElement) throws {
+        var flag = enable ? 1 : 0
+        let size = UInt32(sizeof(UInt32))
+        let res = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ShouldAllocateBuffer, scope, bus, &flag, size)
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setEnableCallbackBufferAllocation \(enable) Scope \(scope) BUS \(bus)]")
         }
     }
 
@@ -284,5 +308,12 @@ public class SRAudioUnit {
         if res != noErr {
             throw SRAudioError.OSStatusError(status: res, description: "SRAudioUnit.stop()")
         }
+    }
+    
+    // MARK: - Custom Debug String Convertible
+    
+    public var debugDescription: String {
+        let ug = self.underGraph ? " (Generated via AUGraph)" : ""
+        return "<SRAudioUnit \(self.audioUnit)\(ug)>"
     }
 }

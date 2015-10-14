@@ -13,8 +13,8 @@ import SRAudioKitPrivates
 public class SRAudioBuffer {
     public private(set) var audioBufferList: UnsafeMutableAudioBufferListPointer
 
-    public init(channelsPerFrame: UInt32, bytesPerFrame: UInt32, interleaved: Bool, capacity: UInt32) {
-        self.audioBufferList = UnsafeMutableAudioBufferListPointer(SRAudioAllocateBufferList(channelsPerFrame, bytesPerFrame, interleaved, capacity))
+    public init(ASBD: AudioStreamBasicDescription, frameCapacity: UInt32) {
+        self.audioBufferList = UnsafeMutableAudioBufferListPointer(SRAudioAllocateBufferList(ASBD, frameCapacity))
         
         print("[SRAudioBuffer] Buffer Count: \(self.audioBufferList.count)")
         for b in self.audioBufferList {
@@ -22,20 +22,20 @@ public class SRAudioBuffer {
         }
     }
 
-    public convenience init(channelsPerFrame: UInt32, frameType: SRAudioFrameType, interleaved: Bool, capacity: UInt32) {
-        let bytesPerFrame: UInt32
-        
-        if frameType == .SignedInteger16Bit {
-            bytesPerFrame = UInt32(sizeof(Int16))
-        } else if frameType == .SignedInteger32Bit {
-            bytesPerFrame = UInt32(sizeof(Int32))
-        } else {
-            // Float32Bit
-            bytesPerFrame = UInt32(sizeof(Float32))
-        }
-
-        self.init(channelsPerFrame: channelsPerFrame, bytesPerFrame: bytesPerFrame, interleaved: interleaved, capacity: capacity)
-    }
+//    public convenience init(channelsPerFrame: UInt32, frameType: SRAudioFrameType, interleaved: Bool, capacity: UInt32) {
+//        let bytesPerFrame: UInt32
+//        
+//        if frameType == .SignedInteger16Bit {
+//            bytesPerFrame = UInt32(sizeof(Int16))
+//        } else if frameType == .SignedInteger32Bit {
+//            bytesPerFrame = UInt32(sizeof(Int32))
+//        } else {
+//            // Float32Bit
+//            bytesPerFrame = UInt32(sizeof(Float32))
+//        }
+//
+//        self.init(channelsPerFrame: channelsPerFrame, bytesPerFrame: bytesPerFrame, interleaved: interleaved, capacity: capacity)
+//    }
     
     deinit {
         SRAudioFreeBufferList(self.audioBufferList.unsafeMutablePointer)
@@ -49,11 +49,15 @@ public class SRAudioBuffer {
         inOutputBusNumber: UInt32,
         inNumberFrames: UInt32) throws {
                             
-        print("--------")
-        print("[render] ioActionFlags: \(ioActionFlags.memory)")
-        print("[render] inTimeStamp: \(inTimeStamp.memory)")
-        print("[render] inOutputBusNumber: \(inOutputBusNumber)")
-        print("[render] inNumberFrames: \(inNumberFrames)")
+        print("-> SRAudioBuffer.render")
+        print(" - Buffer: \(self.audioBufferList)")
+        print(" - AudioUnit: \(audioUnit)")
+        print(" - ioActionFlags: \(ioActionFlags.memory)")
+        print(" - inTimeStamp: \(inTimeStamp.memory)")
+        print(" - inOutputBusNumber: \(inOutputBusNumber)")
+        print(" - inNumberFrames: \(inNumberFrames)")
+            
+        
                             
         let res = AudioUnitRender(audioUnit.audioUnit, ioActionFlags, inTimeStamp, inOutputBusNumber, inNumberFrames, self.audioBufferList.unsafeMutablePointer)
         
@@ -63,7 +67,10 @@ public class SRAudioBuffer {
     }
     
     public func copy(source: UnsafeMutableAudioBufferListPointer) {
-        assert(self.audioBufferList.count == source.count)
         SRAudioCopyBufferList(source.unsafeMutablePointer, self.audioBufferList.unsafeMutablePointer)
+    }
+
+    public func copy(source: UnsafeMutablePointer<AudioBufferList>) {
+        SRAudioCopyBufferList(source, self.audioBufferList.unsafeMutablePointer)
     }
 }

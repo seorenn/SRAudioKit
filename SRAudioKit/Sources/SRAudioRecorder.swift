@@ -13,6 +13,7 @@ import SRAudioKitPrivates
 
 let BusHALInput = AudioUnitElement(1)
 let BusHALOutput = AudioUnitElement(0)
+let SRAudioRecorderDefaultFrameSize = UInt32(1024)
 
 public class SRAudioRecorder {
     var au: SRAudioUnit?
@@ -29,8 +30,16 @@ public class SRAudioRecorder {
         print("AURenderCallback: Called with Bus \(inBusNumber), \(inNumberFrames)frames")
         
         let recorderObject: SRAudioRecorder = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
-        try! recorderObject.buffer!.render(audioUnit: recorderObject.au!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+        //let res = AudioUnitRender(recorderObject.au!.audioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData)
         
+        do {
+            try recorderObject.buffer!.render(audioUnit: recorderObject.au!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+        } catch let err as SRAudioError {
+            print("Render Callback Error: \(err)")
+        } catch {
+            print("Unknown Error")
+        }
+
         return noErr
     }
     
@@ -54,6 +63,9 @@ public class SRAudioRecorder {
             let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
             try self.au!.setDevice(dev, bus: BusHALOutput)
             
+            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: BusHALOutput)
+            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Output, bus: BusHALInput)
+
             #if os(OSX)
                 let inputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Output, bus: BusHALInput)
                 print("IO-AU Input Scope Format: \(inputScopeFormat)")
@@ -61,26 +73,28 @@ public class SRAudioRecorder {
                 print("IO-AU Output Scope Format: \(outputScopeFormat)")
             #endif
             
+
+            try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: BusHALInput)
+            
+            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALInput)
+            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALOutput)
+            
             // Prepare Buffer
             
-            self.buffer = SRAudioBuffer(
-                channelsPerFrame: 2,
-                bytesPerFrame: streamDescription.mBitsPerChannel/8,
-                interleaved: streamDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved != kAudioFormatFlagIsNonInterleaved,
-                capacity: 512)
+            let frameSize = try self.au!.getBufferFrameSize(BusHALInput)
+            self.buffer = SRAudioBuffer(ASBD: inputScopeFormat, frameCapacity: frameSize)
             
             // Prepare File Writer
             
-            self.writer = SRAudioFileWriter(audioStreamDescription: streamDescription, fileFormat: outputFileFormat, filePath: outputPath)
+            self.writer = SRAudioFileWriter(audioStreamDescription: inputScopeFormat, fileFormat: outputFileFormat, filePath: outputPath)
             if self.writer == nil {
                 print("Failed to initialize SRAudioFileWriter. Cancel operations")
                 return nil
             }
             
             // Configure Callbacks
-            try self.au!.setInputCallback(kAudioUnitScope_Global, bus: BusHALOutput, callbackStruct: self.callbackStruct)
-            
-            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: BusHALOutput)
+            try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALOutput)
+            try self.au!.setEnableCallbackBufferAllocation(false, scope: kAudioUnitScope_Output, bus: BusHALInput)
             
             try self.au!.initialize()
         }
@@ -188,11 +202,7 @@ public class SRAudioRecorderWithGraph {
             
             // Prepare Buffer
             
-            self.buffer = SRAudioBuffer(
-                channelsPerFrame: 2,
-                bytesPerFrame: streamDescription.mBitsPerChannel/8,
-                interleaved: streamDescription.mFormatFlags & kAudioFormatFlagIsNonInterleaved != kAudioFormatFlagIsNonInterleaved,
-                capacity: 512)
+            self.buffer = SRAudioBuffer(ASBD: streamDescription, frameCapacity: 512)
             
             // Prepare File Writer
             

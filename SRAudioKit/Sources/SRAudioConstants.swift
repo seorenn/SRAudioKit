@@ -109,6 +109,7 @@ public enum SRAudioError: ErrorType, CustomStringConvertible {
     case UnknownError
     case GenericError(description: String)
     case OSStatusError(status: OSStatus, description: String)
+    case IncompatibleAudioBuffer
     
     public var description: String {
         switch (self) {
@@ -118,6 +119,8 @@ public enum SRAudioError: ErrorType, CustomStringConvertible {
             return "Generic Error: \(description)"
         case .OSStatusError(let status, let description):
             return "OSStatus Error: \(description) \(status)(\(OSStatusString(status))) -> \(OSStatusErrorDescription(status))"
+        case .IncompatibleAudioBuffer:
+            return "Incompatible Audio Buffer"
         }
     }
 }

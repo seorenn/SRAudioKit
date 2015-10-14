@@ -25,6 +25,7 @@ NSString * _Nonnull OSStatusString(OSStatus status) {
     return [NSString stringWithCString:str encoding:NSUTF8StringEncoding];
 }
 
+/*
 AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
                                                      UInt32 bytesPerFrame,
                                                      BOOL interleaved,
@@ -46,13 +47,44 @@ AudioBufferList * _Nonnull SRAudioAllocateBufferList(UInt32 channelsPerFrame,
     
     return bufferList;
 }
+ */
+
+AudioBufferList * _Nullable SRAudioAllocateBufferList(AudioStreamBasicDescription asbd, UInt32 capacityFrames) {
+    AudioBufferList *bufferList = NULL;
+
+    BOOL interleaved = asbd.mFormatFlags & kAudioFormatFlagIsNonInterleaved ? NO : YES;
+    
+    int numBuffers = interleaved ? 1 : asbd.mChannelsPerFrame;
+    int channels = interleaved ? asbd.mChannelsPerFrame : 1;
+    int bufferSize = asbd.mBytesPerFrame * capacityFrames;
+
+    bufferList = malloc(sizeof(AudioBufferList) + ((numBuffers - 1) * sizeof(AudioBuffer)));
+    if (bufferList == NULL) return NULL;
+    
+    bufferList->mNumberBuffers = numBuffers;
+    for (int i=0; i < numBuffers; i++) {
+        bufferList->mBuffers[i].mDataByteSize = bufferSize;
+        bufferList->mBuffers[i].mNumberChannels = channels;
+        
+        if (bufferSize > 0) {
+            bufferList->mBuffers[i].mData = calloc(bufferSize, 1);
+            if (bufferList->mBuffers[i].mData == NULL) {
+                SRAudioFreeBufferList(bufferList);
+                return NULL;
+            }
+        } else {
+            bufferList->mBuffers[i].mData = NULL;
+        }
+    }
+    
+    return bufferList;
+}
 
 void SRAudioCopyBufferList(AudioBufferList * _Nonnull src, AudioBufferList * _Nonnull dest) {
     for (int i=0; i < src->mNumberBuffers; ++i) {
         memcpy(src->mBuffers[i].mData, dest->mBuffers[i].mData, src->mBuffers[i].mDataByteSize);
     }
 }
-
 
 void SRAudioFreeBufferList(AudioBufferList * _Nonnull bufferList) {
     if (bufferList == NULL) return;
