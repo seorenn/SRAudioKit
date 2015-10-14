@@ -34,6 +34,8 @@ public class SRAudioRecorder {
         
         do {
             try recorderObject.buffer!.render(audioUnit: recorderObject.au!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)
+            
+            recorderObject.append(inNumberFrames)
         } catch let err as SRAudioError {
             print("Render Callback Error: \(err)")
         } catch {
@@ -114,6 +116,10 @@ public class SRAudioRecorder {
         try! writer.append(bufferList, bufferSize: bufferSize)
     }
     
+    func append(bufferSize: UInt32) {
+        self.append(self.buffer!.audioBufferList.unsafeMutablePointer, bufferSize: bufferSize)
+    }
+    
     public func startRecord() {
         if self.au == nil { return }
         
@@ -125,6 +131,7 @@ public class SRAudioRecorder {
         if self.au == nil { return }
 
         try! self.au!.stop()
+        try! self.writer!.close()
         self.recording = false
     }
 }

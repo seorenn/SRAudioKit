@@ -32,9 +32,9 @@ class ViewController: NSViewController {
         
         let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
         print("Input Config: \(inputConfig)")
-        let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.AIFF)
+        let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.WAVE)
         print("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .AIFF) {
+        if let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .WAVE) {
             self.recorder = recorder
             recorder.startRecord()
         } else {
@@ -56,7 +56,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func pressedReccordButton(sender: AnyObject) {
-        let outputPath = "/Users/hirenn/Desktop/output.aiff"
+        let outputPath = "/Users/hirenn/Desktop/output.wav"
         if let recorder = self.recorder {
             if recorder.recording {
                 self.stopRecord()
