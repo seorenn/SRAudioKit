@@ -238,7 +238,6 @@ public class SRAudioUnit: CustomDebugStringConvertible {
     public func addRenderNotify(userData userData: AnyObject, callback: AURenderCallback) throws {
         var userDataVar = userData
         let res = AudioUnitAddRenderNotify(self.audioUnit, callback, &userDataVar)
-        
         guard res == noErr
             else { throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.addRenderNotify]") }
     }
@@ -256,7 +255,6 @@ public class SRAudioUnit: CustomDebugStringConvertible {
         var mutableCallbackStruct = callbackStruct
         let size = UInt32(sizeof(AURenderCallbackStruct))
         let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_SetInputCallback, scope, bus, &mutableCallbackStruct, size)
-
         guard res == noErr
             else { throw SRAudioError.OSStatusError(status: res, description: "SRAudioUnit.setInputCallback") }
     }
@@ -265,7 +263,6 @@ public class SRAudioUnit: CustomDebugStringConvertible {
         var flag = enable ? 1 : 0
         let size = UInt32(sizeof(UInt32))
         let res = AudioUnitSetProperty(self.audioUnit, kAudioUnitProperty_ShouldAllocateBuffer, scope, bus, &flag, size)
-        
         guard res == noErr
             else { throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setEnableCallbackBufferAllocation \(enable) Scope \(scope) BUS \(bus)]") }
     }

@@ -29,9 +29,9 @@ func SRAudioFileWriterGetFormat() throws -> AudioStreamBasicDescription {
     var size = UInt32(sizeof(AudioStreamBasicDescription))
     var result = AudioStreamBasicDescription()
     let res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &result)
-    if res != noErr {
-        throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterGetFormat")
-    }
+    guard res == noErr
+        else { throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterGetFormat") }
+    
     return result
 }
 
@@ -39,9 +39,8 @@ func SRAudioFileWriterSetFileFormat(fileRef: ExtAudioFileRef, audioStreamDescrip
     let size = UInt32(sizeof(AudioStreamBasicDescription))
     var inFormat = audioStreamDescription
     let res = ExtAudioFileSetProperty(fileRef, kExtAudioFileProperty_ClientDataFormat, size, &inFormat)
-    if res != noErr {
-        throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterSetFileFormat")
-    }
+    guard res == noErr
+        else { throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriterSetFileFormat") }
 }
 
 func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStreamDescription: AudioStreamBasicDescription) throws -> ExtAudioFileRef {
@@ -55,25 +54,22 @@ func SRAudioFileWriterOpen(path: String, fileFormat: SRAudioFileFormat, audioStr
 
     var size = UInt32(sizeof(AudioStreamBasicDescription))
     var res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &outputDesc)
-    if res != noErr {
-        throw SRAudioError.OSStatusError(status: res, description: "AudioFormatGetProperty")
-    }
+    guard res == noErr
+        else { throw SRAudioError.OSStatusError(status: res, description: "AudioFormatGetProperty") }
     
     print("Updated Format Description: \(outputDesc)")
     
     res = ExtAudioFileCreateWithURL(url, fileTypeID, &outputDesc, nil, AudioFileFlags.EraseFile.rawValue, &fileRef)
-    if res != noErr {
-        throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileCreateWithURL")
-    }
+    guard res == noErr
+        else { throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileCreateWithURL") }
     
     var sf = audioStreamDescription
     size = UInt32(sizeof(AudioStreamBasicDescription))
     
     print("SRAudioFileWriterOpen: Try to update stream format: \(audioStreamDescription)")
     res = ExtAudioFileSetProperty(fileRef, kExtAudioFileProperty_ClientDataFormat, size, &sf)
-    if res != noErr {
-        throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileSetProperty")
-    }
+    guard res == noErr
+        else { throw SRAudioError.OSStatusError(status: res, description: "ExtAudioFileSetProperty") }
     
     return fileRef
 }
@@ -97,18 +93,20 @@ public class SRAudioFileWriter {
     }
     
     public func close() throws {
-        let res = ExtAudioFileDispose(self.fileRef!)
-        if res != noErr {
-            SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.close()")
-        }
+        guard let fileRef = self.fileRef
+            else { return }
+        
+        let res = ExtAudioFileDispose(fileRef)
+        guard res == noErr
+            else { throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.close()") }
     }
  
     public func append(bufferList: UnsafePointer<AudioBufferList>, bufferSize: UInt32) throws {
-        guard let fileRef = self.fileRef else { return }
+        guard let fileRef = self.fileRef
+            else { return }
         
         let res = ExtAudioFileWriteAsync(fileRef, bufferSize, bufferList)
-        if res != noErr {
-            SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.append()")
-        }
+        guard res == noErr
+            else { throw SRAudioError.OSStatusError(status: res, description: "SRAudioFileWriter.append()") }
     }
 }

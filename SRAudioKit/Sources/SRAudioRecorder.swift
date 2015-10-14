@@ -89,7 +89,7 @@ public class SRAudioRecorder {
             // Prepare File Writer
             
             self.writer = SRAudioFileWriter(audioStreamDescription: inputScopeFormat, fileFormat: outputFileFormat, filePath: outputPath)
-            if self.writer == nil {
+            guard let _ = self.writer else {
                 print("Failed to initialize SRAudioFileWriter. Cancel operations")
                 return nil
             }
@@ -112,7 +112,9 @@ public class SRAudioRecorder {
     
     
     func append(bufferList: UnsafeMutablePointer<AudioBufferList>, bufferSize: UInt32) {
-        guard let writer = self.writer else { return }
+        guard let writer = self.writer
+            else { return }
+        
         try! writer.append(bufferList, bufferSize: bufferSize)
     }
     
@@ -121,18 +123,28 @@ public class SRAudioRecorder {
     }
     
     public func startRecord() {
-        if self.au == nil { return }
+        guard let au = self.au
+            else { return }
         
+        try! au.start()
         self.recording = true
-        try! self.au!.start()
     }
     
     public func stopRecord() {
-        if self.au == nil { return }
+        guard self.recording
+            else { return }
+        
+        defer { self.recording = false }
+        
+        guard let au = self.au
+            else { return }
 
-        try! self.au!.stop()
-        try! self.writer!.close()
-        self.recording = false
+        try! au.stop()
+        
+        guard let writer = self.writer
+            else { return }
+        
+        try! writer.close()
     }
 }
 

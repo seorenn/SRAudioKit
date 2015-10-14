@@ -19,23 +19,27 @@ public class SRAudioDeviceManager {
             var dataSize: UInt32 = 0;
             var results = [SRAudioDevice]()
             
-            var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDevices, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
+            var address = AudioObjectPropertyAddress(
+                mSelector: kAudioHardwarePropertyDevices,
+                mScope: kAudioObjectPropertyScopeGlobal,
+                mElement: kAudioObjectPropertyElementMaster)
             
             var err = AudioObjectGetPropertyDataSize(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize);
             
-            guard err == noErr else { return results }
+            guard err == noErr
+                else { return results }
             
             let count = Int(dataSize / UInt32(sizeof(AudioObjectID)))
-            guard count > 0 else { return [SRAudioDevice]() }
+            guard count > 0
+                else { return results }
 
             let devicesPtr = UnsafeMutablePointer<AudioObjectID>.alloc(Int(dataSize))
+            defer { devicesPtr.dealloc(Int(dataSize)) }
             
             err = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize, devicesPtr);
 
-            guard err == noErr else {
-                devicesPtr.dealloc(Int(dataSize))
-                return results
-            }
+            guard err == noErr
+                else { return results }
             
             var curPtr = devicesPtr
             for _ in 0..<count {
@@ -46,7 +50,6 @@ public class SRAudioDeviceManager {
                 curPtr = curPtr.successor()
             }
             
-            devicesPtr.dealloc(Int(dataSize))
             return results
         #else
             return [SRAudioDevice]()
@@ -57,13 +60,14 @@ public class SRAudioDeviceManager {
         #if os(OSX)
             var size = UInt32(sizeof(AudioDeviceID))
             var deviceID = AudioDeviceID()
-            var address = AudioObjectPropertyAddress(mSelector: kAudioHardwarePropertyDefaultInputDevice, mScope: kAudioObjectPropertyScopeGlobal, mElement: kAudioObjectPropertyElementMaster)
+            var address = AudioObjectPropertyAddress(
+                mSelector: kAudioHardwarePropertyDefaultInputDevice,
+                mScope: kAudioObjectPropertyScopeGlobal,
+                mElement: kAudioObjectPropertyElementMaster)
             
             let error = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID)
-            if error != noErr {
-                debugPrint("Failed to get default input device \(error)")
-                return nil
-            }
+            guard error == noErr
+                else { return nil }
             
             return SRAudioDevice(deviceID: deviceID)
         #else

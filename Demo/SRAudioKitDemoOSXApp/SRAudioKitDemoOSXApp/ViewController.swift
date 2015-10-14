@@ -26,27 +26,36 @@ class ViewController: NSViewController {
     }
     
     func startRecord(outputPath: String) {
-        let device = SRAudioDeviceManager.sharedManager.defaultInputDevice!
+        guard let device = SRAudioDeviceManager.sharedManager.defaultInputDevice else {
+            print("Failed to get default input device")
+            return
+        }
+        
         print("Start Record with Output Path: \(outputPath)")
         print("Using Input Device: \(device)")
         
         let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
         print("Input Config: \(inputConfig)")
+        
         let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.WAVE)
         print("Output Config: \(outputConfig)")
-        if let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .WAVE) {
-            self.recorder = recorder
-            recorder.startRecord()
-        } else {
+        
+        guard let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .WAVE) else {
             print("Failed to initialize SRAudioRecorder")
+            return
         }
+        
+        self.recorder = recorder
+        recorder.startRecord()
     }
     
     func stopRecord() {
         print("Stop Record")
-        if let recorder = self.recorder {
-            recorder.stopRecord()
-        }
+        
+        guard let recorder = self.recorder
+            else { return }
+        
+        recorder.stopRecord()
     }
 
     override var representedObject: AnyObject? {
