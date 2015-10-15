@@ -31,16 +31,18 @@ class ViewController: NSViewController {
             return
         }
         
+        let type = SRAudioFileType.AAC
+        
         print("Start Record with Output Path: \(outputPath)")
         print("Using Input Device: \(device)")
         
         let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
         print("Input Config: \(inputConfig)")
         
-        let outputConfig = AudioStreamBasicDescription.fileFormatDescription(.WAVE)
+        let outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
         print("Output Config: \(outputConfig)")
         
-        guard let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: outputConfig, outputFileFormat: .WAVE) else {
+        guard let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
             print("Failed to initialize SRAudioRecorder")
             return
         }
@@ -65,7 +67,7 @@ class ViewController: NSViewController {
     }
     
     @IBAction func pressedReccordButton(sender: AnyObject) {
-        let outputPath = "/Users/hirenn/Desktop/output.wav"
+        let outputPath = "/Users/hirenn/Desktop/output.aac"
         if let recorder = self.recorder {
             if recorder.recording {
                 self.stopRecord()

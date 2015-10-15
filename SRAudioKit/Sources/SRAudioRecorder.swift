@@ -51,7 +51,7 @@ public class SRAudioRecorder {
     
     public private(set) var recording: Bool = false
     
-    public init?(inputDevice: SRAudioDevice?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileFormat: SRAudioFileFormat) {
+    public init?(inputDevice: SRAudioDevice?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileType: SRAudioFileType) {
         let desc = AudioComponentDescription.HAL()
         self.au = SRAudioUnit(description: desc)
         if self.au == nil { return nil }
@@ -86,9 +86,11 @@ public class SRAudioRecorder {
             let frameSize = try self.au!.getBufferFrameSize(BusHALInput)
             self.buffer = SRAudioBuffer(ASBD: inputScopeFormat, frameCapacity: frameSize)
             
+            let fileFormat = try AudioStreamBasicDescription.genericCompressedDescription(outputFileType.audioFormatID, numberOfChannels: inputScopeFormat.mChannelsPerFrame)
+            
             // Prepare File Writer
             
-            self.writer = SRAudioFileWriter(audioStreamDescription: inputScopeFormat, fileFormat: outputFileFormat, filePath: outputPath)
+            self.writer = SRAudioFileWriter(clientFormat: inputScopeFormat, fileFormat: fileFormat, fileType: outputFileType, filePath: outputPath)
             guard let _ = self.writer else {
                 print("Failed to initialize SRAudioFileWriter. Cancel operations")
                 return nil
@@ -196,7 +198,7 @@ public class SRAudioRecorderWithGraph {
     
     // MARK: -
     
-    public init?(inputDevice: SRAudioDevice?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileFormat: SRAudioFileFormat) {
+    public init?(inputDevice: SRAudioDevice?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileType: SRAudioFileType) {
         self.graph = SRAUGraph()
         
         do {
@@ -228,7 +230,8 @@ public class SRAudioRecorderWithGraph {
             
             // Prepare File Writer
             
-            self.writer = SRAudioFileWriter(audioStreamDescription: streamDescription, fileFormat: outputFileFormat, filePath: outputPath)
+            //self.writer = SRAudioFileWriter(audioStreamDescription: streamDescription, fileFormat: outputFileFormat, filePath: outputPath)
+            self.writer = SRAudioFileWriter(clientFormat: streamDescription, fileFormat: streamDescription, fileType: outputFileType, filePath: outputPath)
             if self.writer == nil {
                 print("Failed to initialize SRAudioFileWriter. Cancel operations")
                 return nil

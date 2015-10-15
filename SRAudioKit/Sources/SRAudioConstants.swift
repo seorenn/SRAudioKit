@@ -134,23 +134,63 @@ public enum SRAudioFrameType: Int {
     case SignedInteger32Bit = 3
 }
 
-
-public enum SRAudioFormat {
-    case PCM, AAC, MP3, NotSupported
-}
-
-func SRAudioGetFormatID(format: SRAudioFormat) -> AudioFormatID {
-    switch (format) {
-    case .PCM:
-        return kAudioFormatLinearPCM
-    case .AAC:
-        return kAudioFormatMPEG4AAC
-    case .MP3:
-        return kAudioFormatMPEGLayer3
-    case .NotSupported:
-        return kAudioFormatLinearPCM
+public enum SRAudioFileType {
+    case AIFF, WAVE, MP3, AAC //, AC3, MPEG4, MP3
+    
+    public var compressedType: Bool {
+        switch (self) {
+        case .AIFF:
+            return false
+        case .WAVE:
+            return false
+        default:
+            return true
+        }
+    }
+    
+    public var audioFormatID: OSType {
+        switch (self) {
+        case .AIFF:
+            return kAudioFormatLinearPCM
+        case .WAVE:
+            return kAudioFormatLinearPCM
+        case .MP3:
+            return kAudioFormatMPEGLayer3
+        case .AAC:
+            return kAudioFormatMPEG4AAC
+        }
+    }
+    
+    public var audioFileTypeID: AudioFileTypeID {
+        switch (self) {
+        case .AIFF:
+            return kAudioFileAIFFType
+        case .WAVE:
+            return kAudioFileWAVEType
+        case .MP3:
+            return kAudioFileMP3Type
+        case .AAC:
+            return kAudioFileAAC_ADTSType
+        }
     }
 }
+
+//public enum SRAudioFormat {
+//    case PCM, AAC, MP3, NotSupported
+//}
+//
+//func SRAudioGetFormatID(format: SRAudioFormat) -> AudioFormatID {
+//    switch (format) {
+//    case .PCM:
+//        return kAudioFormatLinearPCM
+//    case .AAC:
+//        return kAudioFormatMPEG4AAC
+//    case .MP3:
+//        return kAudioFormatMPEGLayer3
+//    case .NotSupported:
+//        return kAudioFormatLinearPCM
+//    }
+//}
 
 
 let SRAudioAllFileFormatFlags = kAudioFileAIFFType | kAudioFileWAVEType

@@ -65,9 +65,23 @@ public extension AudioStreamBasicDescription {
             mBitsPerChannel: 8 * sampleSize,    // Canonical (But canonical was deprecated)
             mReserved: 0)
     }
-    
-    public static func fileFormatDescription(format: SRAudioFileFormat) -> AudioStreamBasicDescription {
-        switch (format) {
+
+    public static func genericCompressedDescription(formatID: OSType, numberOfChannels: UInt32) throws -> AudioStreamBasicDescription {
+        var asbd = AudioStreamBasicDescription()
+        asbd.mFormatID = formatID
+        asbd.mChannelsPerFrame = numberOfChannels
+        
+        var size = UInt32(sizeof(AudioStreamBasicDescription))
+        
+        let res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &asbd)
+        guard res == noErr
+            else { throw SRAudioError.OSStatusError(status: res, description: "AudioStreamBasicDescription.genericCompressedDescription formatID \(formatID) numberOfChannels \(numberOfChannels)") }
+        
+        return asbd
+    }
+
+    public static func fileTypeDescription(type: SRAudioFileType) -> AudioStreamBasicDescription {
+        switch (type) {
         case .AIFF:
             return AudioStreamBasicDescription(
                 mSampleRate: 44100,
@@ -90,18 +104,8 @@ public extension AudioStreamBasicDescription {
                 mChannelsPerFrame: 2,
                 mBitsPerChannel: 32,
                 mReserved: 0)
-        case .MP3:
-            // TODO: Not Confirmed
-            return AudioStreamBasicDescription(
-                mSampleRate: 44100,
-                mFormatID: kAudioFormatLinearPCM,
-                mFormatFlags: kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger,
-                mBytesPerPacket: 8,
-                mFramesPerPacket: 1,
-                mBytesPerFrame: 8,
-                mChannelsPerFrame: 2,
-                mBitsPerChannel: 32,
-                mReserved: 0)
+        default:
+            return try! AudioStreamBasicDescription.genericCompressedDescription(type.audioFormatID, numberOfChannels: 2)
         }
     }
 }
