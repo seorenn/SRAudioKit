@@ -175,24 +175,6 @@ public enum SRAudioFileType {
     }
 }
 
-//public enum SRAudioFormat {
-//    case PCM, AAC, MP3, NotSupported
-//}
-//
-//func SRAudioGetFormatID(format: SRAudioFormat) -> AudioFormatID {
-//    switch (format) {
-//    case .PCM:
-//        return kAudioFormatLinearPCM
-//    case .AAC:
-//        return kAudioFormatMPEG4AAC
-//    case .MP3:
-//        return kAudioFormatMPEGLayer3
-//    case .NotSupported:
-//        return kAudioFormatLinearPCM
-//    }
-//}
-
-
 let SRAudioAllFileFormatFlags = kAudioFileAIFFType | kAudioFileWAVEType
 
 let SRAudioSIntFormatFlags = kAudioFormatFlagsNativeEndian | kAudioFormatFlagIsPacked | kAudioFormatFlagIsSignedInteger

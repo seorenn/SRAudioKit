@@ -22,21 +22,6 @@ public class SRAudioBuffer {
         }
     }
 
-//    public convenience init(channelsPerFrame: UInt32, frameType: SRAudioFrameType, interleaved: Bool, capacity: UInt32) {
-//        let bytesPerFrame: UInt32
-//        
-//        if frameType == .SignedInteger16Bit {
-//            bytesPerFrame = UInt32(sizeof(Int16))
-//        } else if frameType == .SignedInteger32Bit {
-//            bytesPerFrame = UInt32(sizeof(Int32))
-//        } else {
-//            // Float32Bit
-//            bytesPerFrame = UInt32(sizeof(Float32))
-//        }
-//
-//        self.init(channelsPerFrame: channelsPerFrame, bytesPerFrame: bytesPerFrame, interleaved: interleaved, capacity: capacity)
-//    }
-    
     deinit {
         SRAudioFreeBufferList(self.audioBufferList.unsafeMutablePointer)
     }
@@ -48,16 +33,6 @@ public class SRAudioBuffer {
         inTimeStamp: UnsafePointer<AudioTimeStamp>,
         inOutputBusNumber: UInt32,
         inNumberFrames: UInt32) throws {
-                            
-        print("-> SRAudioBuffer.render")
-        print(" - Buffer: \(self.audioBufferList)")
-        print(" - AudioUnit: \(audioUnit)")
-        print(" - ioActionFlags: \(ioActionFlags.memory)")
-        print(" - inTimeStamp: \(inTimeStamp.memory)")
-        print(" - inOutputBusNumber: \(inOutputBusNumber)")
-        print(" - inNumberFrames: \(inNumberFrames)")
-            
-        
                             
         let res = AudioUnitRender(audioUnit.audioUnit, ioActionFlags, inTimeStamp, inOutputBusNumber, inNumberFrames, self.audioBufferList.unsafeMutablePointer)
         

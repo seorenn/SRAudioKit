@@ -27,10 +27,9 @@ public class SRAudioRecorder {
     let callback: AURenderCallback = {
         (inRefCon, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData) in
         
-        print("AURenderCallback: Called with Bus \(inBusNumber), \(inNumberFrames)frames")
+        //print("AURenderCallback: Called with Bus \(inBusNumber), \(inNumberFrames)frames")
         
         let recorderObject: SRAudioRecorder = Unmanaged<SRAudioRecorder>.fromOpaque(COpaquePointer(inRefCon)).takeUnretainedValue()
-        //let res = AudioUnitRender(recorderObject.au!.audioUnit, ioActionFlags, inTimeStamp, inBusNumber, inNumberFrames, ioData)
         
         do {
             try recorderObject.buffer!.render(audioUnit: recorderObject.au!, ioActionFlags: ioActionFlags, inTimeStamp: inTimeStamp, inOutputBusNumber: inBusNumber, inNumberFrames: inNumberFrames)

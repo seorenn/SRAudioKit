@@ -74,8 +74,9 @@ public extension AudioStreamBasicDescription {
         var size = UInt32(sizeof(AudioStreamBasicDescription))
         
         let res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &asbd)
-        guard res == noErr
-            else { throw SRAudioError.OSStatusError(status: res, description: "AudioStreamBasicDescription.genericCompressedDescription formatID \(formatID) numberOfChannels \(numberOfChannels)") }
+        guard res == noErr else {
+            throw SRAudioError.OSStatusError(status: res, description: "AudioStreamBasicDescription.genericCompressedDescription formatID \(formatID) numberOfChannels \(numberOfChannels)")
+        }
         
         return asbd
     }

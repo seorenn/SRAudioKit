@@ -26,20 +26,17 @@ public class SRAudioDeviceManager {
             
             var err = AudioObjectGetPropertyDataSize(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize);
             
-            guard err == noErr
-                else { return results }
+            guard err == noErr else { return results }
             
             let count = Int(dataSize / UInt32(sizeof(AudioObjectID)))
-            guard count > 0
-                else { return results }
+            guard count > 0 else { return results }
 
             let devicesPtr = UnsafeMutablePointer<AudioObjectID>.alloc(Int(dataSize))
             defer { devicesPtr.dealloc(Int(dataSize)) }
             
             err = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize, devicesPtr);
 
-            guard err == noErr
-                else { return results }
+            guard err == noErr else { return results }
             
             var curPtr = devicesPtr
             for _ in 0..<count {
@@ -66,8 +63,7 @@ public class SRAudioDeviceManager {
                 mElement: kAudioObjectPropertyElementMaster)
             
             let error = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &size, &deviceID)
-            guard error == noErr
-                else { return nil }
+            guard error == noErr else { return nil }
             
             return SRAudioDevice(deviceID: deviceID)
         #else
