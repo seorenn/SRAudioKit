@@ -81,79 +81,91 @@ public class SRAudioUnit: CustomDebugStringConvertible {
     
     // MARK: - Devices
     
-    #if os(OSX)
     public func setDevice(device: SRAudioDevice, bus: AudioUnitElement) throws {
-        var deviceID = device.deviceID
-        let size = UInt32(sizeof(AudioDeviceID))
-        let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus, &deviceID, size)
-        
-        guard res == noErr else {
-            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setDevice BUS \(bus) \(device)]")
-        }
+        #if os(OSX)
+            var deviceID = device.deviceID
+            let size = UInt32(sizeof(AudioDeviceID))
+            let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus, &deviceID, size)
+            
+            guard res == noErr else {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setDevice BUS \(bus) \(device)]")
+            }
+        #endif
     }
     
-    public func getDevice(bus: AudioUnitElement) throws -> SRAudioDevice {
-        var deviceID = AudioDeviceID()
-        var size = UInt32(sizeof(AudioDeviceID))
-        let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus, &deviceID, &size)
-        
-        guard res == noErr else {
-            throw SRAudioError.OSStatusError(status: res, description: "[SRaudioUnit.getDevice BUS \(bus)")
-        }
-        
-        return SRAudioDevice(deviceID: deviceID)
+    public func getDevice(bus: AudioUnitElement) throws -> SRAudioDevice? {
+        #if os(OSX)
+            var deviceID = AudioDeviceID()
+            var size = UInt32(sizeof(AudioDeviceID))
+            let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_CurrentDevice, kAudioUnitScope_Global, bus, &deviceID, &size)
+            
+            guard res == noErr else {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRaudioUnit.getDevice BUS \(bus)")
+            }
+            
+            return SRAudioDevice(deviceID: deviceID)
+        #else
+            return nil
+        #endif
     }
     
     public func setChannelMap(channels: SRAudioDeviceIOChannels, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
-        var channelMap = [Bool]()
-        for i in 0..<channels.count {
-            channelMap.append(channels[i])
-        }
-        
-        try self.setChannelMap(channelMap, scope: scope, bus: bus)
+        #if os(OSX)
+            var channelMap = [Bool]()
+            for i in 0..<channels.count {
+                channelMap.append(channels[i])
+            }
+            
+            try self.setChannelMap(channelMap, scope: scope, bus: bus)
+        #endif
     }
     
     public func setChannelMap(channelMap: [Bool], scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
-        let dataPtr = UnsafeMutablePointer<Int32>.alloc(channelMap.count)
-        defer { dataPtr.dealloc(channelMap.count) }
+        #if os(OSX)
+            let dataPtr = UnsafeMutablePointer<Int32>.alloc(channelMap.count)
+            defer { dataPtr.dealloc(channelMap.count) }
 
-        var curPtr = dataPtr
-        for value in channelMap {
-            curPtr.memory = value ? Int32(1) : Int32(0)
-            curPtr = curPtr.successor()
-        }
-        
-        let size = UInt32(channelMap.count * sizeof(Int32))
-        
-        let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, size)
-        
-        guard res == noErr else {
-            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setChannelMap [\(channelMap)] Scope \(scope) BUS \(bus)]")
-        }
+            var curPtr = dataPtr
+            for value in channelMap {
+                curPtr.memory = value ? Int32(1) : Int32(0)
+                curPtr = curPtr.successor()
+            }
+            
+            let size = UInt32(channelMap.count * sizeof(Int32))
+            
+            let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, size)
+            
+            guard res == noErr else {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setChannelMap [\(channelMap)] Scope \(scope) BUS \(bus)]")
+            }
+        #endif
     }
     
     public func getChannelMap(numberInputChannels: Int, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws -> [Bool]? {
-        let dataPtr = UnsafeMutablePointer<Int32>.alloc(numberInputChannels)
-        defer { dataPtr.dealloc(numberInputChannels) }
-        
-        var size = UInt32(numberInputChannels * sizeof(Int32))
-        var result: [Bool]? = nil
-        
-        let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, &size)
-        guard res == noErr else {
-            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.getChannelMap numberInputChannels \(numberInputChannels) scope \(scope) bus \(bus)]")
-        }
-        
-        result = [Bool]()
-        var curPtr = dataPtr
-        for _ in 0..<numberInputChannels {
-            result!.append(curPtr.memory == 1 ? true : false)
-            curPtr = curPtr.successor()
-        }
-        
-        return result
+        #if os(OSX)
+            let dataPtr = UnsafeMutablePointer<Int32>.alloc(numberInputChannels)
+            defer { dataPtr.dealloc(numberInputChannels) }
+            
+            var size = UInt32(numberInputChannels * sizeof(Int32))
+            var result: [Bool]? = nil
+            
+            let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, &size)
+            guard res == noErr else {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.getChannelMap numberInputChannels \(numberInputChannels) scope \(scope) bus \(bus)]")
+            }
+            
+            result = [Bool]()
+            var curPtr = dataPtr
+            for _ in 0..<numberInputChannels {
+                result!.append(curPtr.memory == 1 ? true : false)
+                curPtr = curPtr.successor()
+            }
+            
+            return result
+        #else
+           return nil
+        #endif
     }
-    #endif
     
     // MARK: - Buffer Frame Size
     
