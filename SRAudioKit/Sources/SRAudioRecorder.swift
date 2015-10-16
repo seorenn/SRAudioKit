@@ -58,8 +58,11 @@ public class SRAudioRecorder {
         do {
             // Enable Input Scope
             try self.au!.enableIO(true, scope: kAudioUnitScope_Input, bus: BusHALInput)
-            // Disable Output Scope
-            try self.au!.enableIO(false, scope: kAudioUnitScope_Output, bus: BusHALOutput)
+            
+            #if os(OSX)
+                // Disable Output Scope
+                try self.au!.enableIO(false, scope: kAudioUnitScope_Output, bus: BusHALOutput)
+            #endif
             
             let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
             try self.au!.setDevice(dev, bus: BusHALOutput)
@@ -67,15 +70,14 @@ public class SRAudioRecorder {
             try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: BusHALOutput)
             try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Output, bus: BusHALInput)
 
+            let inputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Output, bus: BusHALInput)
+            print("IO-AU Input Scope Format: \(inputScopeFormat)")
+            let outputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Input, bus: BusHALOutput)
+            print("IO-AU Output Scope Format: \(outputScopeFormat)")
+                
             #if os(OSX)
-                let inputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Output, bus: BusHALInput)
-                print("IO-AU Input Scope Format: \(inputScopeFormat)")
-                let outputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Input, bus: BusHALOutput)
-                print("IO-AU Output Scope Format: \(outputScopeFormat)")
+                try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: BusHALInput)
             #endif
-            
-
-            try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: BusHALInput)
             
             try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALInput)
             try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALOutput)
@@ -96,7 +98,11 @@ public class SRAudioRecorder {
             }
             
             // Configure Callbacks
-            try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALOutput)
+            #if os(OSX)
+                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALOutput)
+            #else
+                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALInput)
+            #endif
             try self.au!.setEnableCallbackBufferAllocation(false, scope: kAudioUnitScope_Output, bus: BusHALInput)
             
             try self.au!.initialize()
