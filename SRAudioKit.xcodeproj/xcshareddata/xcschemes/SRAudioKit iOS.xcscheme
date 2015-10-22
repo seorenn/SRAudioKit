@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "8A84F8051BAC08D700C81D09"
                BuildableName = "SRAudioKit.framework"
-               BlueprintName = "SRAudioKit"
+               BlueprintName = "SRAudioKit iOS"
                ReferencedContainer = "container:SRAudioKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,7 +47,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8A84F8051BAC08D700C81D09"
             BuildableName = "SRAudioKit.framework"
-            BlueprintName = "SRAudioKit"
+            BlueprintName = "SRAudioKit iOS"
             ReferencedContainer = "container:SRAudioKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -65,7 +65,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "8A84F8051BAC08D700C81D09"
             BuildableName = "SRAudioKit.framework"
-            BlueprintName = "SRAudioKit"
+            BlueprintName = "SRAudioKit iOS"
             ReferencedContainer = "container:SRAudioKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

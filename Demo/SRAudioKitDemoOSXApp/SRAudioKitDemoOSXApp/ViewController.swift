@@ -9,7 +9,7 @@
 import Cocoa
 import CoreAudio
 import AudioToolbox
-import SRAudioKitOSX
+import SRAudioKit
 
 class ViewController: NSViewController {
     

@@ -30,12 +30,12 @@
 			remoteGlobalIDString = 8A84F81A1BAC08E000C81D09;
 			remoteInfo = SRAudioKitOSX;
 		};
-		8A57B2D01BB28115009D6388 /* PBXContainerItemProxy */ = {
+		8AAF8F261BD8E7480079EDC3 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 8A57B2C51BB2810C009D6388 /* SRAudioKit.xcodeproj */;
 			proxyType = 1;
 			remoteGlobalIDString = 8A84F8111BAC08E000C81D09;
-			remoteInfo = SRAudioKitOSX;
+			remoteInfo = "SRAudioKit OSX";
 		};
 /* End PBXContainerItemProxy section */
 
@@ -128,7 +128,7 @@
 			buildRules = (
 			);
 			dependencies = (
-				8A57B2D11BB28115009D6388 /* PBXTargetDependency */,
+				8AAF8F271BD8E7480079EDC3 /* PBXTargetDependency */,
 			);
 			name = SRAudioKitDemoOSXApp;
 			productName = SRAudioKitDemoOSXApp;
@@ -215,10 +215,10 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
-		8A57B2D11BB28115009D6388 /* PBXTargetDependency */ = {
+		8AAF8F271BD8E7480079EDC3 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			name = SRAudioKitOSX;
-			targetProxy = 8A57B2D01BB28115009D6388 /* PBXContainerItemProxy */;
+			name = "SRAudioKit OSX";
+			targetProxy = 8AAF8F261BD8E7480079EDC3 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
