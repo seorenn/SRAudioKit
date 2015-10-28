@@ -31,14 +31,18 @@ public class SRAudioDevice: CustomDebugStringConvertible {
             return ""
         #endif
     }
-    
+
+    #if os(OSX)
     public var numberInputChannels: Int {
         return Int(SRAudioGetNumberOfDeviceInputChannels(self.deviceID))
     }
+    #endif
     
+    #if os(OSX)
     public var numberOutputChannels: Int {
         return Int(SRAudioGetNumberOfDeviceOutputChannels(self.deviceID))
     }
+    #endif
     
     #if os(OSX)
     public init(deviceID: AudioDeviceID) {
