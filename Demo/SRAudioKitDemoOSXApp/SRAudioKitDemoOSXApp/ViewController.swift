@@ -42,7 +42,7 @@ class ViewController: NSViewController {
         let outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
         print("Output Config: \(outputConfig)")
         
-        guard let recorder = SRAudioRecorder(inputDevice: device, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
+        guard let recorder = SRAudioRecorder(inputDevice: device, channelMap: nil, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
             print("Failed to initialize SRAudioRecorder")
             return
         }

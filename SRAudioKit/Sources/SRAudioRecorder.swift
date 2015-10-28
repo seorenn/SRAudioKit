@@ -51,7 +51,7 @@ public class SRAudioRecorder {
     
     public private(set) var recording: Bool = false
     
-    public init?(inputDevice: SRAudioDevice?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileType: SRAudioFileType) {
+    public init?(inputDevice: SRAudioDevice?, channelMap: [Int32]?, outputPath: String, streamDescription: AudioStreamBasicDescription, outputFileType: SRAudioFileType) {
         let desc = AudioComponentDescription.HAL()
         self.au = SRAudioUnit(description: desc)
         if self.au == nil { return nil }
@@ -76,9 +76,12 @@ public class SRAudioRecorder {
             let outputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Input, bus: SRAudioRecorderOutputBus)
             print("IO-AU Output Scope Format: \(outputScopeFormat)")
                 
-//            #if os(OSX)
+            #if os(OSX)
+                if let map = channelMap {
+                    try self.au!.setChannelMap(map, scope: kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
+                }
 //                try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
-//            #endif
+            #endif
             
             try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: SRAudioRecorderInputBus)
             try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: SRAudioRecorderOutputBus)
