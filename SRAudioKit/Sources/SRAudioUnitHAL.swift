@@ -88,6 +88,7 @@ public class SRAudioUnitHAL: SRAudioUnit {
     
     // TODO: Implement Output Device Properties
     
+    #if os(OSX)
     public var inputDeviceChannelMap: [Int32]? {
         set {
             do {
@@ -120,4 +121,5 @@ public class SRAudioUnitHAL: SRAudioUnit {
             }
         }
     }
+    #endif
 }
