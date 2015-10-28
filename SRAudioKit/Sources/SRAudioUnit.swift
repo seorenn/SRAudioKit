@@ -109,6 +109,8 @@ public class SRAudioUnit: CustomDebugStringConvertible {
         #endif
     }
     
+    // Maybe not used
+    /*
     public func setChannelMap(channels: SRAudioDeviceIOChannels, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
         #if os(OSX)
             var channelMap = [Bool]()
@@ -119,7 +121,10 @@ public class SRAudioUnit: CustomDebugStringConvertible {
             try self.setChannelMap(channelMap, scope: scope, bus: bus)
         #endif
     }
+    */
     
+    // Maybe not used
+    /*
     public func setChannelMap(channelMap: [Bool], scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws {
         #if os(OSX)
             let dataPtr = UnsafeMutablePointer<Int32>.alloc(channelMap.count)
@@ -140,7 +145,20 @@ public class SRAudioUnit: CustomDebugStringConvertible {
             }
         #endif
     }
+    */
     
+    public func setChannelMap(channelMap: [Int32], scope: AudioUnitScope, bus: AudioUnitElement) throws {
+        var mutableMap = channelMap
+        let size = UInt32(channelMap.count * sizeof(Int32))
+        let res = AudioUnitSetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, &mutableMap, size)
+        
+        if res != noErr {
+            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.setChannelMap \(channelMap) scope \(scope) bus \(bus)")
+        }
+    }
+    
+    // Maybe not used
+    /*
     public func getChannelMap(numberInputChannels: Int, scope: AudioUnitScope = kAudioUnitScope_Output, bus: AudioUnitElement = 1) throws -> [Bool]? {
         #if os(OSX)
             let dataPtr = UnsafeMutablePointer<Int32>.alloc(numberInputChannels)
@@ -164,6 +182,32 @@ public class SRAudioUnit: CustomDebugStringConvertible {
             return result
         #else
            return nil
+        #endif
+    }
+    */
+    
+    public func getChannelMap(numberInputChannels: Int, scope: AudioUnitScope, bus: AudioUnitElement) throws -> [Int32] {
+        #if os(OSX)
+            let dataPtr = UnsafeMutablePointer<Int32>.alloc(numberInputChannels)
+            defer { dataPtr.dealloc(numberInputChannels) }
+            
+            var size = UInt32(numberInputChannels * sizeof(Int32))
+            var result = [Int32]()
+            
+            let res = AudioUnitGetProperty(self.audioUnit, kAudioOutputUnitProperty_ChannelMap, scope, bus, dataPtr, &size)
+            guard res == noErr else {
+                throw SRAudioError.OSStatusError(status: res, description: "[SRAudioUnit.getChannelMap numberInputChannels \(numberInputChannels) scope \(scope) bus \(bus)]")
+            }
+            
+            var curPtr = dataPtr
+            for _ in 0..<numberInputChannels {
+                result.append(curPtr.memory)
+                curPtr = curPtr.successor()
+            }
+            
+            return result
+        #else
+            return [Int32]()
         #endif
     }
     

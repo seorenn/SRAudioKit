@@ -10,6 +10,12 @@ import Foundation
 import CoreAudioKit
 import AudioToolbox
 
+internal func L(message: String) {
+    #if DEBUG
+        print(message)
+    #endif
+}
+
 // BASIC THEORY
 
 /* 
