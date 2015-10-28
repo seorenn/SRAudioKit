@@ -31,6 +31,8 @@
 		8A57B2C41BB27A0B009D6388 /* SRAudioDevice.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8A57B2BF1BB2764C009D6388 /* SRAudioDevice.swift */; };
 		8A84F80A1BAC08D700C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		8A84F8151BAC08E000C81D09 /* SRAudioKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 8A84F8091BAC08D700C81D09 /* SRAudioKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		8AAF8F331BDA06640079EDC3 /* SRAudioUnitHAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAF8F321BDA06640079EDC3 /* SRAudioUnitHAL.swift */; };
+		8AAF8F341BDA06640079EDC3 /* SRAudioUnitHAL.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8AAF8F321BDA06640079EDC3 /* SRAudioUnitHAL.swift */; };
 		8ADD367D1BC4E7EA00BB5505 /* SRAudioBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADD367C1BC4E7EA00BB5505 /* SRAudioBuffer.swift */; };
 		8ADD367E1BC4E7EC00BB5505 /* SRAudioBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8ADD367C1BC4E7EA00BB5505 /* SRAudioBuffer.swift */; };
 /* End PBXBuildFile section */
@@ -52,6 +54,7 @@
 		8A84F80B1BAC08D700C81D09 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		8A84F81A1BAC08E000C81D09 /* SRAudioKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SRAudioKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		8A84F8241BAC0A9900C81D09 /* module.modulemap */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = "sourcecode.module-map"; path = module.modulemap; sourceTree = "<group>"; };
+		8AAF8F321BDA06640079EDC3 /* SRAudioUnitHAL.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioUnitHAL.swift; path = Sources/SRAudioUnitHAL.swift; sourceTree = "<group>"; };
 		8ADD367C1BC4E7EA00BB5505 /* SRAudioBuffer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = SRAudioBuffer.swift; path = Sources/SRAudioBuffer.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -87,9 +90,9 @@
 		8A14F8AC1BB3D7A50037A28B /* Low Level Wrapper */ = {
 			isa = PBXGroup;
 			children = (
+				8AAF8F311BDA06220079EDC3 /* AudioUnit */,
 				8A14F8AD1BB3D7CD0037A28B /* SRAUGraph.swift */,
 				8A14F8AF1BB3D8700037A28B /* SRAUNode.swift */,
-				8A14F8B11BB3D87B0037A28B /* SRAudioUnit.swift */,
 			);
 			name = "Low Level Wrapper";
 			sourceTree = "<group>";
@@ -167,6 +170,15 @@
 			);
 			name = SRAudioKitPrivates;
 			path = Sources/SRAudioKitPrivates;
+			sourceTree = "<group>";
+		};
+		8AAF8F311BDA06220079EDC3 /* AudioUnit */ = {
+			isa = PBXGroup;
+			children = (
+				8A14F8B11BB3D87B0037A28B /* SRAudioUnit.swift */,
+				8AAF8F321BDA06640079EDC3 /* SRAudioUnitHAL.swift */,
+			);
+			name = AudioUnit;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -287,6 +299,7 @@
 				8A14F8AE1BB3D7CD0037A28B /* SRAUGraph.swift in Sources */,
 				8A14F8B01BB3D8700037A28B /* SRAUNode.swift in Sources */,
 				8A14F8B21BB3D87B0037A28B /* SRAudioUnit.swift in Sources */,
+				8AAF8F331BDA06640079EDC3 /* SRAudioUnitHAL.swift in Sources */,
 				8A57B2BE1BB2761F009D6388 /* SRAudioDeviceManager.swift in Sources */,
 				8A3FA7691BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */,
 				8ADD367D1BC4E7EA00BB5505 /* SRAudioBuffer.swift in Sources */,
@@ -305,6 +318,7 @@
 				8A14F8B61BB3DA970037A28B /* SRAUGraph.swift in Sources */,
 				8A14F8B71BB3DA9A0037A28B /* SRAUNode.swift in Sources */,
 				8A14F8B81BB3DA9E0037A28B /* SRAudioUnit.swift in Sources */,
+				8AAF8F341BDA06640079EDC3 /* SRAudioUnitHAL.swift in Sources */,
 				8A57B2C31BB27A08009D6388 /* SRAudioDeviceManager.swift in Sources */,
 				8A3FA76A1BBBDA6E00624D69 /* SRAudioFileWriter.swift in Sources */,
 				8ADD367E1BC4E7EC00BB5505 /* SRAudioBuffer.swift in Sources */,

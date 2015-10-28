@@ -11,9 +11,10 @@ import CoreAudioKit
 import AudioToolbox
 import SRAudioKitPrivates
 
-let BusHALInput = AudioUnitElement(1)
-let BusHALOutput = AudioUnitElement(0)
-let SRAudioRecorderDefaultFrameSize = UInt32(1024)
+private let SRAudioRecorderInputBus = AudioUnitElement(1)
+private let SRAudioRecorderOutputBus = AudioUnitElement(0)
+
+private let SRAudioRecorderDefaultFrameSize = UInt32(1024)
 
 public class SRAudioRecorder {
     var au: SRAudioUnit?
@@ -57,34 +58,34 @@ public class SRAudioRecorder {
         
         do {
             // Enable Input Scope
-            try self.au!.enableIO(true, scope: kAudioUnitScope_Input, bus: BusHALInput)
+            try self.au!.enableIO(true, scope: kAudioUnitScope_Input, bus: SRAudioRecorderInputBus)
             
             #if os(OSX)
                 // Disable Output Scope
-                try self.au!.enableIO(false, scope: kAudioUnitScope_Output, bus: BusHALOutput)
+                try self.au!.enableIO(false, scope: kAudioUnitScope_Output, bus: SRAudioRecorderOutputBus)
             #endif
             
             let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
-            try self.au!.setDevice(dev, bus: BusHALOutput)
+            try self.au!.setDevice(dev, bus: SRAudioRecorderOutputBus)
             
-            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: BusHALOutput)
-            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Output, bus: BusHALInput)
+            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: SRAudioRecorderOutputBus)
+            try self.au!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
 
-            let inputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Output, bus: BusHALInput)
+            let inputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
             print("IO-AU Input Scope Format: \(inputScopeFormat)")
-            let outputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Input, bus: BusHALOutput)
+            let outputScopeFormat = try self.au!.getStreamFormat(kAudioUnitScope_Input, bus: SRAudioRecorderOutputBus)
             print("IO-AU Output Scope Format: \(outputScopeFormat)")
                 
-            #if os(OSX)
-                try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: BusHALInput)
-            #endif
+//            #if os(OSX)
+//                try self.au!.setChannelMap(dev.inputChannels, scope: kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
+//            #endif
             
-            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALInput)
-            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: BusHALOutput)
+            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: SRAudioRecorderInputBus)
+            try self.au!.setBufferFrameSize(SRAudioRecorderDefaultFrameSize, bus: SRAudioRecorderOutputBus)
             
             // Prepare Buffer
             
-            let frameSize = try self.au!.getBufferFrameSize(BusHALInput)
+            let frameSize = try self.au!.getBufferFrameSize(SRAudioRecorderInputBus)
             self.buffer = SRAudioBuffer(ASBD: inputScopeFormat, frameCapacity: frameSize)
             
             let fileFormat = try AudioStreamBasicDescription.genericCompressedDescription(outputFileType.audioFormatID, numberOfChannels: inputScopeFormat.mChannelsPerFrame)
@@ -99,11 +100,11 @@ public class SRAudioRecorder {
             
             // Configure Callbacks
             #if os(OSX)
-                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALOutput)
+                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: SRAudioRecorderOutputBus)
             #else
-                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: BusHALInput)
+                try self.au!.setInputCallback(callbackStruct, scope: kAudioUnitScope_Global, bus: SRAudioRecorderInputBus)
             #endif
-            try self.au!.setEnableCallbackBufferAllocation(false, scope: kAudioUnitScope_Output, bus: BusHALInput)
+            try self.au!.setEnableCallbackBufferAllocation(false, scope: kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
             
             try self.au!.initialize()
         }
@@ -215,17 +216,17 @@ public class SRAudioRecorderWithGraph {
             self.ioAudioUnit = try self.graph!.nodeInfo(self.ioNode!)
             
             // Enable Input Scope
-            try self.ioAudioUnit!.enableIO(true, scope: kAudioUnitScope_Input, bus: BusHALInput)
+            try self.ioAudioUnit!.enableIO(true, scope: kAudioUnitScope_Input, bus: SRAudioRecorderInputBus)
             // Disable Output Scope
-            try self.ioAudioUnit!.enableIO(false, scope: kAudioUnitScope_Output, bus: BusHALOutput)
+            try self.ioAudioUnit!.enableIO(false, scope: kAudioUnitScope_Output, bus: SRAudioRecorderOutputBus)
             
             let dev: SRAudioDevice = inputDevice ?? SRAudioDeviceManager.sharedManager.defaultInputDevice!
-            try self.ioAudioUnit!.setDevice(dev, bus: BusHALOutput)
+            try self.ioAudioUnit!.setDevice(dev, bus: SRAudioRecorderOutputBus)
             
             #if os(OSX)
-                let inputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Output, bus: BusHALInput)
+                let inputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Output, bus: SRAudioRecorderInputBus)
                 print("IO-AU Input Scope Format: \(inputScopeFormat)")
-                let outputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Input, bus: BusHALOutput)
+                let outputScopeFormat = try self.ioAudioUnit!.getStreamFormat(kAudioUnitScope_Input, bus: SRAudioRecorderOutputBus)
                 print("IO-AU Output Scope Format: \(outputScopeFormat)")
             #endif
             
@@ -269,9 +270,9 @@ public class SRAudioRecorderWithGraph {
             
             let callbackStruct = AURenderCallbackStruct(inputProc: callback, inputProcRefCon: selfPointer)
             */
-            try! self.graph!.setNodeInputCallback(self.ioNode!, destInputNumber: BusHALOutput, callback: self.callbackStruct)
+            try! self.graph!.setNodeInputCallback(self.ioNode!, destInputNumber: SRAudioRecorderOutputBus, callback: self.callbackStruct)
             
-            try self.ioAudioUnit!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: BusHALOutput)
+            try self.ioAudioUnit!.setStreamFormat(streamDescription, scope: kAudioUnitScope_Input, bus: SRAudioRecorderOutputBus)
             
             try self.graph!.initialize()
         }

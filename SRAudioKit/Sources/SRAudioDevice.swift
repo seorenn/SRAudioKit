@@ -11,76 +11,9 @@ import AudioToolbox
 import CoreAudio
 import SRAudioKitPrivates
     
-private enum SRAudioDeviceIOChannelsType {
-    case Unknown, Input, Output
-}
-
-public class SRAudioDeviceIOChannels: CustomDebugStringConvertible {
-    #if os(OSX)
-        private let deviceID: AudioDeviceID
-        private var channelEnables: [Bool]
-        private let type: SRAudioDeviceIOChannelsType
-    
-        public let count: Int
-    #endif
-
-    #if os(OSX)
-    private init(deviceID: AudioDeviceID, type: SRAudioDeviceIOChannelsType) {
-        self.deviceID = deviceID
-        self.type = type
-        
-        if (type == .Input) {
-            self.count = Int(SRAudioGetNumberOfDeviceInputChannels(self.deviceID))
-        } else {
-            self.count = Int(SRAudioGetNumberOfDeviceOutputChannels(self.deviceID))
-        }
-        
-        self.channelEnables = [Bool](count: self.count, repeatedValue: true)
-    }
-    #endif
-    
-    public func enableChannel(channelIndex: Int, value: Bool) {
-        #if os(OSX)
-            guard channelIndex >= 0 && channelIndex < self.count else { return }
-            self[channelIndex] = value
-        #endif
-    }
-
-    public subscript(index: Int) -> Bool {
-        set {
-            #if os(OSX)
-                self.channelEnables[index] = newValue
-            #endif
-        }
-        get {
-            #if os(OSX)
-                return self.channelEnables[index]
-            #else
-                return false
-            #endif
-        }
-    }
-    
-    public var debugDescription: String {
-        #if os(OSX)
-            let typeString = self.type == .Input ? "IN" : "OUT"
-            var enables = ""
-            for i in 0..<self.count {
-                enables = enables + (self[i] ? "o" : ".")
-            }
-            
-            return "<SRAudioDeviceIOChannels \(typeString) \(self.count) Ports [\(enables)]>"
-        #else
-            return "<SRAudioDeviceIOChannels>"
-        #endif
-    }
-}
-    
 public class SRAudioDevice: CustomDebugStringConvertible {
     #if os(OSX)
         public let deviceID: AudioDeviceID
-        public let inputChannels: SRAudioDeviceIOChannels
-        public let outputChannels: SRAudioDeviceIOChannels
     #endif
 
     public var name: String {
@@ -99,17 +32,23 @@ public class SRAudioDevice: CustomDebugStringConvertible {
         #endif
     }
     
+    public var numberInputChannels: Int {
+        return Int(SRAudioGetNumberOfDeviceInputChannels(self.deviceID))
+    }
+    
+    public var numberOutputChannels: Int {
+        return Int(SRAudioGetNumberOfDeviceOutputChannels(self.deviceID))
+    }
+    
     #if os(OSX)
     public init(deviceID: AudioDeviceID) {
         self.deviceID = deviceID
-        self.inputChannels = SRAudioDeviceIOChannels(deviceID: self.deviceID, type: .Input)
-        self.outputChannels = SRAudioDeviceIOChannels(deviceID: self.deviceID, type: .Output)
     }
     #endif
     
     public var debugDescription: String {
         #if os(OSX)
-            return "<SRAudioDevice \"\(self.name)(\(self.deviceID))\" IN(\(self.inputChannels.count)) OUT(\(self.outputChannels.count))>"
+            return "<SRAudioDevice \"\(self.name)(\(self.deviceID))\" IN(\(self.numberInputChannels)) OUT(\(self.numberOutputChannels))>"
         #else
             return "<SRAudioDevice>"
         #endif
