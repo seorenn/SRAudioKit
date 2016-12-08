@@ -10,8 +10,8 @@
 import AudioToolbox
 import CoreAudio
 
-public class SRAudioUnitHAL: SRAudioUnit {
-    public var outputStreamFormat: AudioStreamBasicDescription? {
+open class SRAudioUnitHAL: SRAudioUnit {
+    open var outputStreamFormat: AudioStreamBasicDescription? {
         // Getter only
         // AUHAL, Output Scope, Element 0
         
@@ -28,7 +28,7 @@ public class SRAudioUnitHAL: SRAudioUnit {
         }
     }
     
-    public var inputStreamFormat: AudioStreamBasicDescription? {
+    open var inputStreamFormat: AudioStreamBasicDescription? {
         // AUHAL, Input Scope, Element 1
         set {
             do {
@@ -57,7 +57,7 @@ public class SRAudioUnitHAL: SRAudioUnit {
     }
     
     internal var inputDeviceObject: SRAudioDevice? = nil
-    public var inputDevice: SRAudioDevice? {
+    open var inputDevice: SRAudioDevice? {
         set {
             do {
                 guard let device = newValue else { return }

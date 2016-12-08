@@ -11,10 +11,10 @@ import SRAudioKitPrivates
 import AudioToolbox
 import CoreAudio
 
-public class SRAudioDeviceManager {
-    public static let sharedManager: SRAudioDeviceManager = SRAudioDeviceManager()
+open class SRAudioDeviceManager {
+    open static let sharedManager: SRAudioDeviceManager = SRAudioDeviceManager()
 
-    public var devices: [SRAudioDevice] {
+    open var devices: [SRAudioDevice] {
         #if os(OSX)
             var dataSize: UInt32 = 0;
             var results = [SRAudioDevice]()
@@ -28,11 +28,11 @@ public class SRAudioDeviceManager {
             
             guard err == noErr else { return results }
             
-            let count = Int(dataSize / UInt32(sizeof(AudioObjectID)))
+            let count = Int(dataSize / UInt32(MemoryLayout<AudioObjectID>.size))
             guard count > 0 else { return results }
 
-            let devicesPtr = UnsafeMutablePointer<AudioObjectID>.alloc(Int(dataSize))
-            defer { devicesPtr.dealloc(Int(dataSize)) }
+            let devicesPtr = UnsafeMutablePointer<AudioObjectID>.allocate(capacity: Int(dataSize))
+            defer { devicesPtr.deallocate(capacity: Int(dataSize)) }
             
             err = AudioObjectGetPropertyData(AudioObjectID(kAudioObjectSystemObject), &address, 0, nil, &dataSize, devicesPtr);
 
@@ -40,7 +40,7 @@ public class SRAudioDeviceManager {
             
             var curPtr = devicesPtr
             for _ in 0..<count {
-                let deviceID = curPtr.memory
+                let deviceID = curPtr.pointee
                 let d = SRAudioDevice(deviceID: deviceID)
                 results.append(d)
                 
@@ -53,9 +53,9 @@ public class SRAudioDeviceManager {
         #endif
     }
     
-    public var defaultInputDevice: SRAudioDevice? {
+    open var defaultInputDevice: SRAudioDevice? {
         #if os(OSX)
-            var size = UInt32(sizeof(AudioDeviceID))
+            var size = UInt32(MemoryLayout<AudioDeviceID>.size)
             var deviceID = AudioDeviceID()
             var address = AudioObjectPropertyAddress(
                 mSelector: kAudioHardwarePropertyDefaultInputDevice,

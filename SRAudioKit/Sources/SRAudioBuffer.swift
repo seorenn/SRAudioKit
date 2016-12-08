@@ -10,11 +10,11 @@ import CoreAudio
 import AudioToolbox
 import SRAudioKitPrivates
 
-public class SRAudioBuffer {
-    public private(set) var audioBufferList: UnsafeMutableAudioBufferListPointer
+open class SRAudioBuffer {
+    open fileprivate(set) var audioBufferList: UnsafeMutableAudioBufferListPointer
 
     public init(ASBD: AudioStreamBasicDescription, frameCapacity: UInt32) {
-        self.audioBufferList = UnsafeMutableAudioBufferListPointer(SRAudioAllocateBufferList(ASBD, frameCapacity))
+        self.audioBufferList = UnsafeMutableAudioBufferListPointer(SRAudioAllocateBufferList(ASBD, frameCapacity))!
         
         print("[SRAudioBuffer] Buffer Count: \(self.audioBufferList.count)")
         for b in self.audioBufferList {
@@ -27,8 +27,8 @@ public class SRAudioBuffer {
     }
     
     // Sideway Wrapper of AudioUnitRender ;-)
-    public func render(
-        audioUnit audioUnit: SRAudioUnit,
+    open func render(
+        audioUnit: SRAudioUnit,
         ioActionFlags: UnsafeMutablePointer<AudioUnitRenderActionFlags>,
         inTimeStamp: UnsafePointer<AudioTimeStamp>,
         inOutputBusNumber: UInt32,
@@ -37,15 +37,15 @@ public class SRAudioBuffer {
         let res = AudioUnitRender(audioUnit.audioUnit, ioActionFlags, inTimeStamp, inOutputBusNumber, inNumberFrames, self.audioBufferList.unsafeMutablePointer)
         
         if res != noErr {
-            throw SRAudioError.OSStatusError(status: res, description: "[SRAudioBuffer.render]")
+            throw SRAudioError.osStatusError(status: res, description: "[SRAudioBuffer.render]")
         }
     }
     
-    public func copy(source: UnsafeMutableAudioBufferListPointer) {
+    open func copy(_ source: UnsafeMutableAudioBufferListPointer) {
         SRAudioCopyBufferList(source.unsafeMutablePointer, self.audioBufferList.unsafeMutablePointer)
     }
 
-    public func copy(source: UnsafeMutablePointer<AudioBufferList>) {
+    open func copy(_ source: UnsafeMutablePointer<AudioBufferList>) {
         SRAudioCopyBufferList(source, self.audioBufferList.unsafeMutablePointer)
     }
 }

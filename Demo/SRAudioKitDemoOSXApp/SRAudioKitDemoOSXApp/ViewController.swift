@@ -25,18 +25,18 @@ class ViewController: NSViewController {
         }
     }
     
-    func startRecord(outputPath: String) {
+    func startRecord(_ outputPath: String) {
         guard let device = SRAudioDeviceManager.sharedManager.defaultInputDevice else {
             print("Failed to get default input device")
             return
         }
         
-        let type = SRAudioFileType.AAC
+        let type = SRAudioFileType.aac
         
         print("Start Record with Output Path: \(outputPath)")
         print("Using Input Device: \(device)")
         
-        let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .SignedInteger16Bit, interleaved: true)
+        let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .signedInteger16Bit, interleaved: true)
         print("Input Config: \(inputConfig)")
         
         let outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
@@ -60,13 +60,13 @@ class ViewController: NSViewController {
         recorder.stopRecord()
     }
 
-    override var representedObject: AnyObject? {
+    override var representedObject: Any? {
         didSet {
         // Update the view, if already loaded.
         }
     }
     
-    @IBAction func pressedReccordButton(sender: AnyObject) {
+    @IBAction func pressedReccordButton(_ sender: AnyObject) {
         let outputPath = "/Users/hirenn/Desktop/output.aac"
         if let recorder = self.recorder {
             if recorder.recording {

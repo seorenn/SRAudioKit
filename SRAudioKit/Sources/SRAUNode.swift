@@ -10,7 +10,7 @@ import Foundation
 import CoreAudioKit
 import AudioToolbox
 
-public class SRAUNode {
+open class SRAUNode {
     let node: AUNode
     
     public init(node: AUNode) {

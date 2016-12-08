@@ -12,7 +12,7 @@ import SRAudioKitPrivates
 
 // MARK: - Error Types
 
-public func OSStatusErrorDescription(status: OSStatus) -> String {
+public func OSStatusErrorDescription(_ status: OSStatus) -> String {
     switch (status) {
     // ExtAudioFile
     case kExtAudioFileError_InvalidProperty:
@@ -105,21 +105,21 @@ public func OSStatusErrorDescription(status: OSStatus) -> String {
     }
 }
 
-public enum SRAudioError: ErrorType, CustomStringConvertible {
-    case UnknownError
-    case GenericError(description: String)
-    case OSStatusError(status: OSStatus, description: String)
-    case IncompatibleAudioBuffer
+public enum SRAudioError: Error, CustomStringConvertible {
+    case unknownError
+    case genericError(description: String)
+    case osStatusError(status: OSStatus, description: String)
+    case incompatibleAudioBuffer
     
     public var description: String {
         switch (self) {
-        case .UnknownError:
+        case .unknownError:
             return "Unknown Error"
-        case .GenericError(let description):
+        case .genericError(let description):
             return "Generic Error: \(description)"
-        case .OSStatusError(let status, let description):
+        case .osStatusError(let status, let description):
             return "OSStatus Error: \(description) \(status)(\(OSStatusString(status))) -> \(OSStatusErrorDescription(status))"
-        case .IncompatibleAudioBuffer:
+        case .incompatibleAudioBuffer:
             return "Incompatible Audio Buffer"
         }
     }
@@ -128,20 +128,20 @@ public enum SRAudioError: ErrorType, CustomStringConvertible {
 // MARK: - Another Types
 
 public enum SRAudioFrameType: Int {
-    case Unknown = 0
-    case Float32Bit = 1
-    case SignedInteger16Bit = 2
-    case SignedInteger32Bit = 3
+    case unknown = 0
+    case float32Bit = 1
+    case signedInteger16Bit = 2
+    case signedInteger32Bit = 3
 }
 
 public enum SRAudioFileType {
-    case AIFF, WAVE, MP3, AAC //, AC3, MPEG4, MP3
+    case aiff, wave, mp3, aac //, AC3, MPEG4, MP3
     
     public var compressedType: Bool {
         switch (self) {
-        case .AIFF:
+        case .aiff:
             return false
-        case .WAVE:
+        case .wave:
             return false
         default:
             return true
@@ -150,26 +150,26 @@ public enum SRAudioFileType {
     
     public var audioFormatID: OSType {
         switch (self) {
-        case .AIFF:
+        case .aiff:
             return kAudioFormatLinearPCM
-        case .WAVE:
+        case .wave:
             return kAudioFormatLinearPCM
-        case .MP3:
+        case .mp3:
             return kAudioFormatMPEGLayer3
-        case .AAC:
+        case .aac:
             return kAudioFormatMPEG4AAC
         }
     }
     
     public var audioFileTypeID: AudioFileTypeID {
         switch (self) {
-        case .AIFF:
+        case .aiff:
             return kAudioFileAIFFType
-        case .WAVE:
+        case .wave:
             return kAudioFileWAVEType
-        case .MP3:
+        case .mp3:
             return kAudioFileMP3Type
-        case .AAC:
+        case .aac:
             return kAudioFileAAC_ADTSType
         }
     }

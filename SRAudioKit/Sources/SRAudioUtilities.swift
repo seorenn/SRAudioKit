@@ -10,7 +10,7 @@ import Foundation
 import CoreAudioKit
 import AudioToolbox
 
-internal func L(message: String) {
+internal func L(_ message: String) {
     #if DEBUG
         print(message)
     #endif
@@ -32,24 +32,24 @@ Each individual buffer consists of one channel of data
 // MARK: - AudioStreamBasicDescription Generators
 
 public extension AudioStreamBasicDescription {
-    public static func genericUncompressedDescription(sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType, interleaved: Bool) -> AudioStreamBasicDescription {
+    public static func genericUncompressedDescription(_ sampleRate: Float64, numberOfChannels: UInt32, frameType: SRAudioFrameType, interleaved: Bool) -> AudioStreamBasicDescription {
         //let commonFlags = kAudioFormatFlagIsBigEndian | kAudioFormatFlagIsPacked
         let commonFlags = kAudioFormatFlagIsPacked
         let formatFlags: UInt32
         let sampleSize: UInt32
         
-        if frameType == .SignedInteger16Bit {
+        if frameType == .signedInteger16Bit {
             // SInt16
             formatFlags = commonFlags | kAudioFormatFlagIsSignedInteger
-            sampleSize = UInt32(sizeof(Int16))
-        } else if frameType == .SignedInteger32Bit {
+            sampleSize = UInt32(MemoryLayout<Int16>.size)
+        } else if frameType == .signedInteger32Bit {
             // SInt32
             formatFlags = commonFlags | kAudioFormatFlagIsSignedInteger
-            sampleSize = UInt32(sizeof(Int32))
+            sampleSize = UInt32(MemoryLayout<Int32>.size)
         } else {
             // Float32
             formatFlags = commonFlags | kAudioFormatFlagIsFloat
-            sampleSize = UInt32(sizeof(Float32))
+            sampleSize = UInt32(MemoryLayout<Float32>.size)
         }
 
         let bytesPerFrame: UInt32
@@ -72,24 +72,24 @@ public extension AudioStreamBasicDescription {
             mReserved: 0)
     }
 
-    public static func genericCompressedDescription(formatID: OSType, numberOfChannels: UInt32) throws -> AudioStreamBasicDescription {
+    public static func genericCompressedDescription(_ formatID: OSType, numberOfChannels: UInt32) throws -> AudioStreamBasicDescription {
         var asbd = AudioStreamBasicDescription()
         asbd.mFormatID = formatID
         asbd.mChannelsPerFrame = numberOfChannels
         
-        var size = UInt32(sizeof(AudioStreamBasicDescription))
+        var size = UInt32(MemoryLayout<AudioStreamBasicDescription>.size)
         
         let res = AudioFormatGetProperty(kAudioFormatProperty_FormatInfo, 0, nil, &size, &asbd)
         guard res == noErr else {
-            throw SRAudioError.OSStatusError(status: res, description: "AudioStreamBasicDescription.genericCompressedDescription formatID \(formatID) numberOfChannels \(numberOfChannels)")
+            throw SRAudioError.osStatusError(status: res, description: "AudioStreamBasicDescription.genericCompressedDescription formatID \(formatID) numberOfChannels \(numberOfChannels)")
         }
         
         return asbd
     }
 
-    public static func fileTypeDescription(type: SRAudioFileType) -> AudioStreamBasicDescription {
+    public static func fileTypeDescription(_ type: SRAudioFileType) -> AudioStreamBasicDescription {
         switch (type) {
-        case .AIFF:
+        case .aiff:
             return AudioStreamBasicDescription(
                 mSampleRate: 44100,
                 mFormatID: kAudioFormatLinearPCM,
@@ -100,7 +100,7 @@ public extension AudioStreamBasicDescription {
                 mChannelsPerFrame: 2,
                 mBitsPerChannel: 32,
                 mReserved: 0)
-        case .WAVE:
+        case .wave:
             return AudioStreamBasicDescription(
                 mSampleRate: 44100,
                 mFormatID: kAudioFormatLinearPCM,
@@ -152,20 +152,20 @@ public extension AudioComponentDescription {
 
 // TODO: NOT USED IN CURRENTLY. REMOVE OR USE THIS! :-)
 public extension UInt32 {
-    public func flagged(flag: UInt32) -> UInt32 {
+    public func flagged(_ flag: UInt32) -> UInt32 {
         return self | flag
     }
     
-    public func unflagged(flag: UInt32) -> UInt32 {
+    public func unflagged(_ flag: UInt32) -> UInt32 {
         return self & ~flag
     }
     
-    public func isFlagged(flag: UInt32) -> Bool {
+    public func isFlagged(_ flag: UInt32) -> Bool {
         return (self & flag) == flag
     }
 }
 
-public func SRAudioGetDuration(sampleRate: Float64, framesPerPacket: UInt32) -> Float64 {
+public func SRAudioGetDuration(_ sampleRate: Float64, framesPerPacket: UInt32) -> Float64 {
     let unit = Float64( 1.0 / Float64(sampleRate) )
     return unit * Float64(framesPerPacket)
 }
