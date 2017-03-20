@@ -11,12 +11,12 @@ import AudioToolbox
 import CoreAudio
 import SRAudioKitPrivates
     
-open class SRAudioDevice: CustomDebugStringConvertible {
+public class SRAudioDevice: CustomDebugStringConvertible {
     #if os(OSX)
         public let deviceID: AudioDeviceID
     #endif
 
-    open var name: String {
+    public var name: String {
         #if os(OSX)
             return SRAudioGetDeviceName(self.deviceID) ?? "Unknown Device Name"
         #else
@@ -24,7 +24,7 @@ open class SRAudioDevice: CustomDebugStringConvertible {
         #endif
     }
     
-    open var deviceUID: String {
+    public var deviceUID: String {
         #if os(OSX)
             return SRAudioGetDeviceUID(self.deviceID) ?? "Unknown Device UID"
         #else
