@@ -39,7 +39,8 @@ class ViewController: NSViewController {
         let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .signedInteger16Bit, interleaved: true)
         print("Input Config: \(inputConfig)")
         
-        let outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
+        var outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
+        outputConfig.mSampleRate = 44100
         print("Output Config: \(outputConfig)")
         
         guard let recorder = SRAudioRecorder(inputDevice: device, channelMap: nil, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
