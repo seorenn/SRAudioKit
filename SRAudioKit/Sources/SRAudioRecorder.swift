@@ -92,7 +92,8 @@ open class SRAudioRecorder {
       let frameSize = try self.au!.getBufferFrameSize(SRAudioRecorderInputBus)
       self.buffer = SRAudioBuffer(ASBD: inputScopeFormat, frameCapacity: frameSize)
       
-      let fileFormat = try AudioStreamBasicDescription.genericCompressedDescription(outputFileType.audioFormatID, numberOfChannels: inputScopeFormat.mChannelsPerFrame)
+      var fileFormat = try AudioStreamBasicDescription.genericCompressedDescription(outputFileType.audioFormatID, numberOfChannels: inputScopeFormat.mChannelsPerFrame)
+      fileFormat.mSampleRate = streamDescription.mSampleRate
       
       // Prepare File Writer
       

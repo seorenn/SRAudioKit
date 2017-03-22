@@ -12,72 +12,71 @@ import AudioToolbox
 import SRAudioKit
 
 class ViewController: NSViewController {
+  
+  var recorder: SRAudioRecorder?
+  
+  override func viewDidLoad() {
+    super.viewDidLoad()
     
-    var recorder: SRAudioRecorder?
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        print("Devices:")
-        for d in SRAudioDeviceManager.sharedManager.devices {
-            debugPrint(d)
-        }
+    // Do any additional setup after loading the view.
+    print("Devices:")
+    for d in SRAudioDeviceManager.sharedManager.devices {
+      debugPrint(d)
     }
-    
-    func startRecord(_ outputPath: String) {
-        guard let device = SRAudioDeviceManager.sharedManager.defaultInputDevice else {
-            print("Failed to get default input device")
-            return
-        }
-        
-        let type = SRAudioFileType.aac
-        
-        print("Start Record with Output Path: \(outputPath)")
-        print("Using Input Device: \(device)")
-        
-        let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .signedInteger16Bit, interleaved: true)
-        print("Input Config: \(inputConfig)")
-        
-        var outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
-        outputConfig.mSampleRate = 44100
-        print("Output Config: \(outputConfig)")
-        
-        guard let recorder = SRAudioRecorder(inputDevice: device, channelMap: nil, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
-            print("Failed to initialize SRAudioRecorder")
-            return
-        }
-        
-        self.recorder = recorder
-        recorder.startRecord()
+  }
+  
+  func startRecord(_ outputPath: String) {
+    guard let device = SRAudioDeviceManager.sharedManager.defaultInputDevice else {
+      print("Failed to get default input device")
+      return
     }
     
-    func stopRecord() {
-        print("Stop Record")
-        
-        guard let recorder = self.recorder
-            else { return }
-        
-        recorder.stopRecord()
-    }
-
-    override var representedObject: Any? {
-        didSet {
-        // Update the view, if already loaded.
-        }
+    let type = SRAudioFileType.aac
+    
+    print("Start Record with Output Path: \(outputPath)")
+    print("Using Input Device: \(device)")
+    
+    let inputConfig = AudioStreamBasicDescription.genericUncompressedDescription(44100, numberOfChannels: 2, frameType: .signedInteger16Bit, interleaved: true)
+    print("Input Config: \(inputConfig)")
+    
+    //        let outputConfig = AudioStreamBasicDescription.fileTypeDescription(type)
+    //        print("Output Config: \(outputConfig)")
+    
+    guard let recorder = SRAudioRecorder(inputDevice: device, channelMap: nil, outputPath: outputPath, streamDescription: inputConfig, outputFileType: type) else {
+      print("Failed to initialize SRAudioRecorder")
+      return
     }
     
-    @IBAction func pressedReccordButton(_ sender: AnyObject) {
-        let outputPath = "/Users/hirenn/Desktop/output.aac"
-        if let recorder = self.recorder {
-            if recorder.recording {
-                self.stopRecord()
-            } else {
-                self.startRecord(outputPath)
-            }
-        } else {
-            self.startRecord(outputPath)
-        }
+    self.recorder = recorder
+    recorder.startRecord()
+  }
+  
+  func stopRecord() {
+    print("Stop Record")
+    
+    guard let recorder = self.recorder
+      else { return }
+    
+    recorder.stopRecord()
+  }
+  
+  override var representedObject: Any? {
+    didSet {
+      // Update the view, if already loaded.
     }
+  }
+  
+  @IBAction func pressedReccordButton(_ sender: AnyObject) {
+    let outputPath = "/Users/hirenn/Desktop/output.aac"
+    if let recorder = self.recorder {
+      if recorder.recording {
+        self.stopRecord()
+      } else {
+        self.startRecord(outputPath)
+      }
+    } else {
+      self.startRecord(outputPath)
+    }
+  }
 }
 
